@@ -1,43 +1,43 @@
 /**
- * 古籍原典查询库 — 类型定义
+ * Classical texts query library — type definitions
  *
- * 设计：所有古籍以 JSON 静态数据打包到代码（公版无版权风险）
- * Next.js 启动时一次性加载到内存，零 DB 依赖
+ * Design: all texts are statically bundled as JSON (public domain, no copyright risk)
+ * Loaded into memory once at Next.js startup, zero DB dependency
  */
 
 export interface Paragraph {
-  /** 段落唯一 id（用于锚点跳转） */
+  /** Unique paragraph id (used for anchor navigation) */
   id: string;
-  /** 段落序号（章节内） */
+  /** Paragraph index within the chapter */
   idx: number;
-  /** 段落原文（古文） */
+  /** Original classical text */
   text: string;
-  /** 现代翻译（可选，未来填充） */
+  /** Modern translation (optional, to be filled in future) */
   translation?: string;
-  /** 倪师注解（可选，标注来源） */
+  /** Ni Haixia annotations (optional, with source notes) */
   niNote?: string;
 }
 
 export interface Chapter {
-  /** 章节标题（如"卷一"、"总论篇"）*/
+  /** Chapter title (e.g. "Volume 1", "General Theory") */
   title: string;
-  /** 章节副标题/简介（可选）*/
+  /** Chapter subtitle / intro (optional) */
   subtitle?: string;
   paragraphs: Paragraph[];
 }
 
 export interface Book {
-  /** 书名 */
+  /** Book title */
   title: string;
-  /** 书 slug（URL 用，如 'guisuifu'）*/
+  /** Book slug (for URLs, e.g. 'guisuifu') */
   slug: string;
-  /** 朝代 */
+  /** Dynasty */
   dynasty: string;
-  /** 作者（多人或不详时填"不详"或多人）*/
+  /** Author(s) (use "Unknown" or multiple names when applicable) */
   author: string;
-  /** 简介 */
+  /** Introduction */
   intro: string;
-  /** 总字数（粗略）*/
+  /** Approximate total character count */
   wordCount: number;
   chapters: Chapter[];
 }
@@ -47,8 +47,8 @@ export interface SearchHit {
   bookTitle: string;
   chapterTitle: string;
   paragraphId: string;
-  /** 高亮片段（含 <mark> 标签） */
+  /** Highlighted snippet (contains <mark> tags) */
   snippet: string;
-  /** 原文 */
+  /** Original text */
   text: string;
 }
