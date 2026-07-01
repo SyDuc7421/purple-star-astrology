@@ -6,7 +6,7 @@ import StarField from '@/components/StarField';
 import { useTheme, type Theme } from '@/components/ThemeProvider';
 import AnnouncementModal from '@/components/AnnouncementModal';
 
-// ─── 滚动入场 wrapper ────────────────────────────────────
+// ─── Scroll entrance wrapper ────────────────────────────────
 function FadeIn({
   children, delay = 0, y = 28, className = '',
 }: {
@@ -27,15 +27,15 @@ function FadeIn({
 }
 
 function WeakBoundary({ line }: { line: string }) {
-  // 之前的版本有 1px 实线 + 12px 渐变阴影，主题切换时形成清晰横线很硬。
-  // 改为更柔和的 24px 渐变 + 低 opacity，section 衔接更自然。
+  // Previous version had a 1px solid line + 12px gradient shadow — created a harsh visible border on theme switch.
+  // Switched to a softer 24px gradient + low opacity for smoother section transitions.
   return (
     <div className="absolute top-0 left-0 right-0 h-16 pointer-events-none"
       style={{ background: `linear-gradient(to bottom, ${line}, transparent)`, opacity: 0.45 }} />
   );
 }
 
-// ─── 主题切换按钮 ────────────────────────────────────────
+// ─── Theme toggle button ────────────────────────────────────
 function ThemeToggle() {
   const { theme, toggle } = useTheme();
   const isDark = theme === 'dark';
@@ -44,7 +44,7 @@ function ThemeToggle() {
       onClick={toggle}
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.93 }}
-      aria-label={isDark ? '切换亮色主题' : '切换暗色主题'}
+      aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
       className="flex items-center gap-2 px-3 py-1.5 rounded-full border"
       style={{
         borderColor: isDark ? 'rgba(212,168,67,0.3)' : 'rgba(140,100,20,0.35)',
@@ -73,13 +73,13 @@ function ThemeToggle() {
           color: isDark ? 'rgba(212,180,100,0.85)' : 'rgba(110,72,8,0.8)',
           transition: 'color 0.35s ease',
         }}>
-        {isDark ? '暗色' : '亮色'}
+        {isDark ? 'Dark' : 'Light'}
       </span>
     </motion.button>
   );
 }
 
-// ─── 主星数据 ────────────────────────────────────────────
+// ─── Major star data ────────────────────────────────────────
 const STARS = [
   { name: '紫微' }, { name: '天机' }, { name: '太阳' }, { name: '武曲' },
   { name: '天同' }, { name: '廉贞' }, { name: '天府' }, { name: '太阴' },
@@ -87,123 +87,123 @@ const STARS = [
   { name: '七杀' }, { name: '破军' },
 ];
 
-// ─── 功能模块 ────────────────────────────────────────────
+// ─── Feature modules ────────────────────────────────────────
 const FEATURES = [
   {
-    tag: '排盘体系',
-    title: '倪海夏正宗\n紫微斗数',
-    subtitle: '非简化版，严格遵循倪海夏老师传承',
+    tag: 'Chart Engine',
+    title: 'Authentic Ni Haixia\nZi Wei Dou Shu',
+    subtitle: 'No shortcuts — strictly following Ni Haixia\'s transmitted system',
     points: [
-      '纳音五行局起盘，不采用网络简化算法',
-      '命宫逆数生时、身宫顺数生时，严格对齐教学规则',
-      '十四主星与四化飞星按原法推演，结构完整可复核',
+      'Na Yin Wu Xing chart generation — no online shortcut algorithms',
+      'Ming Gong counted backward from birth time, Shen Gong forward — strictly aligned with teaching rules',
+      '14 major stars and Si Hua calculated by the original method — fully verifiable structure',
     ],
   },
   {
-    tag: '命盘呈现',
-    title: '完整十四主星\n四化飞星',
-    subtitle: '结构清晰，一眼看懂主轴与重点',
+    tag: 'Chart Display',
+    title: 'Full 14 Major Stars\n& Si Hua',
+    subtitle: 'Clear structure — see the main axes and key points at a glance',
     points: [
-      '十四主星完整入宫，主星关系清楚可读',
-      '辅星与煞星同屏呈现，避免关键信息缺失',
-      '庙旺利陷亮度分级，快速识别强弱',
-      '点击任意主星即可查看倪海夏老师对该星的详细解读',
+      'All 14 major stars placed in palaces — relationships clearly readable',
+      'Support and sha stars shown on the same screen — no key info missed',
+      'Miao/Wang/Li/Xian brightness tiers for quick strength identification',
+      "Click any major star to see Ni Haixia's detailed interpretation of that star",
     ],
   },
   {
-    tag: 'AI 解读',
-    title: '深度解盘\n不止于算',
-    subtitle: '倪海夏体系知识库 × Claude AI',
+    tag: 'AI Reading',
+    title: 'Deep Reading\nBeyond Calculation',
+    subtitle: 'Ni Haixia knowledge base × Claude AI',
     points: [
-      '命格分析：从命宫主星出发，结合三方四正，给出全面的性格与人生格局判断',
-      '六大维度解读：事业方向、感情婚姻、财运模式、健康注意、家庭关系、子女缘分',
-      '大限流年追踪：当前10年大限重点、今年流年宫位的具体提示与行动建议',
-      '自由追问：针对你的命盘直接提问，「今年能换工作吗」「什么时候结婚运最好」',
+      'Chart analysis: starting from the Ming Gong major star, combined with three-direction palaces, for a comprehensive personality and life-pattern judgment',
+      'Six dimensions: career direction, love & marriage, wealth patterns, health cautions, family relations, children affinity',
+      "Da Xian & Liu Nian tracking: current 10-year period highlights, this year's palace-specific tips and action advice",
+      'Free follow-up questions: ask your chart directly — e.g. "Can I change jobs this year?" or "When is my best marriage timing?"',
     ],
   },
   {
-    tag: '格局识别',
-    title: '自动检测\n命盘格局',
-    subtitle: '从星曜组合中发现你的命中注定',
+    tag: 'Pattern Detection',
+    title: 'Auto-Detect\nChart Patterns',
+    subtitle: 'Discover what the star combinations reveal',
     points: [
-      '自动识别11种经典格局：紫府同宫、杀破狼格、机月同梁、廉相格、武曲七杀等',
-      '辅弼夹命、日月夹命等特殊格局精准检测，并给出倪海夏体系下的标准解读',
-      '四化入命宫迁移宫的特殊状况自动标注，提示需关注的人生议题',
-      '格局按吉凶等级分层展示，让你一目了然自己命盘中的优势与挑战',
+      'Auto-identifies 11 classic patterns: Zi Fu together, Sha Po Lang, Ji Yue Tong Liang, Lian Xiang, Wu Qu Qi Sha, and more',
+      'Precise detection of special patterns like Zuo You flanking Ming Gong and Ri Yue flanking, with standard Ni Haixia system interpretations',
+      'Auto-flags special Si Hua entries into Ming Gong and Qian Yi Gong, highlighting life issues that need attention',
+      "Patterns layered by auspiciousness level, so you can see your chart's strengths and challenges at a glance",
     ],
   },
 ];
 
-// ─── 4 大学习板块（hero 后时间轴）──────────────────────────
+// ─── 4 learning modules (timeline after hero) ──────────────
 const SECTIONS = [
   {
     key: 'ziwei',
     name: '紫微',
     en: 'Zi Wei',
-    desc: '14 主星 · 13 宫位 · AI 解读',
+    desc: '14 major stars · 13 palaces · AI reading',
     status: 'ready' as const,
-    when: '5 月',
-    icon: '◉',  // 实心圆+内点，紫微星视觉
+    when: 'May',
+    icon: '◉',  // filled circle + inner dot, Zi Wei star visual
     note: '',
   },
   {
     key: 'tianji',
     name: '天纪',
     en: 'Tian Ji',
-    desc: '紫微 · 周易 · 奇门遁甲',
+    desc: 'Zi Wei · Zhou Yi · Qi Men Dun Jia',
     status: 'soon' as const,
-    when: '6 月',
-    icon: '⊙',  // 圆+内点（古文"日"），与 ◉ 同字宽
+    when: 'Jun',
+    icon: '⊙',  // circle + inner dot (ancient "sun"), same width as ◉
     note: '',
   },
   {
     key: 'diji',
     name: '地纪',
     en: 'Di Ji',
-    desc: '倪师未竟之业 · 后辈补注',
+    desc: "Ni Haixia's unfinished work · annotated by disciples",
     status: 'soon' as const,
-    when: '6 月',
-    icon: '⊞',  // 方+井（地/田视觉），与 ⊙ 同字宽
-    note: '遗稿研读',
+    when: 'Jun',
+    icon: '⊞',  // square + grid (earth/field visual), same width as ⊙
+    note: 'Manuscript study',
   },
   {
     key: 'renji',
     name: '人纪',
     en: 'Ren Ji',
-    desc: '内经 · 伤寒 · 金匮 · 针灸',
+    desc: 'Nei Jing · Shang Han · Jin Kui · Acupuncture',
     status: 'soon' as const,
-    when: '7 月',
-    icon: '⊕',  // 圆+十字（医道/阴阳调和），与 ⊙/⊞ 同字宽
+    when: 'Jul',
+    icon: '⊕',  // circle + cross (medicine / yin-yang), same width as ⊙/⊞
     note: '',
   },
 ];
 
-// ─── 倪海夏核心教义 ──────────────────────────────────────
+// ─── Ni Haixia core teachings ──────────────────────────────
 const NI_TEACHINGS = [
   {
-    title: '命宫为本，三方为用',
-    body: '倪师始终强调，看命必先看命宫。命宫主星决定一个人的基本格局与天生性格，三方（财帛、官禄、迁移）则决定此人的「用武之地」。四宫联动才是完整的人生图景。',
+    title: 'Ming Gong is the root, Three Directions the function',
+    body: "Ni Haixia always stressed that reading a chart must start with Ming Gong. Its major stars determine a person's foundational pattern and innate character; the Three Directions (Wealth, Career, Travel) determine where they can apply themselves. The four palaces working together form the complete life picture.",
   },
   {
-    title: '对宫借星，不可忽视',
-    body: '倪师的独到之处在于重视「对宫」。任何宫位若为空宫，必须借对宫星曜来论断，命宫的对面是迁移宫，两者互相影响，这是很多初学者容易忽略的关键。',
+    title: 'Borrow stars from the opposite palace — never ignore it',
+    body: "Ni Haixia's distinctive insight was the emphasis on the opposite palace. Any empty palace must be read by borrowing stars from its opposite; the palace across from Ming Gong is Qian Yi Gong, and they influence each other — a key point many beginners overlook.",
   },
   {
-    title: '四化才是命运的手',
-    body: '星曜只是基础，四化（化禄、化权、化科、化忌）才是决定运势好坏的关键。同一颗星，有化禄与有化忌，人生轨迹可以截然不同。倪师反复强调：不看四化，命盘只解了一半。',
+    title: 'Si Hua are the hands of fate',
+    body: 'Stars are just the foundation; Si Hua (Hua Lu, Hua Quan, Hua Ke, Hua Ji) decide whether fortune is good or bad. The same star with Hua Lu versus Hua Ji produces completely different life trajectories. Ni Haixia repeatedly emphasized: without looking at Si Hua, a chart reading is only half complete.',
   },
   {
-    title: '大限十年，运势有节',
-    body: '倪师将人生划分为12个大限，每个大限10年。他认为人在不同的大限宫位，际遇完全不同。了解自己现在走的是哪个大限、该宫位有何星曜，才能真正把握当下的运势。',
+    title: 'Da Xian spans ten years — fortune has seasons',
+    body: 'Ni Haixia divided life into 12 Da Xian periods of 10 years each. He believed that experiences differ completely depending on which Da Xian palace you are in. Knowing your current period and which stars occupy that palace is key to grasping your present fortune.',
   },
 ];
 
-// ─── 主题色彩 helper ─────────────────────────────────────
+// ─── Theme color helper ─────────────────────────────────────
 function useColors(theme: Theme) {
   const d = theme === 'dark';
   return {
     bgBase:       d ? '#020810'                                : '#f5efe0',
-    // nav 用与 bgBase 完全相同的不透明色，避免半透明叠加产生色差带
+    // nav uses the same opaque color as bgBase to avoid color banding from semi-transparent overlays
     navBg:        d ? '#020810'                                : '#f5efe0',
     navBorder:    d ? 'rgba(255,255,255,0.05)'                : 'rgba(160,120,30,0.15)',
     goldGrad:     d ? 'linear-gradient(160deg,#c8993a 0%,#f0d070 40%,#c8993a 70%,#f0c755 100%)'
@@ -211,12 +211,12 @@ function useColors(theme: Theme) {
     goldSolid:    d ? '#d4a843'                               : '#8b6410',
     goldLine:     d ? 'rgba(212,168,67,0.4)'                  : 'rgba(140,100,20,0.4)',
     tagText:      d ? 'rgba(212,168,67,0.6)'                  : 'rgba(120,80,10,0.65)',
-    // 亮色文字用冷灰系（A 方案核心）：暖底 + 冷字 → 视觉不审美疲劳
+    // Light-mode text uses cool-gray (Plan A): warm bg + cool text = no visual fatigue
     textPrimary:  d ? '#e8eef6'                               : '#1a1d24',
     textSecond:   d ? '#b8c6df'                               : '#3a3f4a',
     textMuted:    d ? '#9db0d0'                               : '#5a6275',
     textFaint:    d ? 'rgba(240,246,255,0.56)'                : '#9da4b3',
-    // 冷色 accent（B 方案核心）：呼应暗色 quan 蓝；用于装饰性 glow / 链接 / 高亮
+    // Cool accent (Plan B): echoes the dark-mode quan blue; used for glow / links / highlights
     accent:       d ? '#3a78d4'                               : '#3a5a82',
     accentSoft:   d ? 'rgba(58,120,212,0.18)'                 : 'rgba(58,90,130,0.10)',
     cardBg:       d ? 'rgba(255,255,255,0.05)'                : 'rgba(255,255,255,0.88)',
@@ -225,7 +225,7 @@ function useColors(theme: Theme) {
     featureBg:    d ? 'rgba(255,255,255,0.04)'                : 'rgba(255,255,255,0.75)',
     featureBord:  d ? 'rgba(255,255,255,0.08)'                : 'rgba(200,160,60,0.2)',
     glowTint:     d ? 'rgba(212,168,67,0.07)'                 : 'rgba(180,140,40,0.06)',
-    // 亮色 glow 真用蓝/紫——给整体氛围加冷色点缀
+    // Light-mode glow uses actual blue/purple — adds cool-tone accent to the overall atmosphere
     glowBlue:     d ? 'rgba(40,80,160,0.12)'                  : 'rgba(58,90,130,0.06)',
     glowPurple:   d ? 'rgba(120,50,180,0.08)'                 : 'rgba(96,80,140,0.04)',
     niBg:         d ? 'rgba(255,255,255,0.04)'                : 'rgba(255,255,255,0.8)',
@@ -248,33 +248,33 @@ function useColors(theme: Theme) {
   };
 }
 
-// ─── 四化简介数据 ─────────────────────────────────────────
+// ─── Si Hua brief descriptions ─────────────────────────────
 const SIHUA_BRIEF: Record<string, { attr: string; brief: string }> = {
-  '化禄': { attr: '吉化·增益', brief: '福星到宫，主财运与福气增益。所在宫位事物顺遂，能力增强，是命盘中最受欢迎的化星。' },
-  '化权': { attr: '吉化·权威', brief: '权力星到宫，主掌控与领导力。所在宫位主强势与决断，喜入官禄宫与命宫，主事业上的实权。' },
-  '化科': { attr: '吉化·名誉', brief: '科名星到宫，主声誉与贵人缘。所在宫位主文名与考运，有贵人扶持，宜学术、考试与公开场合。' },
-  '化忌': { attr: '凶化·阻碍', brief: '劫数星到宫，主执念与阻碍。所在宫位需特别关注，该宫人生课题将成为重要考验。' },
+  '化禄': { attr: 'Auspicious·Augment', brief: 'Fortune star enters the palace, boosting wealth and blessings. Things run smoothly and abilities are enhanced — the most welcome transformation star.' },
+  '化权': { attr: 'Auspicious·Authority', brief: 'Power star enters the palace, governing control and leadership. Its palace is assertive and decisive; thrives in Career and Life palaces, conferring real authority.' },
+  '化科': { attr: 'Auspicious·Reputation', brief: 'Prestige star enters the palace, governing reputation and benefactor affinity. Favors scholarly fame and exam luck — good for academics, exams, and public roles.' },
+  '化忌': { attr: 'Inauspicious·Obstruction', brief: 'Obstacle star enters the palace, governing fixations and blockages. Its palace needs special attention — the life lesson of that palace becomes a major trial.' },
 };
 
-// ─── 主星简介数据 ─────────────────────────────────────────
+// ─── Major star brief descriptions ─────────────────────────
 const STAR_BRIEF: Record<string, { attr: string; brief: string }> = {
-  '紫微': { attr: '土·帝王星', brief: '天皇贵星，统御众星。坐命者有孤傲之气，主权威显达，天生具备领导气质，适合独当一面的领导岗位。' },
-  '天机': { attr: '木·智慧星', brief: '益寿星，主智谋与变动。聪慧机灵，善于筹谋，心思细腻，宜从事策划、顾问、技术类工作。' },
-  '太阳': { attr: '火·官禄主', brief: '官禄主星，主声誉与名望。慷慨大度，重视公众形象，利官场与公职，男命力强，入庙时光明磊落。' },
-  '武曲': { attr: '金·财帛主', brief: '财帛主星，主财务与决断。意志坚定，行动果敢，适合财务、金融、军警类职业，孤克之星，利晚婚。' },
-  '天同': { attr: '水·福星', brief: '福德主星，主享乐与人缘。性情温和，人缘极好，注重生活品质，感情细腻，晚年运势佳。' },
-  '廉贞': { attr: '火·才艺星', brief: '次桃花星，主才艺与情欲。才华出众，感情丰富，适合艺术、政界，多才多艺但需防桃花是非。' },
-  '天府': { attr: '土·财库星', brief: '南斗主星，主财库与积蓄。稳重保守，理财能力强，是命盘的稳定力量，适合管理财务与行政。' },
-  '太阴': { attr: '水·田宅主', brief: '田宅主星，主财富与阴柔。细腻温柔，感受力强，女命尤佳，利不动产与积蓄，适合文艺或服务业。' },
-  '贪狼': { attr: '木水·桃花', brief: '桃花星，主欲望与才艺。多才多艺，欲望旺盛，社交活跃，宜从事艺术、公关、商业，人缘极好。' },
-  '巨门': { attr: '水·是非星', brief: '暗星，主口才与是非。口才出众，思辨能力强，适合律师、教育、媒体，注意口舌是非，以辩才立身。' },
-  '天相': { attr: '水·印星', brief: '印星，主辅佐与印绶。善于协调，重视礼节，正直守法，适合幕僚、行政、法律类工作，贵人运佳。' },
-  '天梁': { attr: '土·荫星', brief: '荫星，主老成与荫蔽。正直稳重，慈悲心强，老天爷会保佑，适合医疗、社会工作、宗教领域。' },
-  '七杀': { attr: '金火·将星', brief: '将星，主刚烈与开创。性格刚毅，行动力强，勇于挑战，适合创业、军警、竞争性行业，逢凶化吉。' },
-  '破军': { attr: '水·耗星', brief: '耗星，主变动与开拓。勇于突破，不惧改变，一生变动大但有魄力，适合开拓型工作，走别人没走过的路。' },
+  '紫微': { attr: 'Earth·Emperor Star', brief: 'Imperial noble star, ruling over all others. Natives carry an air of aloofness and command authority — a natural leader suited to standing alone at the top.' },
+  '天机': { attr: 'Wood·Wisdom Star', brief: 'Longevity-benefiting star, governing intellect and change. Clever and resourceful with a subtle mind — suited to planning, consulting, and technical work.' },
+  '太阳': { attr: 'Fire·Career Lord', brief: 'Career lord star, governing reputation and fame. Generous and image-conscious — favorable for officialdom and public service. Strong in male charts; upright and brilliant when in Miao.' },
+  '武曲': { attr: 'Metal·Wealth Lord', brief: 'Wealth lord star, governing finance and decisiveness. Strong-willed and action-oriented — suited to finance, military, police, and accounting. A solitary star; benefits from late marriage.' },
+  '天同': { attr: 'Water·Fortune Star', brief: 'Fortune and virtue star, governing enjoyment and social relations. Gentle-natured with excellent people skills — values quality of life, emotionally sensitive, fortune improves in later years.' },
+  '廉贞': { attr: 'Fire·Talent Star', brief: 'Secondary romance star, governing talent and passion. Gifted and emotionally rich — suited to the arts and politics. Multi-talented but should guard against romantic entanglements.' },
+  '天府': { attr: 'Earth·Treasury Star', brief: 'South Dipper lord star, governing treasury and savings. Steady and conservative with strong financial management — the stabilizing force of a chart, suited to finance and administration.' },
+  '太阴': { attr: 'Water·Property Lord', brief: 'Property lord star, governing wealth and feminine energy. Delicate and sensitive — especially favorable for women. Benefits real estate and savings; suited to arts or service industries.' },
+  '贪狼': { attr: 'Wood-Water·Romance', brief: 'Romance star governing desire and talent. Multi-talented with strong desires and an active social life — suited to art, public relations, and commerce, with excellent people skills.' },
+  '巨门': { attr: 'Water·Dispute Star', brief: 'The dark star, governing eloquence and controversy. Outstanding oratory and dialectical ability — suited to law, education, and media. Establish yourself through debate; watch your words.' },
+  '天相': { attr: 'Water·Seal Star', brief: 'Seal star governing assistance and official mandate. Skilled at coordination, respects etiquette, upright and law-abiding — suited to advisory, administrative, and legal roles, with good benefactor luck.' },
+  '天梁': { attr: 'Earth·Shelter Star', brief: "Shelter star governing maturity and protection. Upright, steady, and compassionate — heaven's protection follows. Suited to medicine, social work, and religious fields." },
+  '七杀': { attr: 'Metal-Fire·General Star', brief: 'General star governing fierceness and pioneering. Resolute character with strong drive — suited to entrepreneurship, military, police, and competitive industries. Turns misfortune to fortune.' },
+  '破军': { attr: 'Water·Breaker Star', brief: "Breaker star governing change and exploration. Bold in breaking through, unafraid of change — a life of major shifts but with great determination. Suited to pioneering work, going where others haven't." },
 };
 
-// ─── 功能视觉装饰 ────────────────────────────────────────
+// ─── Feature visual decorations ────────────────────────────
 function FeatureVisual({ index, colors: c }: { index: number; colors: ReturnType<typeof useColors> }) {
   if (index === 0) {
     return (
@@ -300,7 +300,7 @@ function FeatureVisual({ index, colors: c }: { index: number; colors: ReturnType
           })}
         </div>
         <p className="text-[10px] tracking-widest transition-colors duration-300"
-          style={{ color: c.textFaint }}>倪海夏排盘法</p>
+          style={{ color: c.textFaint }}>Ni Haixia Chart Method</p>
       </div>
     );
   }
@@ -311,8 +311,8 @@ function FeatureVisual({ index, colors: c }: { index: number; colors: ReturnType
     return (
       <div className="flex flex-col gap-4 h-full justify-center">
         {[
-          { group: '紫微系', stars: ['紫微', '天机', '太阳', '武曲', '天同', '廉贞'] },
-          { group: '天府系', stars: ['天府', '太阴', '贪狼', '巨门', '天相', '天梁', '七杀', '破军'] },
+          { group: 'Zi Wei group', stars: ['紫微', '天机', '太阳', '武曲', '天同', '廉贞'] },
+          { group: 'Tian Fu group', stars: ['天府', '太阴', '贪狼', '巨门', '天相', '天梁', '七杀', '破军'] },
         ].map(group => (
           <div key={group.group}>
             <div className="text-[11px] tracking-widest mb-2 transition-colors duration-300"
@@ -338,7 +338,7 @@ function FeatureVisual({ index, colors: c }: { index: number; colors: ReturnType
         ))}
         <div>
           <div className="text-[11px] tracking-widest mb-2 transition-colors duration-300"
-            style={{ color: c.textFaint }}>四化飞星</div>
+            style={{ color: c.textFaint }}>Si Hua Stars</div>
           <div className="flex gap-2 flex-wrap">
             {[['化禄', 'rgba(52,211,153,0.7)'], ['化权', 'rgba(96,165,250,0.7)'], ['化科', 'rgba(250,204,21,0.7)'], ['化忌', 'rgba(248,113,113,0.7)']].map(([label, color]) => (
               <motion.button key={label}
@@ -378,9 +378,9 @@ function FeatureVisual({ index, colors: c }: { index: number; colors: ReturnType
 
   if (index === 2) {
     const msgs = [
-      { role: 'user', text: '我今年的事业运势如何？' },
-      { role: 'ai', text: '命宫天机化禄，今年大限走官禄宫，三方有左辅相助，事业有贵人提携，适合主动拓展…' },
-      { role: 'user', text: '什么时候感情运最好？' },
+      { role: 'user', text: 'What is my career fortune this year?' },
+      { role: 'ai', text: 'Tian Ji Hua Lu in Ming Gong. This year\'s Da Xian runs through the Career Palace, with Zuo Fu supporting from the three-direction palaces — a benefactor aids your career. A good time to actively expand...' },
+      { role: 'user', text: 'When is my love fortune at its best?' },
     ];
     return (
       <div className="flex flex-col gap-2 h-full justify-center">
@@ -406,9 +406,9 @@ function FeatureVisual({ index, colors: c }: { index: number; colors: ReturnType
 
   if (index === 3) {
     const patterns = [
-      { name: '杀破狼格', desc: '开创进取之命', ok: true },
-      { name: '廉相格',   desc: '行政印绶之格', ok: true },
-      { name: '化忌入命', desc: '需关注心理课题', ok: false },
+      { name: 'Sha Po Lang pattern', desc: 'Pioneering and ambitious', ok: true },
+      { name: 'Lian Xiang pattern', desc: 'Administrative and official', ok: true },
+      { name: 'Hua Ji in Ming', desc: 'Psychological themes to watch', ok: false },
     ];
     return (
       <div className="flex flex-col gap-3 h-full justify-center">
@@ -431,7 +431,7 @@ function FeatureVisual({ index, colors: c }: { index: number; colors: ReturnType
           </motion.div>
         ))}
         <div className="text-[9px] mt-2 tracking-wider text-center" style={{ color: c.textFaint }}>
-          自动识别 11 种经典格局
+          Auto-identifies 11 classic patterns
         </div>
       </div>
     );
@@ -440,7 +440,7 @@ function FeatureVisual({ index, colors: c }: { index: number; colors: ReturnType
   return null;
 }
 
-// ─── 主页 ─────────────────────────────────────────────────
+// ─── Home page ─────────────────────────────────────────────
 export default function HomePage() {
   const router = useRouter();
   const { theme } = useTheme();
@@ -451,8 +451,8 @@ export default function HomePage() {
   const heroY = useTransform(scrollYProgress, [0, 1], ['0%', '28%']);
   const heroOpacity = useTransform(scrollYProgress, [0, 0.55], [1, 0]);
 
-  // 把 body / html 背景同步到 home 主题色，消除半透明 nav 透出 #fafaf9 的色差
-  // useLayoutEffect 保证在浏览器绘制前同步更新，避免与根 div 的 transition 不同步
+  // Sync body/html bg to home theme color to eliminate color bleed through semi-transparent nav
+  // useLayoutEffect ensures sync before browser paint, preventing desync with root div transition
   useLayoutEffect(() => {
     document.documentElement.style.background = c.bgBase;
     document.body.style.background = c.bgBase;
@@ -464,12 +464,12 @@ export default function HomePage() {
 
   return (
     <div style={{ background: c.bgBase, transition: 'background 0.35s ease' }} className="overflow-x-hidden">
-      {/* 致用户公告——首次访问全屏覆盖，关闭后才进入首页 */}
+      {/* User announcement — full-screen on first visit, home loads after close */}
       <AnnouncementModal />
 
       <StarField />
 
-      {/* 全局光晕 */}
+      {/* Global glow */}
       <div className="fixed inset-0 pointer-events-none z-0">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[500px] rounded-full"
           style={{ background: `radial-gradient(ellipse, ${c.glowTint} 0%, transparent 70%)` }} />
@@ -479,14 +479,14 @@ export default function HomePage() {
           style={{ background: `radial-gradient(ellipse, ${c.glowPurple} 0%, transparent 70%)` }} />
       </div>
 
-      {/* ── 顶部导航 ── nav 与 hero 同色（c.bgBase），无 blur 无 border，彻底无色差带 */}
+      {/* ── Top nav ── same color as hero (c.bgBase), no blur or border, zero color banding */}
       <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 sm:px-8 py-3 sm:py-4 gap-2"
         style={{
           background: c.navBg,
         }}>
         <div className="text-[11px] sm:text-xs tracking-[0.3em] sm:tracking-[0.4em] font-medium transition-colors duration-300 flex-shrink-0"
           style={{ color: c.goldSolid }}>
-          紫微命盘
+          Zi Wei Chart
         </div>
         <div className="flex items-center gap-1.5 sm:gap-3 flex-shrink-0">
           <ThemeToggle />
@@ -495,14 +495,14 @@ export default function HomePage() {
             onClick={() => router.push('/heming')}
             className="text-[11px] sm:text-xs px-2.5 sm:px-4 py-1 sm:py-1.5 rounded-full transition-all duration-300"
             style={{ border: `1px solid ${c.navBorder}`, color: c.textMuted }}>
-            合盘
+            Union Chart
           </motion.button>
           <motion.button
             whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
             onClick={() => router.push('/chart')}
             className="text-[11px] sm:text-xs px-2.5 sm:px-4 py-1 sm:py-1.5 rounded-full transition-all duration-300"
             style={{ border: `1px solid ${c.goldLine}`, color: c.goldSolid }}>
-            立即起盘
+            Cast Chart
           </motion.button>
         </div>
       </nav>
@@ -510,18 +510,18 @@ export default function HomePage() {
       {/* ══ HERO ══════════════════════════════════════════ */}
       <section ref={heroRef} className="relative min-h-[82svh] lg:min-h-[92vh] flex flex-col items-center justify-center px-6 z-10 pb-24 pt-10">
         <motion.div style={{ y: heroY, opacity: heroOpacity, maxWidth: '960px' }} className="text-center w-full mx-auto mt-10">
-          {/* 标签行 */}
+          {/* Tag row */}
           <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
             className="flex items-center justify-center gap-3 mb-8">
             <div className="h-px w-12" style={{ background: `linear-gradient(to right, transparent, ${c.goldLine})` }} />
             <span className="text-[11px] tracking-[0.45em] transition-colors duration-300" style={{ color: c.tagText }}>
-              紫微斗数 · 倪海夏体系
+              Zi Wei Dou Shu · Ni Haixia System
             </span>
             <div className="h-px w-12" style={{ background: `linear-gradient(to left, transparent, ${c.goldLine})` }} />
           </motion.div>
 
-          {/* 主标题 */}
+          {/* Main title */}
           <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
             style={{ position: 'relative', display: 'inline-block' }}>
@@ -531,7 +531,7 @@ export default function HomePage() {
                 fontSize: 'clamp(56px, 10vw, 124px)',
                 letterSpacing: '0.07em',
               }}>
-              紫微命盘
+              Zi Wei Chart
             </h1>
           </motion.div>
 
@@ -539,19 +539,19 @@ export default function HomePage() {
             transition={{ duration: 0.7, delay: 0.45 }}
             className="text-base md:text-lg tracking-[0.18em] mb-2"
             style={{ color: c.textSecond, fontWeight: 500 }}>
-            紫微为门 · 天地人为路 · 倪海夏为师
+            Zi Wei as the gate · Heaven, Earth, Human as the path · Ni Haixia as the teacher
           </motion.p>
           <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }}
             transition={{ duration: 0.7, delay: 0.55 }}
             className="text-xs md:text-sm tracking-[0.3em] mb-6"
             style={{ color: c.textMuted, opacity: 0.85 }}>
-            AI 答疑 · 知行合一
+            AI guidance · Knowledge and action as one
           </motion.p>
           <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }}
             transition={{ duration: 0.7, delay: 0.65 }}
             className="text-sm max-w-xl mx-auto leading-relaxed mb-10"
             style={{ color: c.textMuted }}>
-            输入出生年月日时，生成专属紫微斗数命盘 — 后续天纪、地纪、人纪学习模块陆续开放。
+            Enter your birth date and time to generate your Zi Wei Dou Shu chart — Tian Ji, Di Ji, and Ren Ji learning modules open in sequence.
           </motion.p>
 
           {/* CTA */}
@@ -563,11 +563,11 @@ export default function HomePage() {
               onClick={() => router.push('/chart')}
               className="px-12 py-4 font-semibold text-base tracking-widest rounded-full"
               style={{ background: c.ctaBg, color: c.ctaText }}>
-              立即起盘
+              Cast Your Chart
             </motion.button>
           </motion.div>
 
-          {/* 十四主星 */}
+          {/* 14 major stars */}
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
             transition={{ delay: 1.05, duration: 0.8 }}
             className="mt-12 grid grid-cols-7 gap-1.5 max-w-[540px] mx-auto">
@@ -583,7 +583,7 @@ export default function HomePage() {
           </motion.div>
         </motion.div>
 
-        {/* 上线公告便利贴 — 桌面端绝对定位右侧 */}
+        {/* Launch announcement sticky note — absolutely positioned right on desktop */}
         <motion.div
           initial={{ opacity: 0, x: 30, rotate: 0 }}
           animate={{ opacity: 1, x: 0, rotate: -4 }}
@@ -606,16 +606,16 @@ export default function HomePage() {
             <div style={{ fontSize: '20px', marginBottom: '6px', lineHeight: 1 }}>🎁</div>
             <div style={{ fontSize: '13px', lineHeight: 1.7, color: '#8b3a1a', fontWeight: 500 }}>
               <span style={{ color: '#c45a2d', fontWeight: 700, fontSize: '14px' }}>5/1 — 5/8</span>
-              <span> 限时回馈</span>
+              <span> Limited-time gift</span>
             </div>
             <div style={{ fontSize: '13px', lineHeight: 1.7, color: '#8b3a1a', fontWeight: 500 }}>
-              全部功能 + AI 提问
-              <strong style={{ color: '#c45a2d' }}> 全免费</strong>
+              All features + AI chat
+              <strong style={{ color: '#c45a2d' }}> completely free</strong>
             </div>
           </div>
         </motion.div>
 
-        {/* 上线公告便利贴 — 手机端正常流式显示（hero 内容下方居中） */}
+        {/* Launch announcement sticky note — normal flow on mobile (centered below hero) */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0, rotate: -2 }}
@@ -637,25 +637,25 @@ export default function HomePage() {
             <div style={{ fontSize: '18px', marginBottom: '4px', lineHeight: 1 }}>🎁</div>
             <div style={{ fontSize: '12px', lineHeight: 1.7, color: '#8b3a1a', fontWeight: 500 }}>
               <span style={{ color: '#c45a2d', fontWeight: 700, fontSize: '13px' }}>5/1 — 5/8</span>
-              <span> 限时回馈</span>
+              <span> Limited-time gift</span>
             </div>
             <div style={{ fontSize: '12px', lineHeight: 1.7, color: '#8b3a1a', fontWeight: 500 }}>
-              全部功能 + AI <strong style={{ color: '#c45a2d' }}>全免费</strong>
+              All features + AI <strong style={{ color: '#c45a2d' }}>completely free</strong>
             </div>
           </div>
         </motion.div>
 
-        {/* 滚动提示（绝对定位，不影响 hero opacity 计算） */}
+        {/* Scroll hint (absolutely positioned, does not affect hero opacity calc) */}
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
           transition={{ delay: 2, duration: 1 }}
           className="absolute bottom-6 left-0 right-0 flex flex-col items-center gap-2 pointer-events-none">
-          <span className="text-[9px] tracking-[0.4em] uppercase" style={{ color: c.scrollText }}>探索更多</span>
+          <span className="text-[9px] tracking-[0.4em] uppercase" style={{ color: c.scrollText }}>Explore more</span>
           <motion.div animate={{ y: [0, 6, 0] }} transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
             className="w-px h-8" style={{ background: `linear-gradient(to bottom, ${c.scrollLine}, transparent)` }} />
         </motion.div>
       </section>
 
-      {/* ══ 哲学引言 ══════════════════════════════════════ */}
+      {/* ══ Philosophical quote ══════════════════════════════════ */}
       <section className="relative z-10 overflow-hidden min-h-[82svh] lg:min-h-[92vh] flex items-center" style={{ padding: '72px 24px' }}>
         <WeakBoundary line={c.navBorder} />
         <div className="absolute inset-0"
@@ -671,14 +671,14 @@ export default function HomePage() {
         <FadeIn className="relative mx-auto text-center w-full" y={20}>
           <div className="flex items-center justify-center gap-4 mb-8">
             <div className="h-px w-16" style={{ background: 'linear-gradient(to right, transparent, rgba(212,168,67,0.45))' }} />
-            <span className="text-[10px] tracking-[0.55em] uppercase" style={{ color: 'rgba(212,168,67,0.5)' }}>命 · 运 · 观</span>
+            <span className="text-[10px] tracking-[0.55em] uppercase" style={{ color: 'rgba(212,168,67,0.5)' }}>Fate · Fortune · Perspective</span>
             <div className="h-px w-16" style={{ background: 'linear-gradient(to left, transparent, rgba(212,168,67,0.45))' }} />
           </div>
           <div className="space-y-3" style={{ maxWidth: '840px', margin: '0 auto' }}>
             {[
-              { text: '提前窥探命运的意义', size: 'clamp(17px, 2.2vw, 28px)', color: 'rgba(215,228,252,0.72)', delay: 0.1 },
-              { text: '不在于预知未来', size: 'clamp(21px, 2.6vw, 32px)', color: 'rgba(220,232,250,0.74)', delay: 0.25 },
-              { text: '而在于不断认识自己', size: 'clamp(24px, 3vw, 40px)', color: 'rgba(218,230,248,0.8)', delay: 0.34 },
+              { text: 'The meaning of glimpsing fate in advance', size: 'clamp(17px, 2.2vw, 28px)', color: 'rgba(215,228,252,0.72)', delay: 0.1 },
+              { text: 'lies not in predicting the future', size: 'clamp(21px, 2.6vw, 32px)', color: 'rgba(220,232,250,0.74)', delay: 0.25 },
+              { text: 'but in continuously knowing yourself', size: 'clamp(24px, 3vw, 40px)', color: 'rgba(218,230,248,0.8)', delay: 0.34 },
             ].map((line, i) => (
               <motion.p key={i}
                 initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
@@ -692,13 +692,13 @@ export default function HomePage() {
               transition={{ duration: 0.8, delay: 0.45 }}
               className={`grad-text ${theme === 'dark' ? 'grad-text-dark' : 'grad-text-light'} font-bold`}
               style={{ fontSize: 'clamp(24px, 3.4vw, 48px)', letterSpacing: '0.05em', lineHeight: 1.35 }}>
-              最终书写属于自己的人生剧本
+              and ultimately writing your own life story
             </motion.p>
           </div>
         </FadeIn>
       </section>
 
-      {/* ══ 4 大学习板块时间轴 ════════════════════════════ */}
+      {/* ══ 4 learning module timeline ══════════════════════════ */}
       <section className="relative z-10 py-20 lg:py-24 px-6"
         style={{
           background: theme === 'dark'
@@ -712,22 +712,22 @@ export default function HomePage() {
             <div className="h-px w-12" style={{ background: `linear-gradient(to left, transparent, ${c.goldLine})` }} />
           </div>
           <div className="text-2xl lg:text-3xl font-bold mb-2 tracking-[0.15em]" style={{ color: c.textPrimary }}>
-            倪师方法论 · 渐次展开
+            Ni Haixia Methodology · Unfolding in sequence
           </div>
           <div className="text-xs lg:text-sm tracking-[0.1em]" style={{ color: c.textMuted }}>
-            从紫微入门，逐步开放天纪 / 地纪 / 人纪学习模块
+            Starting with Zi Wei, then opening Tian Ji / Di Ji / Ren Ji modules in turn
           </div>
         </FadeIn>
 
         <div className="max-w-sm lg:max-w-5xl mx-auto relative">
-          {/* 横向连接线（仅桌面）*/}
+          {/* Horizontal connector line (desktop only) */}
           <div className="hidden lg:block absolute top-7 left-[12.5%] right-[12.5%] h-0.5"
             style={{
               background: `linear-gradient(90deg, ${c.goldSolid} 0%, ${c.goldSolid} 25%, ${c.goldLine} 25%)`,
               opacity: 0.6,
             }} />
 
-          {/* 纵向连接线（仅手机）—— 圆点贴在线上，做"地铁线路图"风格 */}
+          {/* Vertical connector line (mobile only) — dots sit on the line, subway-map style */}
           <div className="lg:hidden absolute left-7 top-7 bottom-7 w-px -translate-x-1/2"
             style={{
               background: `linear-gradient(180deg, ${c.goldSolid} 0%, ${c.goldSolid} 22%, ${c.goldLine} 22%)`,
@@ -743,7 +743,7 @@ export default function HomePage() {
                   transition={{ delay: i * 0.15, duration: 0.5 }}
                   viewport={{ once: true }}
                   className="relative flex flex-row lg:flex-col items-center lg:items-center text-left lg:text-center gap-4 lg:gap-0">
-                  {/* 节点圆 */}
+                  {/* Node circle */}
                   <div className="relative w-14 h-14 shrink-0 rounded-full flex items-center justify-center lg:mb-3"
                     style={{
                       background: ready
@@ -761,9 +761,9 @@ export default function HomePage() {
                       </div>
                     )}
                   </div>
-                  {/* 文字组：手机端右排单列；桌面端居中堆叠 */}
+                  {/* Text group: single column on mobile; stacked centered on desktop */}
                   <div className="flex-1 lg:flex-none flex flex-col items-start lg:items-center min-w-0">
-                    {/* 顶行：时间标签 + 板块名 + note（手机端 inline；桌面端依然分行） */}
+                    {/* Top row: time label + module name + note (inline on mobile; stacked on desktop) */}
                     <div className="flex items-baseline gap-2 lg:flex-col lg:gap-0 lg:mb-1">
                       <div className="text-[10px] tracking-[0.25em] lg:mb-1.5"
                         style={{ color: ready ? '#10b981' : c.textMuted, fontWeight: 500 }}>
@@ -785,7 +785,7 @@ export default function HomePage() {
                         </div>
                       )}
                     </div>
-                    {/* 桌面专属 note（手机已在顶行 inline 展示）*/}
+                    {/* Desktop-only note (already shown inline on mobile top row) */}
                     {s.note && (
                       <div className="hidden lg:block text-[9px] tracking-[0.15em] mb-1.5 px-2 py-0.5 rounded-full"
                         style={{
@@ -797,7 +797,7 @@ export default function HomePage() {
                         {s.note}
                       </div>
                     )}
-                    {/* 简介 */}
+                    {/* Description */}
                     <div className="text-[11px] lg:text-xs leading-relaxed lg:max-w-[200px] mt-0.5 lg:mt-0"
                       style={{ color: c.textSecond }}>
                       {s.desc}
@@ -810,7 +810,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ══ 功能详解 ══════════════════════════════════════ */}
+      {/* ══ Feature details ══════════════════════════════════════ */}
       <section className="relative z-10">
         {FEATURES.map((feature, i) => (
           <div key={i}
@@ -818,7 +818,7 @@ export default function HomePage() {
             style={{ background: i % 2 === 1 ? c.altSection : 'transparent' }}>
             <div className="mx-auto w-full" style={{ maxWidth: '1280px' }}>
               <div className={`grid grid-cols-1 ${i % 2 === 0 ? 'lg:grid-cols-[0.45fr_0.55fr]' : 'lg:grid-cols-[0.55fr_0.45fr]'} gap-10 lg:gap-16 items-start ${i % 2 === 1 ? 'lg:grid-flow-dense' : ''}`}>
-                {/* 文字区 */}
+                {/* Text area */}
                 <div className={i % 2 === 1 ? 'lg:col-start-2' : ''}>
                   <FadeIn delay={0}>
                     <div className="flex items-center gap-3 mb-6">
@@ -849,7 +849,7 @@ export default function HomePage() {
                     ))}
                   </div>
                 </div>
-                {/* 视觉装饰区 */}
+                {/* Visual decoration area */}
                 <div className={i % 2 === 1 ? 'lg:col-start-1 lg:row-start-1' : ''}>
                   <FadeIn delay={0.15}>
                     <div className="relative rounded-2xl overflow-hidden p-8 md:p-12"
@@ -869,7 +869,7 @@ export default function HomePage() {
         ))}
       </section>
 
-      {/* ══ 天·地·人 三分理论 ════════════════════════════ */}
+      {/* ══ Heaven·Earth·Human three-part theory ═════════════════ */}
       <section className="relative z-10 flex items-center px-6 md:px-10 lg:px-14 py-20"
         style={{ background: c.altSection, minHeight: '82svh' }}>
         <WeakBoundary line={c.navBorder} />
@@ -886,16 +886,16 @@ export default function HomePage() {
                 天 · 地 · 人
               </h2>
               <p className="max-w-2xl mx-auto text-sm leading-relaxed" style={{ color: c.textSecond }}>
-                倪海夏老师的核心命运观：命运从来不是人生的全部。<br />
-                他将影响人生的力量分为三个同等重要的维度。
+                Ni Haixia's core view of fate: destiny is never the whole of life.<br />
+                He divided the forces that shape a life into three equally important dimensions.
               </p>
             </div>
           </FadeIn>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
             {[
-              { glyph: '天', label: '先天命运', pct: '⅓', color: c.goldSolid, borderColor: c.goldLine, desc: '紫微斗数所揭示的，是一个人的先天命盘格局——出生时间决定的星曜布局、五行局数、命宫主星。这只是命运的三分之一，是人生的底色，而非全貌。', sub: '命盘 · 星曜 · 五行' },
-              { glyph: '地', label: '地理环境', pct: '⅓', color: 'rgba(96,165,250,0.9)', borderColor: 'rgba(96,165,250,0.3)', desc: '你所在的地理环境、城市、国家、风水格局，乃至家庭背景与社会结构，共同构成了命运的第二个维度。同一命盘，生在不同地方，际遇可以天壤之别。', sub: '地域 · 风水 · 环境' },
-              { glyph: '人', label: '人心意念', pct: '⅓', color: 'rgba(100,216,139,0.9)', borderColor: 'rgba(100,216,139,0.3)', desc: '个人的意志、心态、选择与行动，才是改变命运最主动的力量。倪师强调：了解命盘是为了更好地做人，而不是坐等命运安排。精进自己，是最强的破局之道。', sub: '意志 · 选择 · 行动' },
+              { glyph: '天', label: 'Innate Destiny', pct: '⅓', color: c.goldSolid, borderColor: c.goldLine, desc: 'Zi Wei Dou Shu reveals a person\'s innate chart pattern — star placements determined by birth time, Wu Xing number, and Ming Gong major stars. This is only one-third of fate; it is the backdrop of life, not the whole picture.', sub: 'Chart · Stars · Wu Xing' },
+              { glyph: '地', label: 'Geographic Environment', pct: '⅓', color: 'rgba(96,165,250,0.9)', borderColor: 'rgba(96,165,250,0.3)', desc: 'Your geographic environment — city, country, feng shui layout, family background, and social structure — together form the second dimension of fate. The same chart, born in different places, can yield vastly different life experiences.', sub: 'Region · Feng Shui · Environment' },
+              { glyph: '人', label: 'Human Will', pct: '⅓', color: 'rgba(100,216,139,0.9)', borderColor: 'rgba(100,216,139,0.3)', desc: 'Personal will, mindset, choices, and actions are the most active force for changing fate. Ni Haixia emphasized: understanding your chart is for living better, not for waiting on fate. Improving yourself is the strongest way to break through.', sub: 'Will · Choice · Action' },
             ].map((item, i) => (
               <FadeIn key={item.glyph} delay={0.1 + i * 0.12}>
                 <motion.div whileHover={{ y: -4 }} transition={{ duration: 0.1 }}
@@ -921,15 +921,15 @@ export default function HomePage() {
           <FadeIn delay={0.3}>
             <div className="mt-10 text-center">
               <p className="text-sm leading-relaxed" style={{ color: c.textSecond }}>
-                「命运不是人生的全部，加上地理位置和人念，才是。」
+                "Fate is not the whole of life — add geography and human intention, and then it is."
               </p>
-              <p className="mt-2 text-[10px] tracking-widest" style={{ color: c.tagText }}>— 倪海夏</p>
+              <p className="mt-2 text-[10px] tracking-widest" style={{ color: c.tagText }}>— Ni Haixia</p>
             </div>
           </FadeIn>
         </div>
       </section>
 
-      {/* ══ 倪海夏介绍 ════════════════════════════════════ */}
+      {/* ══ Ni Haixia biography ══════════════════════════════════ */}
       <section className="relative z-10 flex items-center px-6 md:px-10 lg:px-14 py-20" style={{ minHeight: '82svh' }}>
         <WeakBoundary line={c.navBorder} />
         <div className="mx-auto w-full" style={{ maxWidth: '1280px' }}>
@@ -942,11 +942,11 @@ export default function HomePage() {
               </div>
               <h2 className={`grad-text ${theme === 'dark' ? 'grad-text-dark' : 'grad-text-light'} font-bold mb-6 tracking-tight`}
                 style={{ fontSize: 'clamp(32px, 4vw, 48px)' }}>
-                倪海夏老师
+                Master Ni Haixia
               </h2>
               <p className="max-w-2xl mx-auto leading-relaxed text-sm" style={{ color: c.textSecond }}>
-                当代华人圈最具影响力的中医与术数大家之一<br />
-                美国汉唐中医学院创办人 ·「人纪」「天纪」两大教学体系传世
+                One of the most influential masters of Chinese medicine and divination in the modern Chinese-speaking world<br />
+                Founder of Han Tang Chinese Medical College in the US · Transmitted the "Ren Ji" and "Tian Ji" teaching systems
               </p>
             </div>
           </FadeIn>
@@ -956,9 +956,9 @@ export default function HomePage() {
               style={{ border: `1px solid ${c.niBorder}`, background: c.niBg, boxShadow: c.cardShadow }}>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
                 {[
-                  { label: '生于', value: '1954年', sub: '台湾' },
-                  { label: '离世', value: '2012年', sub: '1月31日 · 享年58' },
-                  { label: '传承', value: '紫微斗数', sub: '经方中医 · 易经' },
+                  { label: 'Born', value: '1954', sub: 'Taiwan' },
+                  { label: 'Passed', value: '2012', sub: 'Jan 31 · Age 58' },
+                  { label: 'Legacy', value: 'Zi Wei Dou Shu', sub: 'Classical TCM · Yi Jing' },
                 ].map(item => (
                   <div key={item.label} className="text-center rounded-xl px-4 py-3"
                     style={{ border: `1px solid ${c.niDivider}`, background: 'rgba(255,255,255,0.02)' }}>
@@ -971,38 +971,22 @@ export default function HomePage() {
               <div className="h-px mb-8" style={{ background: c.niDivider }} />
               <div className="space-y-4 text-sm leading-relaxed max-w-3xl mx-auto" style={{ color: c.textSecond }}>
                 <p>
-                  <strong style={{ color: c.goldSolid }}>生平履历</strong>：
-                  倪海夏先生（1954–2012）出生于台湾，早年师承多位中医名家，专研经方派（《伤寒论》传承）。
-                  中年赴美行医，在美国创立<strong>汉唐中医学院</strong>，二十余年间系统传授中医与传统术数。
-                  2012 年 1 月 31 日因肝癌在台湾离世，享年 58 岁。
+                  <strong style={{ color: c.goldSolid }}>Biography</strong>: Ni Haixia (1954–2012) was born in Taiwan, where he studied under several renowned Chinese medicine masters in his early years, specializing in the classical formula school (<em>Shang Han Lun</em> lineage). He moved to the US in midlife to practice medicine and founded <strong>Han Tang Chinese Medical College</strong>, systematically teaching Chinese medicine and traditional divination for over twenty years. He passed away from liver cancer in Taiwan on January 31, 2012, at the age of 58.
                 </p>
                 <p>
-                  <strong style={{ color: c.goldSolid }}>教学体系</strong>：
-                  倪师将毕生所学整理为两大公开教学系列。
-                  <strong>「人纪」</strong>涵盖《针灸大成》《神农本草经》《黄帝内经》《伤寒论》《金匮要略》——
-                  这是「人之纪」，奠定中医学习的完整路径；
-                  <strong>「天纪」</strong>涵盖紫微斗数与《易经》——这是「天之纪」，是术数研究的体系化成果。
-                  两者相合，是倪师留给后世最完整的传承。
+                  <strong style={{ color: c.goldSolid }}>Teaching Systems</strong>: Ni Haixia organized his life's learning into two major public teaching series. <strong>"Ren Ji"</strong> covers the <em>Zhen Jiu Da Cheng</em>, <em>Shen Nong Ben Cao Jing</em>, <em>Huang Di Nei Jing</em>, <em>Shang Han Lun</em>, and <em>Jin Kui Yao Lue</em> — the "Record of Humanity," laying a complete path for studying Chinese medicine. <strong>"Tian Ji"</strong> covers Zi Wei Dou Shu and the <em>Yi Jing</em> — the "Record of Heaven," a systematized body of divination research. Together, they represent Ni Haixia's most complete transmitted legacy.
                 </p>
                 <p>
-                  <strong style={{ color: c.goldSolid }}>紫微立场</strong>：
-                  倪师在紫微斗数上明确属<strong>南派三合派</strong>，主张「以命宫为本、以三方四正为用、以四化为纲」。
-                  他在《天纪》课程中明言：「<em>飞星（四化）飞来飞去太复杂，不搞这个，毕竟大道至简</em>」——
-                  这一立场将其与繁琐的飞星派清晰区分。
+                  <strong style={{ color: c.goldSolid }}>Zi Wei Stance</strong>: Ni Haixia clearly belonged to the <strong>Southern San He school</strong> of Zi Wei Dou Shu, advocating "Ming Gong as the root, Three Directions as the function, and Si Hua as the framework." In his <em>Tian Ji</em> lectures he stated: "<em>Flying stars (Si Hua) flying here and there are too complicated — I don't do that; the great way is simple.</em>" This stance clearly distinguished him from the more complex Flying Stars school.
                 </p>
                 <p>
-                  <strong style={{ color: c.goldSolid }}>治学态度</strong>：
-                  倪师反对死记硬背口诀，强调「理解原理胜过背诵」「逻辑可复核胜过神秘玄学」。
-                  这种态度让紫微斗数从师徒密传的封闭体系，走向系统化、可验证、可学习的现代知识体系。
+                  <strong style={{ color: c.goldSolid }}>Scholarly Approach</strong>: Ni Haixia opposed rote memorization of mnemonics, emphasizing "understanding principles beats memorizing" and "verifiable logic beats mysticism." This approach transformed Zi Wei Dou Shu from a closed master-apprentice tradition into a systematic, verifiable, and learnable modern body of knowledge.
                 </p>
                 <p>
-                  <strong style={{ color: c.goldSolid }}>当代影响</strong>：
-                  倪师的讲课视频在 B 站、YouTube 与各大平台广泛流传，是新一代命理与中医爱好者公认的入门必修。
-                  他不仅是紫微斗数的传承者，更是把传统命理与中医带入现代知识体系的关键人物之一。
+                  <strong style={{ color: c.goldSolid }}>Contemporary Influence</strong>: Ni Haixia's lecture videos are widely circulated on Bilibili, YouTube, and major platforms — recognized by the new generation of divination and Chinese medicine enthusiasts as essential introductory material. He is not only a transmitter of Zi Wei Dou Shu, but one of the key figures who brought traditional divination and Chinese medicine into the modern knowledge ecosystem.
                 </p>
                 <p style={{ fontSize: '11px', color: c.textMuted, fontStyle: 'italic', marginTop: '12px' }}>
-                  本平台所有解读基于倪师《天纪》公开教学讲义、《紫微斗数全书》明版、传统三合派古籍整理而成，
-                  仅作文化与个人成长参考。倪师本人与本平台无任何商业关联。
+                  All interpretations on this platform are based on Ni Haixia's public <em>Tian Ji</em> lecture notes, the Ming-dynasty <em>Zi Wei Dou Shu Quan Shu</em>, and traditional San He school classics — provided for cultural and personal enrichment only. Ni Haixia himself has no commercial relationship with this platform.
                 </p>
               </div>
             </div>
@@ -1029,7 +1013,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ══ 合盘入口 ══════════════════════════════════════ */}
+      {/* ══ Union chart entry ══════════════════════════════════════ */}
       <section className="relative z-10 px-6 md:px-10 lg:px-14 py-20">
         <div className="mx-auto" style={{ maxWidth: '1280px' }}>
           <div className="rounded-2xl p-10 md:p-14 text-center"
@@ -1046,14 +1030,14 @@ export default function HomePage() {
               </div>
               <h2 className={`grad-text ${theme === 'dark' ? 'grad-text-dark' : 'grad-text-light'} font-bold mb-4 tracking-tight`}
                 style={{ fontSize: 'clamp(26px, 3.5vw, 40px)' }}>
-                紫微合盘
+                Zi Wei Union Chart
               </h2>
               <p className="text-sm leading-relaxed mb-8 max-w-lg mx-auto" style={{ color: c.textSecond }}>
-                输入两个人的出生信息，AI 基于倪海夏体系分析夫妻宫互参、命宫兼容性与三方四正交互，<br className="hidden md:block" />
-                给出感情匹配度、合伙可行性与最佳相处建议。
+                Enter two people's birth details — AI analyzes spouse palace interaction, Ming Gong compatibility, and three-direction palace overlap based on the Ni Haixia system,<br className="hidden md:block" />
+                then provides a love-compatibility score, partnership feasibility, and the best relationship advice.
               </p>
               <div className="flex justify-center gap-3 flex-wrap mb-6">
-                {['感情匹配度分析', '合伙创业评估', '亲子缘分解读', '婚前相性评估'].map(item => (
+                {['Love Compatibility Analysis', 'Business Partnership Assessment', 'Parent-Child Affinity Reading', 'Pre-marriage Compatibility Check'].map(item => (
                   <span key={item} style={{
                     fontSize: '12px', padding: '5px 14px', borderRadius: '20px',
                     background: theme === 'dark' ? 'rgba(212,168,67,0.08)' : 'rgba(212,168,67,0.12)',
@@ -1074,31 +1058,31 @@ export default function HomePage() {
                   color: c.goldSolid,
                   cursor: 'pointer',
                 }}>
-                开始合盘分析
+                Start Union Chart Analysis
               </motion.button>
             </FadeIn>
           </div>
         </div>
       </section>
 
-      {/* ══ 最终 CTA ══════════════════════════════════════ */}
+      {/* ══ Final CTA ══════════════════════════════════════════════ */}
       <section className="relative z-10 py-40 px-6 text-center" style={{ background: c.altSection }}>
         <FadeIn>
-          <p className="text-[10px] tracking-[0.6em] uppercase mb-6" style={{ color: c.tagText }}>开始你的命盘之旅</p>
+          <p className="text-[10px] tracking-[0.6em] uppercase mb-6" style={{ color: c.tagText }}>Begin your chart journey</p>
           <h2 className={`grad-text ${theme === 'dark' ? 'grad-text-dark' : 'grad-text-light'} font-bold mb-8 tracking-tight leading-tight`}
             style={{ fontSize: 'clamp(32px, 5vw, 60px)' }}>
-            你的紫微命盘<br />等你解读
+            Your Zi Wei Chart<br />Awaits Your Reading
           </h2>
           <p className="text-sm mb-10 max-w-md mx-auto leading-relaxed" style={{ color: c.textSecond }}>
-            输入出生年月日时，在几秒内生成你的专属命盘<br />
-            再由 AI 按倪海夏体系为你深度解读
+            Enter your birth date and time — your personal chart is generated in seconds,<br />
+            then AI provides a deep reading following the Ni Haixia system
           </p>
           <motion.button
             whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
             onClick={() => router.push('/chart')}
             className="px-14 py-4 font-semibold text-base tracking-widest rounded-full"
             style={{ background: c.ctaBg, color: c.ctaText }}>
-            免费起盘
+            Cast Chart (Free)
           </motion.button>
           <div className="mt-4 flex flex-wrap gap-3 justify-center">
             <motion.a
@@ -1111,7 +1095,7 @@ export default function HomePage() {
                 background: 'transparent',
                 textDecoration: 'none',
               }}>
-              ✦ 紫微斗数知识库 →
+              ✦ Zi Wei Dou Shu Knowledge Base →
             </motion.a>
             <motion.a
               href="/library"
@@ -1123,7 +1107,7 @@ export default function HomePage() {
                 background: 'transparent',
                 textDecoration: 'none',
               }}>
-              📜 古籍原典库 →
+              📜 Classical Texts Library →
             </motion.a>
           </div>
         </FadeIn>
@@ -1133,11 +1117,11 @@ export default function HomePage() {
       <footer className="relative z-10 py-10 px-6"
         style={{ borderTop: `1px solid ${c.niCardBord}` }}>
 
-        {/* 4 板块导航占位（已上线 + 即将开放）*/}
+        {/* 4 module nav slots (live + coming soon) */}
         <div className="max-w-4xl mx-auto mb-8">
           <div className="text-[9px] tracking-[0.3em] text-center mb-4 uppercase"
             style={{ color: c.textMuted, opacity: 0.6 }}>
-            倪师方法论 · 学术体系
+            Ni Haixia Methodology · Academic System
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
             {SECTIONS.map(s => {
@@ -1162,7 +1146,7 @@ export default function HomePage() {
                   </div>
                   <div className="text-[9px] tracking-wider"
                     style={{ color: ready ? '#10b981' : c.textMuted }}>
-                    {ready ? '✓ 已上线' : `${s.when} 开放`}
+                    {ready ? '✓ Live' : `Opens ${s.when}`}
                   </div>
                 </a>
               );
@@ -1172,17 +1156,17 @@ export default function HomePage() {
 
         <div className="text-center">
           <p className="text-[10px] tracking-wider mb-3" style={{ color: c.footerText }}>
-            紫微命盘 · 基于倪海夏正宗体系 · 仅供参考，命运掌握在自己手中
+            Zi Wei Chart · Based on the Ni Haixia authentic system · For reference only — your fate is in your own hands
           </p>
           <p className="text-[10px] tracking-wider mb-3 max-w-2xl mx-auto leading-relaxed"
             style={{ color: c.footerText, opacity: 0.85 }}>
-            本平台基于中国传统文化研究，仅提供学习参考。<br className="sm:hidden" />
-            不构成任何医疗、投资、法律或重大决策建议。
+            This platform is based on Chinese traditional cultural research, provided for learning reference only.<br className="sm:hidden" />
+            It does not constitute medical, investment, legal, or major life-decision advice.
           </p>
           <p className="text-[10px] tracking-wider" style={{ color: c.footerText }}>
-            <a href="/terms" style={{ color: c.footerText, textDecoration: 'underline' }}>服务条款</a>
+            <a href="/terms" style={{ color: c.footerText, textDecoration: 'underline' }}>Terms of Service</a>
             {' · '}
-            <a href="/privacy" style={{ color: c.footerText, textDecoration: 'underline' }}>隐私政策</a>
+            <a href="/privacy" style={{ color: c.footerText, textDecoration: 'underline' }}>Privacy Policy</a>
           </p>
         </div>
       </footer>

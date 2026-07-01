@@ -1,47 +1,49 @@
 /**
- * 紫微斗数格局识别（v2 严格化版本）
+ * Zi Wei Dou Shu chart pattern detection (v2 strict edition)
  *
- * 设计原则：
- * 1. 古书条件优先：每个格局列出"必须 / 加分 / 破格"三层结构，出处可考
- * 2. 倪师立场：不使用宫干自化、大限四化、来因宫等飞星派工具
- * 3. 庙旺利陷：用 brightness 字段（bright=庙旺、normal=平、dim=陷）
- * 4. 三方四正会照：命宫 + 财帛 + 官禄 + 迁移
- * 5. 夹宫：命宫前后两宫
+ * Design principles:
+ * 1. Classical text conditions first: each pattern has a three-tier structure
+ *    (required / bonus / pattern-breaking) with traceable classical sources
+ * 2. Ni Haixia's position: no palace-stem self-Hua, Da Xian Si Hua, or
+ *    origin-palace tools (flying-star school features)
+ * 3. Brightness: uses the `brightness` field (bright = miao/wang, normal, dim = xian)
+ * 4. San Fang Si Zheng (Three Directions & Four Directions): Ming Gong + Cai Bo + Guan Lu + Qian Yi
+ * 5. Jia Gong (flanking palaces): the two palaces adjacent to Ming Gong
  *
- * 主要古籍出处：
- *  - 《紫微斗数全集》（陈抟祖师传，明代刊本）
- *  - 《紫微斗数全书》（罗洪先编，明代刊本）
- *  - 《骨髓赋》《女命骨髓赋》《十二宫诸星得地合格诀》
- *  - 倪海厦《天纪》紫微斗数讲义
+ * Primary classical sources:
+ *  - "Zi Wei Dou Shu Quan Ji" (transmitted by Chen Tuan, Ming dynasty edition)
+ *  - "Zi Wei Dou Shu Quan Shu" (compiled by Luo Honxian, Ming dynasty edition)
+ *  - "Gu Sui Fu", "Nu Ming Gu Sui Fu", "Shi Er Gong Zhu Xing De Di He Ge Jue"
+ *  - Ni Haixia "Tian Ji" Zi Wei Dou Shu lecture notes
  */
 
 import type { ZiweiChart, Palace, Star } from './types';
 
-// ────────────────── 类型 ──────────────────
+// ────────────────── Types ──────────────────
 export interface PatternCondition {
-  required: string[];   // 必须满足条件（已通过的）
-  bonus?: string[];     // 加分项（已触发）
-  breaking?: string[];  // 破格警示（已触发）
+  required: string[];   // must-satisfy conditions (already matched)
+  bonus?: string[];     // bonus conditions (triggered)
+  breaking?: string[];  // pattern-breaking warnings (triggered)
 }
 
 export interface Pattern {
   name: string;
   level: 'excellent' | 'good' | 'neutral' | 'caution';
   description: string;
-  palaces: string[];                 // 涉及宫位
-  conditions?: PatternCondition;     // 成立条件分层（v2 新增）
-  source?: string;                   // 古籍出处（v2 新增）
+  palaces: string[];                 // palaces involved
+  conditions?: PatternCondition;     // tiered conditions (added in v2)
+  source?: string;                   // classical source citation (added in v2)
 }
 
-// ────────────────── 常量 ──────────────────
+// ────────────────── Constants ──────────────────
 const SHA_NAMES = ['擎羊', '陀罗', '火星', '铃星', '地空', '地劫'];
-const SHA_HARD = ['擎羊', '陀罗', '火星', '铃星'];   // 四煞
-const SHA_KONG = ['地空', '地劫'];                  // 空劫
+const SHA_HARD = ['擎羊', '陀罗', '火星', '铃星'];   // four sha stars
+const SHA_KONG = ['地空', '地劫'];                  // kong-jie (void) stars
 const ZUO_YOU = ['左辅', '右弼'];
 const CHANG_QU = ['文昌', '文曲'];
 const KUI_YUE = ['天魁', '天钺'];
 
-// ────────────────── 辅助函数 ──────────────────
+// ────────────────── Helper functions ──────────────────
 function getMajorStarNames(palace: Palace): string[] {
   return palace.stars.filter(s => s.type === 'major').map(s => s.name);
 }
@@ -100,9 +102,9 @@ function getStarSiHua(palace: Palace, starName: string): Star['siHua'] | undefin
 }
 const BRANCH_NAMES = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'];
 
-// ────────────────── 正格识别器 ──────────────────
+// ────────────────── Positive pattern detectors ──────────────────
 
-/** 君臣庆会：紫微入命，左辅右弼同会（同宫或三方） */
+/** Jun Chen Qing Hui: Zi Wei in Life Palace, Zuo Fu & You Bi converge (same palace or San Fang) */
 function detectJunChenQingHui(chart: ZiweiChart, ming: Palace, patterns: Pattern[]) {
   if (!hasStar(ming, '紫微')) return;
   const sanFangSet = sanFangAllStars(chart);
@@ -128,7 +130,7 @@ function detectJunChenQingHui(chart: ZiweiChart, ming: Palace, patterns: Pattern
   });
 }
 
-/** 紫府同宫：紫微+天府于命宫（限寅、申宫） */
+/** Zi Fu Tong Gong: Zi Wei + Tian Fu together in Life Palace (Yin or Shen palace only) */
 function detectZiFu(chart: ZiweiChart, ming: Palace, patterns: Pattern[]) {
   const ziwei = findStarPalace(chart, '紫微');
   const tianfu = findStarPalace(chart, '天府');
@@ -158,7 +160,7 @@ function detectZiFu(chart: ZiweiChart, ming: Palace, patterns: Pattern[]) {
   });
 }
 
-/** 府相朝垣：天府、天相分别坐守命宫的三方四正 */
+/** Fu Xiang Chao Yuan: Tian Fu & Tian Xiang each occupy San Fang Si Zheng of the Life Palace */
 function detectFuXiangChaoYuan(chart: ZiweiChart, ming: Palace, patterns: Pattern[]) {
   const tianfu = findStarPalace(chart, '天府');
   const tianxiang = findStarPalace(chart, '天相');
@@ -185,7 +187,7 @@ function detectFuXiangChaoYuan(chart: ZiweiChart, ming: Palace, patterns: Patter
   });
 }
 
-/** 阳梁昌禄：太阳+天梁+文昌+禄存四星会命宫，大贵格 */
+/** Yang Liang Chang Lu: Tai Yang + Tian Liang + Wen Chang + Lu Cun all converge on Life Palace — high nobility pattern */
 function detectYangLiangChangLu(chart: ZiweiChart, ming: Palace, patterns: Pattern[]) {
   const sanFangSet = sanFangAllStars(chart);
   if (!sanFangSet.has('太阳') || !sanFangSet.has('天梁') ||
@@ -217,7 +219,7 @@ function detectYangLiangChangLu(chart: ZiweiChart, ming: Palace, patterns: Patte
   });
 }
 
-/** 火贪格 / 铃贪格：贪狼+火星 或 贪狼+铃星 同宫或会照 */
+/** Huo Tan / Ling Tan: Tan Lang + Huo Xing or Tan Lang + Ling Xing — same palace or convergence */
 function detectHuoTanLingTan(chart: ZiweiChart, ming: Palace, patterns: Pattern[]) {
   const tan = findStarPalace(chart, '贪狼');
   if (!tan) return;
@@ -253,7 +255,7 @@ function detectHuoTanLingTan(chart: ZiweiChart, ming: Palace, patterns: Pattern[
   }
 }
 
-/** 武贪格：武曲+贪狼 同宫（丑、未） 或 对照 */
+/** Wu Tan: Wu Qu + Tan Lang in same palace (Chou or Wei) or opposing */
 function detectWuTan(chart: ZiweiChart, ming: Palace, patterns: Pattern[]) {
   const wu = findStarPalace(chart, '武曲');
   const tan = findStarPalace(chart, '贪狼');
@@ -284,7 +286,7 @@ function detectWuTan(chart: ZiweiChart, ming: Palace, patterns: Pattern[]) {
   });
 }
 
-/** 杀破狼：七杀、破军、贪狼三方齐聚 */
+/** Sha Po Lang: Qi Sha, Po Jun, Tan Lang gathered across the three directions */
 function detectShaPoLang(chart: ZiweiChart, ming: Palace, patterns: Pattern[]) {
   const sanFangSet = sanFangAllStars(chart);
   const has = ['七杀', '破军', '贪狼'].filter(s => sanFangSet.has(s));
@@ -308,7 +310,7 @@ function detectShaPoLang(chart: ZiweiChart, ming: Palace, patterns: Pattern[]) {
   });
 }
 
-/** 机月同梁：天机、太阴、天同、天梁四星齐入命迁财官 */
+/** Ji Yue Tong Liang: Tian Ji, Tai Yin, Tian Tong, Tian Liang all in Life/Travel/Wealth/Career palaces */
 function detectJiYueTongLiang(chart: ZiweiChart, ming: Palace, patterns: Pattern[]) {
   const sanFangSet = sanFangAllStars(chart);
   const has = ['天机', '太阴', '天同', '天梁'].filter(s => sanFangSet.has(s));
@@ -332,7 +334,7 @@ function detectJiYueTongLiang(chart: ZiweiChart, ming: Palace, patterns: Pattern
   });
 }
 
-/** 廉贞天相：同宫 */
+/** Lian Zhen Tian Xiang: same palace */
 function detectLianXiang(chart: ZiweiChart, patterns: Pattern[]) {
   const lian = findStarPalace(chart, '廉贞');
   const xiang = findStarPalace(chart, '天相');
@@ -357,7 +359,7 @@ function detectLianXiang(chart: ZiweiChart, patterns: Pattern[]) {
   });
 }
 
-/** 武曲七杀：同宫，将星配财星 */
+/** Wu Qu Qi Sha: same palace — general star paired with wealth star */
 function detectWuQiSha(chart: ZiweiChart, patterns: Pattern[]) {
   const wu = findStarPalace(chart, '武曲');
   const qi = findStarPalace(chart, '七杀');
@@ -382,7 +384,7 @@ function detectWuQiSha(chart: ZiweiChart, patterns: Pattern[]) {
   });
 }
 
-/** 天同天梁：同宫 */
+/** Tian Tong Tian Liang: same palace */
 function detectTongLiang(chart: ZiweiChart, patterns: Pattern[]) {
   const tong = findStarPalace(chart, '天同');
   const liang = findStarPalace(chart, '天梁');
@@ -405,12 +407,12 @@ function detectTongLiang(chart: ZiweiChart, patterns: Pattern[]) {
   });
 }
 
-/** 日月同宫：太阳太阴丑或未宫同宫 */
+/** Ri Yue Tong Gong: Tai Yang & Tai Yin together in Chou or Wei palace */
 function detectRiYueTongGong(chart: ZiweiChart, patterns: Pattern[]) {
   const sun = findStarPalace(chart, '太阳');
   const moon = findStarPalace(chart, '太阴');
   if (!sun || !moon || sun.branch !== moon.branch) return;
-  if (sun.branch !== 1 && sun.branch !== 7) return;  // 必须丑(1) 或 未(7)
+  if (sun.branch !== 1 && sun.branch !== 7) return;  // must be Chou(1) or Wei(7)
 
   const inMing = sun.branch === chart.mingGongBranch;
   const required = [`太阳太阴同入${BRANCH_NAMES[sun.branch]}宫`];
@@ -430,7 +432,7 @@ function detectRiYueTongGong(chart: ZiweiChart, patterns: Pattern[]) {
   });
 }
 
-/** 日月夹命：太阳太阴在命宫前后两宫 */
+/** Ri Yue Jia Ming: Tai Yang & Tai Yin flank the Life Palace on both sides */
 function detectRiYueJiaMing(chart: ZiweiChart, patterns: Pattern[]) {
   const { prev, next } = getJiaPalaces(chart, chart.mingGongBranch);
   if (!prev || !next) return;
@@ -460,12 +462,12 @@ function detectRiYueJiaMing(chart: ZiweiChart, patterns: Pattern[]) {
   });
 }
 
-/** 巨日同宫：巨门太阳同入寅或申 */
+/** Ju Ri Tong Gong: Ju Men & Tai Yang together in Yin or Shen palace */
 function detectJuRiTongGong(chart: ZiweiChart, patterns: Pattern[]) {
   const ju = findStarPalace(chart, '巨门');
   const sun = findStarPalace(chart, '太阳');
   if (!ju || !sun || ju.branch !== sun.branch) return;
-  if (ju.branch !== 2 && ju.branch !== 8) return;  // 必须寅(2) 或 申(8)
+  if (ju.branch !== 2 && ju.branch !== 8) return;  // must be Yin(2) or Shen(8)
 
   const inMing = ju.branch === chart.mingGongBranch;
   const required = [`巨门太阳同入${BRANCH_NAMES[ju.branch]}宫`];
@@ -486,10 +488,10 @@ function detectJuRiTongGong(chart: ZiweiChart, patterns: Pattern[]) {
   });
 }
 
-/** 石中隐玉：巨门入命于子午宫 */
+/** Shi Zhong Yin Yu: Ju Men in Life Palace at Zi or Wu palace */
 function detectShiZhongYinYu(chart: ZiweiChart, ming: Palace, patterns: Pattern[]) {
   if (!hasStar(ming, '巨门')) return;
-  if (ming.branch !== 0 && ming.branch !== 6) return;  // 子(0) 或 午(6)
+  if (ming.branch !== 0 && ming.branch !== 6) return;  // must be Zi(0) or Wu(6)
 
   const required = [`巨门入命于${BRANCH_NAMES[ming.branch]}宫`];
   const bonus: string[] = [];
@@ -509,10 +511,10 @@ function detectShiZhongYinYu(chart: ZiweiChart, ming: Palace, patterns: Pattern[
   });
 }
 
-/** 明珠出海：命宫在未空宫，对宫丑宫为太阳太阴 */
+/** Ming Zhu Chu Hai: Life Palace in Wei (empty), opposite Chou palace has Tai Yang & Tai Yin */
 function detectMingZhuChuHai(chart: ZiweiChart, ming: Palace, patterns: Pattern[]) {
-  if (ming.branch !== 7) return;   // 命在未
-  if (getMajorStarNames(ming).length > 0) return;   // 命宫为空宫
+  if (ming.branch !== 7) return;   // Life Palace must be Wei
+  if (getMajorStarNames(ming).length > 0) return;   // Life Palace must be empty
   const dui = getDuiGong(chart, ming.branch);
   if (!dui) return;
   if (!hasStar(dui, '太阳') || !hasStar(dui, '太阴')) return;
@@ -534,7 +536,7 @@ function detectMingZhuChuHai(chart: ZiweiChart, ming: Palace, patterns: Pattern[
   });
 }
 
-/** 紫微独坐入命 */
+/** Zi Wei alone in Life Palace */
 function detectZiWeiInMing(chart: ZiweiChart, ming: Palace, patterns: Pattern[]) {
   if (!hasStar(ming, '紫微') || hasStar(ming, '天府')) return;
 
@@ -557,7 +559,7 @@ function detectZiWeiInMing(chart: ZiweiChart, ming: Palace, patterns: Pattern[])
   });
 }
 
-/** 辅弼夹命 */
+/** Zuo Fu & You Bi flanking Life Palace */
 function detectFuBiJiaMing(chart: ZiweiChart, patterns: Pattern[]) {
   const { prev, next } = getJiaPalaces(chart, chart.mingGongBranch);
   if (!prev || !next) return;
@@ -582,7 +584,7 @@ function detectFuBiJiaMing(chart: ZiweiChart, patterns: Pattern[]) {
   });
 }
 
-/** 昌曲夹命 */
+/** Wen Chang & Wen Qu flanking Life Palace */
 function detectChangQuJiaMing(chart: ZiweiChart, patterns: Pattern[]) {
   const { prev, next } = getJiaPalaces(chart, chart.mingGongBranch);
   if (!prev || !next) return;
@@ -602,7 +604,7 @@ function detectChangQuJiaMing(chart: ZiweiChart, patterns: Pattern[]) {
   });
 }
 
-/** 魁钺夹命 */
+/** Tian Kui & Tian Yue flanking Life Palace */
 function detectKuiYueJiaMing(chart: ZiweiChart, patterns: Pattern[]) {
   const { prev, next } = getJiaPalaces(chart, chart.mingGongBranch);
   if (!prev || !next) return;
@@ -620,7 +622,7 @@ function detectKuiYueJiaMing(chart: ZiweiChart, patterns: Pattern[]) {
   });
 }
 
-/** 双禄朝垣：化禄 + 禄存 同会三方 */
+/** Shuang Lu Chao Yuan: Hua Lu + Lu Cun both converge in San Fang */
 function detectShuangLuChaoYuan(chart: ZiweiChart, ming: Palace, patterns: Pattern[]) {
   const sanFang = getSanFangPalaces(chart);
   let huaLuFound = false;
@@ -644,7 +646,7 @@ function detectShuangLuChaoYuan(chart: ZiweiChart, ming: Palace, patterns: Patte
   });
 }
 
-/** 三奇加会：化禄 化权 化科 同会三方 */
+/** San Qi Jia Hui: Hua Lu, Hua Quan, Hua Ke all converge in San Fang */
 function detectSanQiJiaHui(chart: ZiweiChart, patterns: Pattern[]) {
   const sanFangPalaces = getSanFangPalaces(chart);
   let lu = false, quan = false, ke = false;
@@ -667,7 +669,7 @@ function detectSanQiJiaHui(chart: ZiweiChart, patterns: Pattern[]) {
   });
 }
 
-/** 化禄入命/官/财 */
+/** Hua Lu entering Life / Career / Wealth palace */
 function detectHuaLuRuMing(chart: ZiweiChart, ming: Palace, patterns: Pattern[]) {
   const huaLuStar = ming.stars.find(s => s.siHua === '禄' && s.type === 'major');
   if (!huaLuStar) return;
@@ -682,9 +684,9 @@ function detectHuaLuRuMing(chart: ZiweiChart, ming: Palace, patterns: Pattern[])
   });
 }
 
-// ────────────────── 恶格识别器 ──────────────────
+// ────────────────── Negative pattern detectors ──────────────────
 
-/** 化忌入命/迁 */
+/** Hua Ji entering Life / Travel palace */
 function detectHuaJiRuMingQian(chart: ZiweiChart, patterns: Pattern[]) {
   const qianBranch = (chart.mingGongBranch + 6) % 12;
   for (const palace of chart.palaces) {
@@ -706,12 +708,12 @@ function detectHuaJiRuMingQian(chart: ZiweiChart, patterns: Pattern[]) {
   }
 }
 
-/** 羊陀夹忌：化忌坐宫，左右被擎羊陀罗夹 */
+/** Yang Tuo Jia Ji: Hua Ji in a palace flanked on both sides by Qing Yang & Tuo Luo */
 function detectYangTuoJiaJi(chart: ZiweiChart, patterns: Pattern[]) {
   for (const palace of chart.palaces) {
     const jiStar = palace.stars.find(s => s.siHua === '忌');
     if (!jiStar) continue;
-    if (palace.branch !== chart.mingGongBranch) continue;   // 只看命宫被夹
+    if (palace.branch !== chart.mingGongBranch) continue;   // only check flanking of Life Palace
 
     const { prev, next } = getJiaPalaces(chart, palace.branch);
     if (!prev || !next) continue;
@@ -731,7 +733,7 @@ function detectYangTuoJiaJi(chart: ZiweiChart, patterns: Pattern[]) {
   }
 }
 
-/** 火铃夹命：火星铃星分居命宫前后 */
+/** Huo Ling Jia Ming: Huo Xing & Ling Xing flank Life Palace on both sides */
 function detectHuoLingJiaMing(chart: ZiweiChart, patterns: Pattern[]) {
   const { prev, next } = getJiaPalaces(chart, chart.mingGongBranch);
   if (!prev || !next) return;
@@ -749,7 +751,7 @@ function detectHuoLingJiaMing(chart: ZiweiChart, patterns: Pattern[]) {
   });
 }
 
-/** 空劫夹命：地空地劫分居命宫前后 */
+/** Kong Jie Jia Ming: Di Kong & Di Jie flank Life Palace on both sides */
 function detectKongJieJiaMing(chart: ZiweiChart, patterns: Pattern[]) {
   const { prev, next } = getJiaPalaces(chart, chart.mingGongBranch);
   if (!prev || !next) return;
@@ -767,7 +769,7 @@ function detectKongJieJiaMing(chart: ZiweiChart, patterns: Pattern[]) {
   });
 }
 
-/** 廉杀羊：廉贞、七杀、擎羊三星会照（流年大限最凶） */
+/** Lian Sha Yang: Lian Zhen, Qi Sha, Qing Yang converge — most inauspicious in Liu Nian/Da Xian */
 function detectLianShaYang(chart: ZiweiChart, patterns: Pattern[]) {
   const sanFangSet = sanFangAllStars(chart);
   if (!(sanFangSet.has('廉贞') && sanFangSet.has('七杀') && sanFangSet.has('擎羊'))) return;
@@ -782,7 +784,7 @@ function detectLianShaYang(chart: ZiweiChart, patterns: Pattern[]) {
   });
 }
 
-/** 巨火羊：巨门、火星、擎羊会照 */
+/** Ju Huo Yang: Ju Men, Huo Xing, Qing Yang converge */
 function detectJuHuoYang(chart: ZiweiChart, patterns: Pattern[]) {
   const sanFangSet = sanFangAllStars(chart);
   if (!(sanFangSet.has('巨门') && sanFangSet.has('火星') && sanFangSet.has('擎羊'))) return;
@@ -797,7 +799,7 @@ function detectJuHuoYang(chart: ZiweiChart, patterns: Pattern[]) {
   });
 }
 
-/** 铃昌陀武：铃星、文昌、陀罗、武曲会照（限至投河） */
+/** Ling Chang Tuo Wu: Ling Xing, Wen Chang, Tuo Luo, Wu Qu converge — classically the most severe negative pattern */
 function detectLingChangTuoWu(chart: ZiweiChart, patterns: Pattern[]) {
   const sanFangSet = sanFangAllStars(chart);
   if (!(sanFangSet.has('铃星') && sanFangSet.has('文昌') && sanFangSet.has('陀罗') && sanFangSet.has('武曲'))) return;
@@ -812,9 +814,9 @@ function detectLingChangTuoWu(chart: ZiweiChart, patterns: Pattern[]) {
   });
 }
 
-/** 马头带箭：擎羊在午宫坐命 */
+/** Ma Tou Dai Jian: Qing Yang in Life Palace at Wu palace */
 function detectMaTouDaiJian(chart: ZiweiChart, ming: Palace, patterns: Pattern[]) {
-  if (ming.branch !== 6) return;   // 必须午
+  if (ming.branch !== 6) return;   // must be Wu(6)
   if (!hasStar(ming, '擎羊')) return;
 
   const required = ['擎羊于午宫坐命'];
@@ -833,11 +835,12 @@ function detectMaTouDaiJian(chart: ZiweiChart, ming: Palace, patterns: Pattern[]
   });
 }
 
-// ────────────────── 基础格局（提升识别覆盖率）──────────────────
-// 设计：让普通命盘也能识别出 1-3 个常见格局，而不是 30+ 严格古书格局都不匹配。
-// 这些都是单一条件触发的轻量识别，level 多为 neutral / good。
+// ────────────────── Basic patterns (improve detection coverage) ──────────────────
+// Design: ensures an average chart can still match 1-3 common patterns,
+// rather than failing all 30+ strict classical patterns. These are lightweight,
+// single-condition detectors; level is usually neutral / good.
 
-/** 禄存守身：禄存入身宫（或命宫与身宫同宫） */
+/** Lu Cun Shou Shen: Lu Cun in Body Palace (or Life Palace = Body Palace) */
 function detectLuCunShouShen(chart: ZiweiChart, patterns: Pattern[]) {
   const luCunPalace = findStarPalace(chart, '禄存');
   if (!luCunPalace) return;
@@ -856,7 +859,7 @@ function detectLuCunShouShen(chart: ZiweiChart, patterns: Pattern[]) {
   });
 }
 
-/** 天马入命/迁：驿马星动 */
+/** Tian Ma entering Life / Travel palace: the courier star is active */
 function detectTianMaRuMing(chart: ZiweiChart, patterns: Pattern[]) {
   const tianMaPalace = findStarPalace(chart, '天马');
   if (!tianMaPalace) return;
@@ -875,7 +878,7 @@ function detectTianMaRuMing(chart: ZiweiChart, patterns: Pattern[]) {
   });
 }
 
-/** 化禄入财：财帛宫主星化禄 */
+/** Hua Lu entering Wealth palace: major star in Wealth palace transforms to Lu */
 function detectHuaLuRuCai(chart: ZiweiChart, patterns: Pattern[]) {
   const cai = chart.palaces.find(p => p.name === '财帛');
   if (!cai) return;
@@ -891,7 +894,7 @@ function detectHuaLuRuCai(chart: ZiweiChart, patterns: Pattern[]) {
   });
 }
 
-/** 化权入官：官禄宫主星化权 */
+/** Hua Quan entering Career palace: major star in Career palace transforms to Quan */
 function detectHuaQuanRuGuan(chart: ZiweiChart, patterns: Pattern[]) {
   const guan = chart.palaces.find(p => p.name === '官禄');
   if (!guan) return;
@@ -907,7 +910,7 @@ function detectHuaQuanRuGuan(chart: ZiweiChart, patterns: Pattern[]) {
   });
 }
 
-/** 化科入命/身：科名加身 */
+/** Hua Ke entering Life / Body palace: academic distinction bestowed */
 function detectHuaKeRuMingShen(chart: ZiweiChart, patterns: Pattern[]) {
   const ming = chart.palaces.find(p => p.branch === chart.mingGongBranch);
   const shen = chart.palaces.find(p => p.branch === chart.shenGongBranch);
@@ -924,16 +927,16 @@ function detectHuaKeRuMingShen(chart: ZiweiChart, patterns: Pattern[]) {
       conditions: { required: [`${keStar.name}化科入${isMing ? '命' : '身'}宫`] },
       source: '《紫微斗数全书·四化论》',
     });
-    return; // 命和身重复时只识别一次
+    return; // avoid duplicate detection when Life Palace = Body Palace
   }
 }
 
-/** 机月同梁三星会（降级版）：天机/太阴/天同/天梁 任 3 星齐入三方四正 */
+/** Ji Yue Tong Liang three-star meeting (reduced version): any 3 of Tian Ji/Tai Yin/Tian Tong/Tian Liang in San Fang Si Zheng */
 function detectJiYueTongLiangPartial(chart: ZiweiChart, ming: Palace, patterns: Pattern[]) {
   const sanFangSet = sanFangAllStars(chart);
   const has = ['天机', '太阴', '天同', '天梁'].filter(s => sanFangSet.has(s));
-  if (has.length !== 3) return; // 4 星齐由 detectJiYueTongLiang 处理
-  // 避免和上面 detectJiYueTongLiang 重复（4 星齐的不进这里）
+  if (has.length !== 3) return; // all 4 stars case is handled by detectJiYueTongLiang
+  // avoid duplicating detectJiYueTongLiang above (4-star cases don't enter here)
   const missing = ['天机', '太阴', '天同', '天梁'].filter(s => !sanFangSet.has(s));
   patterns.push({
     name: '机月同梁三星会',
@@ -946,7 +949,7 @@ function detectJiYueTongLiangPartial(chart: ZiweiChart, ming: Palace, patterns: 
   void ming;
 }
 
-/** 昌曲同会：文昌+文曲都在命三方四正 */
+/** Chang Qu Tong Hui: Wen Chang + Wen Qu both in Life Palace's San Fang Si Zheng */
 function detectChangQuTongHui(chart: ZiweiChart, patterns: Pattern[]) {
   const sanFangSet = sanFangAllStars(chart);
   if (!sanFangSet.has('文昌') || !sanFangSet.has('文曲')) return;
@@ -965,7 +968,7 @@ function detectChangQuTongHui(chart: ZiweiChart, patterns: Pattern[]) {
   });
 }
 
-/** 辅弼同会：左辅+右弼都在命三方四正 */
+/** Fu Bi Tong Hui: Zuo Fu + You Bi both in Life Palace's San Fang Si Zheng */
 function detectFuBiTongHui(chart: ZiweiChart, patterns: Pattern[]) {
   const sanFangSet = sanFangAllStars(chart);
   if (!sanFangSet.has('左辅') || !sanFangSet.has('右弼')) return;
@@ -979,7 +982,7 @@ function detectFuBiTongHui(chart: ZiweiChart, patterns: Pattern[]) {
   });
 }
 
-/** 魁钺同会：天魁+天钺都在命三方四正 */
+/** Kui Yue Tong Hui: Tian Kui + Tian Yue both in Life Palace's San Fang Si Zheng */
 function detectKuiYueTongHui(chart: ZiweiChart, patterns: Pattern[]) {
   const sanFangSet = sanFangAllStars(chart);
   if (!sanFangSet.has('天魁') || !sanFangSet.has('天钺')) return;
@@ -993,7 +996,7 @@ function detectKuiYueTongHui(chart: ZiweiChart, patterns: Pattern[]) {
   });
 }
 
-/** 科权双会：化科 + 化权 同会三方四正 */
+/** Ke Quan Shuang Hui: Hua Ke + Hua Quan both converge in San Fang Si Zheng */
 function detectKeQuanShuangHui(chart: ZiweiChart, patterns: Pattern[]) {
   const sfPalaces = getSanFangPalaces(chart);
   let hasKe = false, hasQuan = false;
@@ -1014,13 +1017,13 @@ function detectKeQuanShuangHui(chart: ZiweiChart, patterns: Pattern[]) {
   });
 }
 
-// ────────────────── 主入口 ──────────────────
+// ────────────────── Main entry point ──────────────────
 export function detectPatterns(chart: ZiweiChart): Pattern[] {
   const patterns: Pattern[] = [];
   const ming = chart.palaces.find(p => p.branch === chart.mingGongBranch);
   if (!ming) return patterns;
 
-  // 上格
+  // Superior patterns
   detectJunChenQingHui(chart, ming, patterns);
   detectZiFu(chart, ming, patterns);
   detectFuXiangChaoYuan(chart, ming, patterns);
@@ -1030,7 +1033,7 @@ export function detectPatterns(chart: ZiweiChart): Pattern[] {
   detectShaPoLang(chart, ming, patterns);
   detectJiYueTongLiang(chart, ming, patterns);
 
-  // 中格
+  // Standard patterns
   detectLianXiang(chart, patterns);
   detectWuQiSha(chart, patterns);
   detectTongLiang(chart, patterns);
@@ -1041,7 +1044,7 @@ export function detectPatterns(chart: ZiweiChart): Pattern[] {
   detectMingZhuChuHai(chart, ming, patterns);
   detectZiWeiInMing(chart, ming, patterns);
 
-  // 助力格
+  // Support patterns
   detectFuBiJiaMing(chart, patterns);
   detectChangQuJiaMing(chart, patterns);
   detectKuiYueJiaMing(chart, patterns);
@@ -1049,7 +1052,7 @@ export function detectPatterns(chart: ZiweiChart): Pattern[] {
   detectSanQiJiaHui(chart, patterns);
   detectHuaLuRuMing(chart, ming, patterns);
 
-  // 恶格
+  // Negative patterns
   detectHuaJiRuMingQian(chart, patterns);
   detectYangTuoJiaJi(chart, patterns);
   detectHuoLingJiaMing(chart, patterns);
@@ -1059,7 +1062,7 @@ export function detectPatterns(chart: ZiweiChart): Pattern[] {
   detectLingChangTuoWu(chart, patterns);
   detectMaTouDaiJian(chart, ming, patterns);
 
-  // 基础格局（提升识别覆盖率，让普通命盘也能识别 1-3 个）
+  // Basic patterns (improve detection coverage so average charts match 1-3 patterns)
   detectLuCunShouShen(chart, patterns);
   detectTianMaRuMing(chart, patterns);
   detectHuaLuRuCai(chart, patterns);
@@ -1074,7 +1077,7 @@ export function detectPatterns(chart: ZiweiChart): Pattern[] {
   return patterns;
 }
 
-// ────────────────── 命宫摘要（保持向后兼容）──────────────────
+// ────────────────── Life Palace summary (backward compatibility) ──────────────────
 export function getMingGongSummary(chart: ZiweiChart): {
   stars: string[];
   keywords: string[];

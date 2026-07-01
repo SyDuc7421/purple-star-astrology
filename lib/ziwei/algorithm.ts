@@ -1,5 +1,5 @@
 /**
- * 紫微斗数排盘算法 — 基于 iztro 开源库
+ * Zi Wei Dou Shu chart calculation algorithm — built on iztro open-source library
  * https://github.com/SylarLong/iztro
  */
 
@@ -7,10 +7,11 @@ import { astro } from 'iztro';
 import { Solar } from 'lunar-javascript';
 import type { BirthInfo, LunarInfo, Star, Palace, DaXian, DaXianSiHua, ZiweiChart } from './types';
 import { BRANCHES, STEMS } from './constants';
-// 飞星派工具仅供导出，不再在排盘时调用（倪师《天纪 03》：四化星永远固定不动）
+// Si Hua flying-star tools are exported only; no longer called during chart generation
+// (Ni Haixia, "Tian Ji 03": the four Si Hua transformations are always fixed)
 // import { detectSelfSihua, getSiHuaByStem } from './sihua';
 
-// ─── 农历信息（兼容保留）────────────────────────────────────────
+// ─── Lunar calendar info (kept for compatibility) ───────────────
 export function getLunarInfo(year: number, month: number, day: number): LunarInfo {
   const solar = Solar.fromYmd(year, month, day);
   const lunar = solar.getLunar();
@@ -27,7 +28,7 @@ export function getLunarInfo(year: number, month: number, day: number): LunarInf
   };
 }
 
-// ─── 亮度映射 ────────────────────────────────────────────────────
+// ─── Brightness mapping ──────────────────────────────────────────
 function mapBrightness(b?: string): 'bright' | 'normal' | 'dim' {
   if (!b) return 'normal';
   if (b === '庙' || b === '旺') return 'bright';
@@ -35,7 +36,7 @@ function mapBrightness(b?: string): 'bright' | 'normal' | 'dim' {
   return 'normal';
 }
 
-// ─── 星曜类型映射 ────────────────────────────────────────────────
+// ─── Star type mapping ───────────────────────────────────────────
 const SHA_STARS = new Set(['擎羊', '陀罗', '火星', '铃星', '地空', '地劫',
   '天空', '旬空', '截路', '大耗', '天使', '天伤']);
 const LUCKY_STARS = new Set(['文昌', '文曲', '左辅', '右弼', '天魁', '天钺',
@@ -52,7 +53,7 @@ function mapStarType(starName: string, iztroType: string): Star['type'] {
   return 'minor';
 }
 
-// ─── 五行局名称 → 数字 ──────────────────────────────────────────
+// ─── Wu Xing ju name → number ───────────────────────────────────
 function parseWuxingJu(name: string): number {
   if (name.includes('二')) return 2;
   if (name.includes('三')) return 3;
@@ -62,21 +63,21 @@ function parseWuxingJu(name: string): number {
   return 3;
 }
 
-// ─── 主函数：生成命盘 ────────────────────────────────────────────
+// ─── Main function: generate birth chart ─────────────────────────
 export function generateChart(birthInfo: BirthInfo): ZiweiChart {
   const { year, month, day, hour, gender } = birthInfo;
 
-  // 调用 iztro 排盘
+  // Call iztro to generate the chart
   const solarDate = `${year}-${month}-${day}`;
   const iztroGender = gender === 'male' ? '男' : '女';
   const astrolabe = astro.bySolar(solarDate, hour, iztroGender, true, 'zh-CN');
 
-  // ── 组装十二宫 ──
+  // ── Assemble the 12 palaces ──
   const palaces: Palace[] = astrolabe.palaces.map(p => {
     const branch = BRANCHES.indexOf(p.earthlyBranch as string);
     const stem   = STEMS.indexOf(p.heavenlyStem as string);
 
-    // 合并所有星：主星 + 次星 + 杂耀
+    // Merge all stars: major + minor + auxiliary
     const allStars: Star[] = [
       ...(p.majorStars ?? []).map(s => ({
         name:       s.name as string,
@@ -109,7 +110,7 @@ export function generateChart(birthInfo: BirthInfo): ZiweiChart {
     };
   });
 
-  // ── 当前年龄 & 大限 ──
+  // ── Current age & Da Xian ──
   const currentYear = new Date().getFullYear();
   const currentAge  = currentYear - year;
 
@@ -119,7 +120,7 @@ export function generateChart(birthInfo: BirthInfo): ZiweiChart {
     }
   });
 
-  // ── 借对宫结构化字段（codex P0：避免文案层从自然语言反查借宫信息）──
+  // ── Borrowed-palace structured fields (codex P0: prevent UI layer from reverse-looking up borrowed palace from natural language) ──
   palaces.forEach(p => {
     p.oppositeBranch = (p.branch + 6) % 12;
     const mainStars = p.stars.filter(s => s.type === 'major');
@@ -134,18 +135,18 @@ export function generateChart(birthInfo: BirthInfo): ZiweiChart {
     }
   });
 
-  // ── 关键宫支 ──
+  // ── Key palace branches ──
   const mingGongBranch = BRANCHES.indexOf(astrolabe.earthlyBranchOfSoulPalace as string);
   const shenGongBranch = BRANCHES.indexOf(astrolabe.earthlyBranchOfBodyPalace as string);
   const wuxingJuName   = astrolabe.fiveElementsClass as string;
   const wuxingJu       = parseWuxingJu(wuxingJuName);
 
-  // ── 紫微星位置 ──
+  // ── Zi Wei star position ──
   const ziweiPalace = palaces.find(p => p.stars.some(s => s.name === '紫微' && s.type === 'major'));
   const ziweiPos    = ziweiPalace?.branch ?? 0;
 
-  // ── 大限数组（倪师《天纪》正统：四化永远固定，大限只看宫位移动）──
-  // 不再生成 daXians[].siHua / stemIndex / stemName（飞星派字段已下线）
+  // ── Da Xian array (Ni Haixia "Tian Ji" orthodox: Si Hua fixed, Da Xian tracks palace movement only) ──
+  // No longer generating daXians[].siHua / stemIndex / stemName (flying-star fields retired)
   const daXians: DaXian[] = palaces
     .filter(p => p.daXianAge)
     .sort((a, b) => a.daXianAge![0] - b.daXianAge![0])
@@ -156,13 +157,13 @@ export function generateChart(birthInfo: BirthInfo): ZiweiChart {
       palaceName:   p.name,
     }));
 
-  // 宫干自化已下线（倪师不主张飞星派宫干自化论）
+  // Palace-stem self-transformation retired (Ni Haixia does not endorse the flying-star self-Hua theory)
 
   const currentDaXianIndex = daXians.findIndex(
     dx => currentAge >= dx.startAge && currentAge <= dx.endAge,
   );
 
-  // ── 农历信息 ──
+  // ── Lunar info ──
   const lunarInfo = getLunarInfo(year, month, day);
 
   return {

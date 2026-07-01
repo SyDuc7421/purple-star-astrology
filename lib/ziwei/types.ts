@@ -2,12 +2,12 @@ export interface BirthInfo {
   year: number;      // Gregorian year
   month: number;     // Gregorian month (1-12)
   day: number;       // Gregorian day
-  hour: number;      // 时辰 branch index (0=子, 1=丑, ... 11=亥)
+  hour: number;      // shichen branch index (0=子, 1=丑, ... 11=亥)
   gender: 'male' | 'female';
   name?: string;
-  province?: string;   // 出生省份
-  city?: string;       // 出生城市
-  longitude?: number;  // 出生地经度（用于真太阳时校正）
+  province?: string;   // birth province
+  city?: string;       // birth city
+  longitude?: number;  // birth longitude (used for true solar time correction)
 }
 
 export interface LunarInfo {
@@ -25,44 +25,44 @@ export interface Star {
   name: string;
   type: 'major' | 'minor' | 'lucky' | 'sha';
   siHua?: SiHua;
-  brightness?: 'bright' | 'normal' | 'dim';  // 庙旺利陷
+  brightness?: 'bright' | 'normal' | 'dim';  // miao/wang/li/xian brightness levels
 }
 
 export interface SelfSihuaMark {
-  siHua: SiHua;       // 禄/权/科/忌
-  starName: string;   // 自化的星
+  siHua: SiHua;       // 禄/权/科/忌 transformation type
+  starName: string;   // the self-transformed star
 }
 
 export interface Palace {
-  branch: number;      // 0-11 (地支索引)
-  stem: number;        // 0-9 (天干索引)
-  name: string;        // 宫名
+  branch: number;      // 0-11 (earthly branch index)
+  stem: number;        // 0-9 (heavenly stem index)
+  name: string;        // palace name
   stars: Star[];
-  daXianAge?: [number, number];   // 大限年龄段
+  daXianAge?: [number, number];   // Da Xian age range
   isCurrentDaXian?: boolean;
   isMingGong?: boolean;
   isShenGong?: boolean;
-  /** 宫干自化（倪师体系核心） */
+  /** Palace-stem self-transformation (core of Ni Haixia's system) */
   selfSihua?: SelfSihuaMark[];
-  /** 对宫地支索引（永远 = (branch + 6) % 12） */
+  /** Opposite palace branch index (always = (branch + 6) % 12) */
   oppositeBranch?: number;
-  /** 是否空宫（无主星） */
+  /** Whether the palace is empty (no major star) */
   isEmpty?: boolean;
-  /** 若为空宫，借自哪个宫的地支索引 = oppositeBranch */
+  /** If empty: the branch index of the palace it borrows from = oppositeBranch */
   borrowedFromBranch?: number;
-  /** 若为空宫，借自哪个宫名 */
+  /** If empty: the name of the palace it borrows from */
   borrowedFromName?: string;
-  /** 若为空宫，借到的对宫主星名列表（结构化数据，文案层不再需要从文本反查） */
+  /** If empty: list of borrowed major star names from the opposite palace (structured; UI layer no longer needs to reverse-look up from text) */
   borrowedStars?: string[];
 }
 
 export interface DaXianSiHua {
   stemIndex: number;
   stemName: string;
-  lu: string;    // 化禄星名
-  quan: string;  // 化权星名
-  ke: string;    // 化科星名
-  ji: string;    // 化忌星名
+  lu: string;    // Hua Lu star name
+  quan: string;  // Hua Quan star name
+  ke: string;    // Hua Ke star name
+  ji: string;    // Hua Ji star name
 }
 
 export interface DaXian {
@@ -70,20 +70,20 @@ export interface DaXian {
   endAge: number;
   palaceBranch: number;
   palaceName: string;
-  stemIndex?: number;    // 大限宫的天干索引（用于大限四化）
+  stemIndex?: number;    // heavenly stem index of the Da Xian palace (for Da Xian Si Hua)
   stemName?: string;
-  siHua?: DaXianSiHua;   // 该大限四化（基于宫干）
+  siHua?: DaXianSiHua;   // Si Hua for this Da Xian period (based on palace stem)
 }
 
 export interface ZiweiChart {
   birthInfo: BirthInfo;
   lunarInfo: LunarInfo;
-  mingGongBranch: number;    // 命宫地支
-  shenGongBranch: number;    // 身宫地支
-  wuxingJu: number;          // 五行局 (2,3,4,5,6)
+  mingGongBranch: number;    // Ming Gong (Life Palace) branch
+  shenGongBranch: number;    // Shen Gong (Body Palace) branch
+  wuxingJu: number;          // Wu Xing ju number (2,3,4,5,6)
   wuxingJuName: string;      // e.g. '水二局'
-  ziweiPos: number;          // 紫微星位置
-  palaces: Palace[];         // 12宫，按地支0-11排序
+  ziweiPos: number;          // Zi Wei star position
+  palaces: Palace[];         // 12 palaces, sorted by branch 0-11
   daXians: DaXian[];
   currentAge: number;
   currentDaXianIndex: number;

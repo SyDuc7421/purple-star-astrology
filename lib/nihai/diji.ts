@@ -1,17 +1,17 @@
 /**
- * 地纪 — 倪海厦地理风水体系数据库
+ * Di Ji — Ni Haixia geography and feng shui database
  *
- * 「下知地理」—— 地之纪，是地理志的体系化研究。
- * 倪海厦原计划60岁后著述，利用天文地理知识与医学素养
- * 重新编写各国地理志，研究国家人性、物产与其风水地理的关系。
+ * "Know the land" — Di Ji is the systematic study of geography.
+ * Ni Haixia originally planned to write this after age 60, drawing on his knowledge of astronomy,
+ * geography, and medicine to rewrite national geographies and study the link between feng shui and national character.
  *
- * 倪师于2012年辞世，地纪未能完成，为「倪师未竟之业」。
- * 现有内容来自天纪课程中的堪舆学部分以及后人整理的遗稿。
+ * Ni Haixia passed away in 2012; Di Ji remains unfinished — his uncompleted legacy.
+ * Existing content derives from the feng shui sections of Tian Ji and manuscripts compiled by his students.
  */
 
 import type { NiModule } from './types';
 
-// ─── 地纪模块 ────────────────────────────────────────────
+// ─── Di Ji modules ──────────────────────────────────────────
 export const DIJI_MODULES: NiModule[] = [
   {
     id: 'dj-guojiadili',
@@ -174,7 +174,7 @@ export const DIJI_MODULES: NiModule[] = [
   },
 ];
 
-// ─── 统计 ────────────────────────────────────────────────
+// ─── Statistics ──────────────────────────────────────────────
 export const DIJI_STATS = {
   totalModules: DIJI_MODULES.length,
   totalChapters: DIJI_MODULES.reduce((sum, m) => sum + m.chapters.length, 0),

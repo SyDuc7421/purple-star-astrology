@@ -1,77 +1,77 @@
 /**
- * 倪海厦 天纪 / 地纪 / 人纪 — 共享类型定义
+ * Ni Haixia Tian Ji / Di Ji / Ren Ji — shared type definitions
  */
 
-/** 三纪分类 */
+/** Three Ji category */
 export type SanJiCategory = 'tianji' | 'diji' | 'renji';
 
-/** 课程/模块 */
+/** Course / module */
 export interface NiModule {
   id: string;
   category: SanJiCategory;
-  /** 中文名 */
+  /** Chinese name */
   name: string;
-  /** 英文名 */
+  /** English name */
   nameEn: string;
-  /** 简短副标题 */
+  /** Short subtitle */
   subtitle: string;
-  /** 简要描述 */
+  /** Brief description */
   description: string;
-  /** 详细介绍（多段） */
+  /** Detailed introduction (multiple paragraphs) */
   details: string[];
-  /** 学派归属 */
+  /** School / lineage */
   school?: string;
-  /** 课时信息 */
+  /** Session info */
   lessons?: string;
-  /** 参考书目 */
+  /** Reference texts */
   references: string[];
-  /** 核心概念/关键词 */
+  /** Core concepts / keywords */
   keywords: string[];
-  /** 图标字符 */
+  /** Icon character */
   icon: string;
-  /** 状态 */
+  /** Status */
   status: 'active' | 'preview' | 'coming';
-  /** 排序权重 */
+  /** Sort weight */
   order: number;
-  /** 路由 slug */
+  /** Route slug */
   slug: string;
-  /** 子章节 */
+  /** Sub-chapters */
   chapters: NiChapter[];
 }
 
-/** 章节 */
+/** Chapter */
 export interface NiChapter {
   id: string;
   title: string;
   subtitle?: string;
   description: string;
-  /** 核心要点 */
+  /** Key points */
   keyPoints: string[];
-  /** 倪师语录 */
+  /** Ni Haixia quotes */
   quotes?: string[];
-  /** 排序 */
+  /** Sort order */
   order: number;
 }
 
-/** 易经六十四卦 */
+/** I Ching 64 hexagrams */
 export interface Hexagram {
   number: number;
   name: string;
-  /** 卦象描述 如「天泽履」 */
+  /** Hexagram description, e.g. "Tian Ze Lü" */
   composition: string;
-  /** 上卦 */
+  /** Upper trigram */
   upper: string;
-  /** 下卦 */
+  /** Lower trigram */
   lower: string;
-  /** 卦辞要点 */
+  /** Gua Ci key points */
   meaning: string;
-  /** 倪师讲解要点 */
+  /** Ni Haixia explanation highlights */
   niInterpretation: string;
-  /** 断事要诀 */
+  /** Divination key maxim */
   divination: string;
 }
 
-/** 堪舆条目 */
+/** Feng shui / geomancy entry */
 export interface FengShuiEntry {
   id: string;
   title: string;
@@ -80,7 +80,7 @@ export interface FengShuiEntry {
   keyPoints: string[];
 }
 
-/** 人纪中医条目 */
+/** Ren Ji traditional medicine entry */
 export interface MedicalEntry {
   id: string;
   moduleId: string;
@@ -91,68 +91,68 @@ export interface MedicalEntry {
   relatedAcupoints?: string[];
 }
 
-/** 针灸经验穴位 */
+/** Acupuncture clinical experience point */
 export interface AcuExperience {
   id: number;
-  /** 适应症/疾病 */
+  /** Indication / condition */
   condition: string;
-  /** 穴位组合 */
+  /** Acupoint combination */
   acupoints: string;
-  /** 分类 */
+  /** Category */
   category: string;
-  /** 补充说明 */
+  /** Additional notes */
   note?: string;
 }
 
-/** 透针透穴法 */
+/** Through-needling technique */
 export interface TransNeedling {
   id: number;
-  /** 透穴组合：A透B */
+  /** Through-needling pair: A through B */
   combo: string;
-  /** 治疗症状 */
+  /** Symptoms treated */
   indication: string;
-  /** 配穴 */
+  /** Supplementary acupoints */
   supporting?: string;
-  /** 来源 */
+  /** Source */
   source: string;
 }
 
-/** 汉唐方剂 */
+/** Han Tang formula */
 export interface HantangFormula {
   id: number;
-  /** 方名（如「白带丸」、「大禹丸」） */
+  /** Formula name (e.g. "Bai Dai Wan", "Da Yu Wan") */
   name: string;
-  /** 主治疾病 */
+  /** Primary indication */
   indication: string;
-  /** 核心理论（一句话） */
+  /** Core theory (one sentence) */
   theory?: string;
-  /** 主要成分（公开部分） */
+  /** Main ingredients (publicly disclosed portion) */
   ingredients?: string;
 }
 
-/** 经典经方 */
+/** Classical formula */
 export interface ClassicFormula {
   id: string;
-  /** 方名 */
+  /** Formula name */
   name: string;
-  /** 出处 */
+  /** Source text */
   source: string;
-  /** 组成药物 */
+  /** Ingredient herbs */
   composition: string;
-  /** 主治 */
+  /** Primary indications */
   indication: string;
-  /** 倪师用法要点 */
+  /** Ni Haixia usage notes */
   niUsage?: string;
 }
 
-/** 天纪课程集数结构 */
+/** Tian Ji course episode structure */
 export interface TianjiEpisode {
-  /** DVD编号 1-24 */
+  /** DVD number 1-24 */
   dvd: number;
-  /** 前半段主题 */
+  /** First-half topic */
   firstHalf: string;
-  /** 后半段主题 */
+  /** Second-half topic */
   secondHalf: string;
-  /** 关键内容 */
+  /** Key content */
   highlights: string[];
 }
