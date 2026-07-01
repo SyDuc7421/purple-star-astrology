@@ -1,50 +1,51 @@
 /**
- * 四化工具模块 — 年干 / 大限宫干 / 流年干 / 流月干 四化映射
- *                + 宫干自化检测 + 来因宫追溯
+ * Si Hua utility module — mapping for birth year stem / Da Xian palace stem /
+ *                         annual stem / monthly stem four-transformation
+ *                         + palace-stem self-Hua detection + origin palace tracing
  *
- * 倪海厦《天纪》体系核心：
- *   本命四化 = 出生年天干四化（静态基础）
- *   大限四化 = 大限宫**宫干**（非本命年干）的四化（十年动态）
- *   流年四化 = 当年年干的四化（一年动态）
- *   自化     = 某宫的宫干四化，其中被化星恰在本宫
- *   来因宫   = 某颗化星的"动力来源宫"——即宫干引发该化的宫位
+ * Core of Ni Haixia's "Tian Ji" system:
+ *   Natal Si Hua    = four transformations of the birth year's heavenly stem (static baseline)
+ *   Da Xian Si Hua  = four transformations of the Da Xian palace's own stem (10-year dynamic)
+ *   Liu Nian Si Hua = four transformations of the current year's stem (annual dynamic)
+ *   Self-Hua        = when a palace's stem transformation falls on a star already in that palace
+ *   Origin palace   = the palace whose stem triggered a given transformation ("source palace")
  */
 
 import type { ZiweiChart, Palace, SiHua } from './types';
 import { SI_HUA_TABLE, STEMS } from './constants';
 
-// ─── 1) 由天干索引取四化四星 ───────────────────────────────────
-/** 天干索引 0-9 → { 禄, 权, 科, 忌 } 对应星名 */
+// ─── 1) Get four Si Hua stars by heavenly stem index ────────────
+/** Stem index 0-9 → { 禄, 权, 科, 忌 } star names */
 export function getSiHuaByStem(stemIndex: number): Record<SiHua, string> {
   const arr = SI_HUA_TABLE[stemIndex];
   if (!arr) return { 禄: '', 权: '', 科: '', 忌: '' };
   return { 禄: arr[0], 权: arr[1], 科: arr[2], 忌: arr[3] };
 }
 
-/** 星名 → 四化类型（由某天干确定） */
+/** Star name → Si Hua type (determined by a given heavenly stem) */
 export function buildStarSiHuaMap(stemIndex: number): Record<string, SiHua> {
   const arr = SI_HUA_TABLE[stemIndex];
   if (!arr) return {};
   return { [arr[0]]: '禄', [arr[1]]: '权', [arr[2]]: '科', [arr[3]]: '忌' };
 }
 
-// ─── 2) 公历年 → 年柱天干索引 ──────────────────────────────────
-/** 公历年份 → 年柱天干索引（0=甲, ... 9=癸） */
+// ─── 2) Gregorian year → year pillar heavenly stem index ────────
+/** Gregorian year → year pillar heavenly stem index (0=甲, ... 9=癸) */
 export function getYearStemIndex(year: number): number {
   return ((year - 4) % 10 + 10) % 10;
 }
 
-/** 公历年份 → 年柱地支索引（0=子, ... 11=亥） */
+/** Gregorian year → year pillar earthly branch index (0=子, ... 11=亥) */
 export function getYearBranchIndex(year: number): number {
   return ((year - 4) % 12 + 12) % 12;
 }
 
-// ─── 3) 大限四化：取大限宫的宫干（非本命年干）───────────────
+// ─── 3) Da Xian Si Hua: use the Da Xian palace's own stem ───────
 /**
- * 大限宫干四化
- * @param chart 命盘
- * @param dxIndex 大限索引（chart.daXians[dxIndex]）
- * @returns 该大限的四化四星
+ * Da Xian palace-stem four transformations
+ * @param chart natal chart
+ * @param dxIndex Da Xian index (chart.daXians[dxIndex])
+ * @returns the four Si Hua stars for that Da Xian period
  */
 export function getDaXianSiHua(
   chart: ZiweiChart,
@@ -62,7 +63,7 @@ export function getDaXianSiHua(
   };
 }
 
-// ─── 4) 流年四化 ──────────────────────────────────────────────
+// ─── 4) Liu Nian (annual) Si Hua ────────────────────────────────
 export function getLiuNianSiHua(year: number): {
   stemIndex: number;
   stemName: string;
@@ -76,22 +77,24 @@ export function getLiuNianSiHua(year: number): {
   };
 }
 
-// ─── 5) 流月四化（月柱天干，由年干 + 月序推） ───────────────
+// ─── 5) Liu Yue (monthly) Si Hua (month pillar stem, derived from year stem + month) ──
 /**
- * 流月天干（五虎遁：甲己年起丙寅、乙庚年起戊寅、丙辛年起庚寅、丁壬年起壬寅、戊癸年起甲寅）
- * month: 农历月 1-12
+ * Monthly heavenly stem (Wu Hu Dun rule:
+ *   甲/己 years start from 丙寅, 乙/庚 from 戊寅, 丙/辛 from 庚寅,
+ *   丁/壬 from 壬寅, 戊/癸 from 甲寅)
+ * month: lunar month 1-12
  */
 export function getLiuYueStemIndex(yearStem: number, month: number): number {
-  // 五虎遁：正月（寅月）天干
+  // Wu Hu Dun: heavenly stem of the first lunar month (Yin month)
   const startStemOfYin: Record<number, number> = {
-    0: 2, 5: 2,  // 甲己 → 丙
-    1: 4, 6: 4,  // 乙庚 → 戊
-    2: 6, 7: 6,  // 丙辛 → 庚
-    3: 8, 8: 8,  // 丁壬 → 壬
-    4: 0, 9: 0,  // 戊癸 → 甲
+    0: 2, 5: 2,  // 甲/己 → 丙
+    1: 4, 6: 4,  // 乙/庚 → 戊
+    2: 6, 7: 6,  // 丙/辛 → 庚
+    3: 8, 8: 8,  // 丁/壬 → 壬
+    4: 0, 9: 0,  // 戊/癸 → 甲
   };
   const yinStem = startStemOfYin[yearStem] ?? 0;
-  // 从寅（正月）到目标月（month 取 1-12）
+  // From Yin (first month) to the target month (1-12)
   return (yinStem + ((month - 1) % 12) + 10) % 10;
 }
 
@@ -108,14 +111,16 @@ export function getLiuYueSiHua(yearStem: number, month: number): {
   };
 }
 
-// ─── 6) 宫干自化检测 ──────────────────────────────────────────
+// ─── 6) Palace-stem self-Hua detection ──────────────────────────
 /**
- * 自化：该宫宫干引发的四化，被化星恰在本宫
- * e.g. 宫干为甲（廉破武阳），如果本宫主星含"廉贞"，则该宫有"自化禄"
+ * Self-Hua: the four transformations triggered by a palace's own stem,
+ * where the transformed star happens to be in that same palace.
+ * e.g. palace stem is 甲 (廉/破/武/阳), if the palace contains '廉贞' as a major star,
+ * that palace has a "self Hua-Lu"
  */
 export interface SelfSihua {
-  siHua: SiHua;        // 禄/权/科/忌
-  starName: string;    // 被化的星
+  siHua: SiHua;        // 禄/权/科/忌 transformation type
+  starName: string;    // the transformed star
 }
 
 export function detectSelfSihua(palace: Palace): SelfSihua[] {
@@ -131,16 +136,17 @@ export function detectSelfSihua(palace: Palace): SelfSihua[] {
   return found;
 }
 
-// ─── 7) 来因宫追溯 ────────────────────────────────────────────
+// ─── 7) Origin palace tracing ───────────────────────────────────
 /**
- * 来因宫：对某颗星某种化，追溯是哪个宫的宫干"飞"过来的
+ * Origin palace: for a given star + Si Hua type, find which palace's stem "flies" it in.
  *
- * 倪师体系常用：化忌的来因宫——化忌由哪个宫位的"宫干"引发，那个宫位就是问题的根源宫位
+ * Commonly used in Ni Haixia's system: tracing the origin palace of Hua Ji —
+ * the palace whose stem triggers the Hua Ji is the root-cause palace for the issue.
  *
- * @param chart 命盘
- * @param starName 被化的星名（如 "太阴"）
- * @param sihua  四化类型（如 "忌"）
- * @returns 引发该化的宫位数组（通常只有一个，但若多宫宫干相同可能多个）
+ * @param chart natal chart
+ * @param starName the transformed star name (e.g. "太阴")
+ * @param sihua   Si Hua type (e.g. "忌")
+ * @returns palaces that trigger this transformation (usually one; multiple if two palaces share the same stem)
  */
 export function findIncomingPalaces(
   chart: ZiweiChart,
@@ -158,7 +164,7 @@ export function findIncomingPalaces(
 }
 
 /**
- * 批量计算盘面所有宫位的自化列表
+ * Compute the self-Hua list for every palace in the chart
  */
 export function buildAllSelfSihua(chart: ZiweiChart): Record<number, SelfSihua[]> {
   const result: Record<number, SelfSihua[]> = {};
@@ -169,17 +175,17 @@ export function buildAllSelfSihua(chart: ZiweiChart): Record<number, SelfSihua[]
   return result;
 }
 
-// ─── 8) 综合覆盖（overlay）：多个四化层叠加后的效果 ──────────
+// ─── 8) Overlay: combined view of multiple Si Hua layers ────────
 /**
- * 生成某星名 → 多层四化的合成视图
- * 用于在宫位上同时显示：本命化 / 大限化 / 流年化
- * 优先级：本命 < 大限 < 流年（但都标出来）
+ * Generate a combined view of a star's multi-layer Si Hua.
+ * Used to display simultaneously on a palace: natal / Da Xian / Liu Nian transformations.
+ * Priority: natal < Da Xian < Liu Nian (all are shown)
  */
 export interface SiHuaOverlay {
-  native?: SiHua;    // 本命（年干）
-  daXian?: SiHua;    // 大限
-  liuNian?: SiHua;   // 流年
-  liuYue?: SiHua;    // 流月
+  native?: SiHua;    // natal (birth year stem)
+  daXian?: SiHua;    // Da Xian
+  liuNian?: SiHua;   // Liu Nian (annual)
+  liuYue?: SiHua;    // Liu Yue (monthly)
 }
 
 export function buildOverlayForStar(

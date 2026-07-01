@@ -18,15 +18,15 @@ export function useHistory() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) setHistory(JSON.parse(raw));
-    } catch { /* localStorage 不可用时静默失败 */ }
+    } catch { /* fail silently when localStorage is unavailable */ }
   }, []);
 
   const save = useCallback((form: BirthFormState) => {
     const label = [
       form.name,
-      `${form.year}年${form.month}月${form.day}日`,
+      `${form.year}/${form.month}/${form.day}`,
       form.city || form.province || '',
-      form.gender === 'male' ? '男' : '女',
+      form.gender === 'male' ? 'Male' : 'Female',
     ].filter(Boolean).join(' · ');
 
     const entry: HistoryEntry = {
@@ -37,7 +37,7 @@ export function useHistory() {
     };
 
     setHistory(prev => {
-      // 去重：相同出生年月日+性别+时辰视为同一条记录
+      // Deduplicate: same birth date + gender + shichen = same record
       const deduped = prev.filter(e =>
         !(e.form.year === form.year &&
           e.form.month === form.month &&
