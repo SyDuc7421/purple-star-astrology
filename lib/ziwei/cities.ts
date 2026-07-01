@@ -9,7 +9,7 @@ export interface ProvinceInfo {
 }
 
 export const PROVINCES: ProvinceInfo[] = [
-  // ─── 直辖市 ───────────────────────────────────────────
+  // ─── Direct-controlled municipalities ──────────────────
   {
     name: '北京市',
     cities: [{ name: '北京', longitude: 116.4 }],
@@ -32,7 +32,7 @@ export const PROVINCES: ProvinceInfo[] = [
     ],
   },
 
-  // ─── 华北 ─────────────────────────────────────────────
+  // ─── North China ──────────────────────────────────────
   {
     name: '河北省',
     cities: [
@@ -79,7 +79,7 @@ export const PROVINCES: ProvinceInfo[] = [
     ],
   },
 
-  // ─── 东北 ─────────────────────────────────────────────
+  // ─── Northeast China ──────────────────────────────────
   {
     name: '辽宁省',
     cities: [
@@ -130,7 +130,7 @@ export const PROVINCES: ProvinceInfo[] = [
     ],
   },
 
-  // ─── 华东 ─────────────────────────────────────────────
+  // ─── East China ───────────────────────────────────────
   {
     name: '江苏省',
     cities: [
@@ -236,7 +236,7 @@ export const PROVINCES: ProvinceInfo[] = [
     ],
   },
 
-  // ─── 华中 ─────────────────────────────────────────────
+  // ─── Central China ────────────────────────────────────
   {
     name: '河南省',
     cities: [
@@ -297,7 +297,7 @@ export const PROVINCES: ProvinceInfo[] = [
     ],
   },
 
-  // ─── 华南 ─────────────────────────────────────────────
+  // ─── South China ──────────────────────────────────────
   {
     name: '广东省',
     cities: [
@@ -356,7 +356,7 @@ export const PROVINCES: ProvinceInfo[] = [
     ],
   },
 
-  // ─── 西南 ─────────────────────────────────────────────
+  // ─── Southwest China ──────────────────────────────────
   {
     name: '四川省',
     cities: [
@@ -431,7 +431,7 @@ export const PROVINCES: ProvinceInfo[] = [
     ],
   },
 
-  // ─── 西北 ─────────────────────────────────────────────
+  // ─── Northwest China ──────────────────────────────────
   {
     name: '陕西省',
     cities: [

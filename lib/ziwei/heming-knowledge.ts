@@ -1,18 +1,18 @@
 /**
- * 紫微斗数合盘知识库
- * 基于倪海夏《天纪》体系 + 《紫微斗数全书》古典断语 + 全网专业资料整合
- * 供合盘 AI 分析使用
+ * Zi Wei Dou Shu compatibility reading (He Ming) knowledge base
+ * Based on Ni Haixia's "Tian Ji" system + "Zi Wei Dou Shu Quan Shu" classical judgments
+ * + curated professional sources. Used by the He Ming AI analysis.
  */
 
-// ─── 十四主星在夫妻宫的完整断语 ──────────────────────────
+// ─── Complete judgments for 14 major stars in the Spouse Palace ──
 
 export const STAR_IN_FUQI_GU: Record<string, {
-  summary: string;       // 一句话核心
-  good: string;          // 吉象条件/表现
-  bad: string;           // 凶象/注意事项
-  spouse_traits: string; // 配偶外形性格
-  timing: string;        // 婚期建议
-  ni_quote?: string;     // 倪海夏原话
+  summary: string;       // one-sentence core judgment
+  good: string;          // auspicious conditions / expressions
+  bad: string;           // inauspicious signs / cautions
+  spouse_traits: string; // spouse appearance and personality
+  timing: string;        // marriage timing recommendation
+  ni_quote?: string;     // direct quote from Ni Haixia
 }> = {
   '紫微': {
     summary: '配偶高傲能干，宜晚婚，感情以尊重为基础',
@@ -123,7 +123,7 @@ export const STAR_IN_FUQI_GU: Record<string, {
   },
 };
 
-// ─── 四化在夫妻宫的完整断语 ──────────��─────────────────────
+// ─── Complete judgments for Si Hua in the Spouse Palace ──────────────────────
 
 export const SIHUA_IN_FUQI_GU = {
   '化禄': '与配偶有先天缘分，配偶个性乐观，婚后感情更好，配偶越来越会赚钱，缘分深厚；自化禄则财来财去，感情有但难守',
@@ -132,7 +132,7 @@ export const SIHUA_IN_FUQI_GU = {
   '化忌': '欠下婚姻债务，早婚早离，建议晚婚或不婚；配偶对本人有怨言；化忌冲夫妻宫尤凶——生离死别之兆',
 };
 
-// ─── 合盘核心方法论 ─────────────────────────────────────────
+// ─── He Ming core methodology ─────────────────────────────────────
 
 export const HEMING_METHODOLOGY = `
 ## 合盘分析核心框架（倪海夏体系 + 《紫微斗数全书》综合）
@@ -306,7 +306,7 @@ export const HEMING_METHODOLOGY = `
 8. **“如果你娶个太太是七杀入命，那你差不多毁了一半了，很累啊，草木皆兵。”**
 `;
 
-// ─── 婚姻判断辅助表 ───────────��─────────────────────────────
+// ─── Marriage judgment reference table ─────────────────────────────
 
 export const MARRIAGE_STARS_BRIEF: Record<string, string> = {
   '红鸾': '婚恋正缘，入命身主动成婚；流年逢红鸾该年婚恋有动',
