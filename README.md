@@ -147,14 +147,14 @@ git clone https://github.com/Renhuai123/ziwei-doushu.git
 cd ziwei-doushu
 
 # Install dependencies
-npm install
+pnpm install
 
 # Configure environment variables
 cp .env.example .env.local
 # Edit .env.local and fill in your AI API key
 
 # Start development server
-npm run dev
+pnpm dev
 ```
 
 > Note: the open-source edition does not include backend API routes. AI interpretation requires you to implement `/api/interpret` and related endpoints yourself. The chart algorithm and frontend UI run independently.
