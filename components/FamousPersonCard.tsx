@@ -3,11 +3,11 @@ import { motion } from 'framer-motion';
 import type { FamousPerson } from '@/lib/ziwei/famous';
 
 const CATEGORY_COLORS: Record<string, string> = {
-  '商业': '#4ade80',
-  '文艺': '#c084fc',
-  '科技': '#60a5fa',
-  '体育': '#fb923c',
-  '历史': '#facc15',
+  '商业': '#4ade80', // Business
+  '文艺': '#c084fc', // Arts
+  '科技': '#60a5fa', // Tech
+  '体育': '#fb923c', // Sports
+  '历史': '#facc15', // History
 };
 
 export default function FamousPersonCard({ person }: { person: FamousPerson }) {
@@ -38,7 +38,7 @@ export default function FamousPersonCard({ person }: { person: FamousPerson }) {
             {person.name}
           </span>
           <span className="text-[11px]" style={{ color: 'var(--t-faint)' }}>
-            {person.year}年 · {person.gender === 'male' ? '男命' : '女命'}
+            {person.year} · {person.gender === 'male' ? 'Male chart' : 'Female chart'}
           </span>
         </div>
 

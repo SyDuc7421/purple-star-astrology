@@ -40,10 +40,10 @@ export default function ShareModal({ open, onClose, shareUrl, chart, birth, high
     try {
       const dataURL = await captureShareCard();
       if (!dataURL) {
-        alert('图片生成失败，请截图保存或刷新重试');
+        alert('Image generation failed — please take a screenshot or refresh and try again');
         return;
       }
-      downloadDataURL(dataURL, `紫微命盘_${Date.now()}.png`);
+      downloadDataURL(dataURL, `ziwei-chart_${Date.now()}.png`);
     } finally {
       setDownloading(false);
     }
@@ -75,14 +75,14 @@ export default function ShareModal({ open, onClose, shareUrl, chart, birth, high
               boxShadow: '0 24px 60px rgba(0,0,0,0.3)',
             }}
           >
-            {/* 顶部标题 */}
+            {/* Header */}
             <div style={{
               padding: '14px 18px',
               borderBottom: '1px solid rgba(184,146,42,0.15)',
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
             }}>
               <div style={{ fontSize: '14px', fontWeight: 600, color: '#3d2f10', letterSpacing: '0.12em' }}>
-                ✦ 分享命盘
+                ✦ Share Chart
               </div>
               <button onClick={onClose}
                 style={{
@@ -93,7 +93,7 @@ export default function ShareModal({ open, onClose, shareUrl, chart, birth, high
               >×</button>
             </div>
 
-            {/* 卡片图预览（实际渲染） */}
+            {/* Card preview (actual render) */}
             <div style={{ padding: '20px', background: '#fbf6e8', display: 'flex', justifyContent: 'center', overflowX: 'auto' }}>
               {chart && (
                 <ShareCardCanvas chart={chart} birth={birth} highlight={highlight} />
@@ -101,10 +101,10 @@ export default function ShareModal({ open, onClose, shareUrl, chart, birth, high
             </div>
 
             <div style={{ padding: '0 20px 12px', textAlign: 'center', fontSize: '11px', color: '#a89b7c', letterSpacing: '0.05em' }}>
-              ↑ 朋友圈 / 微信 / 抖音 / 小红书 都能用
+              ↑ Works for WeChat Moments / Douyin / Xiaohongshu
             </div>
 
-            {/* 操作区 */}
+            {/* Actions */}
             <div style={{ padding: '0 20px 20px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
               <button onClick={downloadImage} disabled={downloading}
                 style={{
@@ -116,7 +116,7 @@ export default function ShareModal({ open, onClose, shareUrl, chart, birth, high
                   opacity: downloading ? 0.7 : 1,
                 }}
               >
-                {downloading ? '生成中…' : '⬇ 下载分享图'}
+                {downloading ? 'Generating…' : '⬇ Download Image'}
               </button>
 
               <button onClick={copyLink}
@@ -127,7 +127,7 @@ export default function ShareModal({ open, onClose, shareUrl, chart, birth, high
                   cursor: 'pointer',
                 }}
               >
-                {copied ? '✓ 已复制链接' : '🔗 复制命盘链接'}
+                {copied ? '✓ Link Copied' : '🔗 Copy Chart Link'}
               </button>
 
               <div style={{
@@ -135,9 +135,9 @@ export default function ShareModal({ open, onClose, shareUrl, chart, birth, high
                 padding: '10px 12px', background: 'rgba(184,146,42,0.05)',
                 borderRadius: '8px', marginTop: '4px',
               }}>
-                <div style={{ marginBottom: '4px', fontWeight: 600, color: '#8b6a14' }}>使用提示：</div>
-                · 下载图片可发朋友圈 / 抖音 / 小红书<br />
-                · 复制链接发给微信好友，对方点开看自己的盘起点
+                <div style={{ marginBottom: '4px', fontWeight: 600, color: '#8b6a14' }}>Tips:</div>
+                · Download the image to share on WeChat Moments / Douyin / Xiaohongshu<br />
+                · Copy the link and send to friends — they can open it to start their own chart
               </div>
             </div>
           </motion.div>

@@ -6,7 +6,7 @@ import { formToBirthInfo } from '@/lib/ziwei/share';
 import type { BirthInfo, ZiweiChart } from '@/lib/ziwei/types';
 import { useTheme } from '@/components/ThemeProvider';
 
-// ─── AiContent 渲染器（与 InsightPanel 一致）────────────────
+// ─── AiContent renderer (same as InsightPanel) ─────────────
 function AiContent({ text, streaming }: { text: string; streaming?: boolean }) {
   const lines = text.split('\n');
   return (
@@ -51,14 +51,14 @@ export default function HemingPage() {
   const { theme } = useTheme();
   const isDark = theme === 'dark';
 
-  // ─── 双方命盘状态 ─────────────────────────────────────────
+  // ─── Both parties chart state ─────────────────────────────
   const [chartA, setChartA] = useState<ZiweiChart | null>(null);
   const [chartB, setChartB] = useState<ZiweiChart | null>(null);
-  // 双方表单状态由 BirthForm onFormSave 同步到此处，统一按钮触发起盘
+  // Both form states are synced here via BirthForm onFormSave; a single button triggers chart generation
   const [formA, setFormA] = useState<BirthFormState | null>(null);
   const [formB, setFormB] = useState<BirthFormState | null>(null);
 
-  // ─── AI 合盘分析状态 ─────────────────────────────────────
+  // ─── AI union chart analysis state ───────────────────────
   const [analysis, setAnalysis] = useState('');
   const [analyzing, setAnalyzing] = useState(false);
   const [question, setQuestion] = useState('');
@@ -66,7 +66,7 @@ export default function HemingPage() {
   const [formError, setFormError] = useState<string | null>(null);
   const analysisRef = useRef<HTMLDivElement>(null);
 
-  // ─── 起盘（单次调用，返回 chart 给统一流程使用）──────────
+  // ─── Generate chart (single call, returns chart for unified flow) ──
   const generateChart = useCallback(async (info: BirthInfo): Promise<ZiweiChart | null> => {
     try {
       const res = await fetch('/api/generate', {
@@ -81,15 +81,15 @@ export default function HemingPage() {
     }
   }, []);
 
-  // 表单是否填齐
+  // Whether both forms are complete
   const isFormReady = (f: BirthFormState | null): boolean =>
     !!(f && f.year && f.month && f.day && f.gender && (f.unknownTime || (f.clockHour !== '' && f.clockMinute !== '')));
 
-  // ─── 统一入口：起盘 + 合盘分析 ─────────────────────────────
+  // ─── Unified entry: chart generation + union analysis ──────
   const runAnalysis = useCallback(async (q?: string) => {
     setFormError(null);
     if (!isFormReady(formA) || !isFormReady(formB)) {
-      setFormError('请先填写双方完整出生信息');
+      setFormError('Please fill in complete birth information for both parties');
       return;
     }
     setAnalyzing(true);
@@ -97,7 +97,7 @@ export default function HemingPage() {
     setAnalysisError(false);
 
     try {
-      // 并行起两张盘（如果还没起）
+      // Generate both charts in parallel (if not already generated)
       let cA = chartA;
       let cB = chartB;
       const [newA, newB] = await Promise.all([
@@ -163,7 +163,7 @@ export default function HemingPage() {
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg-0)' }}>
-      {/* 顶栏 */}
+      {/* Top bar */}
       <header style={{
         position: 'sticky', top: 0, zIndex: 50,
         background: isDark ? 'rgba(2,8,16,0.88)' : 'rgba(250,245,235,0.92)',
@@ -179,34 +179,34 @@ export default function HemingPage() {
           }}
         >
           <span style={{ fontSize: '16px' }}>‹</span>
-          <span>返回</span>
+          <span>Back</span>
         </button>
         <div style={{ width: '1px', height: '20px', background: 'var(--bdr-med)' }} />
-        <span style={{ fontSize: '12px', color: 'var(--ac)', letterSpacing: '0.2em' }}>合盘分析</span>
+        <span style={{ fontSize: '12px', color: 'var(--ac)', letterSpacing: '0.2em' }}>Union Chart Analysis</span>
         <div style={{ flex: 1 }} />
-        <span style={{ fontSize: '11px', color: 'var(--tx-3)' }}>感情 · 合伙 · 亲子 · 朋友</span>
+        <span style={{ fontSize: '11px', color: 'var(--tx-3)' }}>Love · Partnership · Family · Friends</span>
       </header>
 
-      {/* 主体 */}
+      {/* Main content */}
       <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '32px 24px 80px' }}>
 
-        {/* 标题 */}
+        {/* Title */}
         <div style={{ textAlign: 'center', marginBottom: '36px' }}>
           <div style={{ fontSize: '28px', color: 'var(--ac)', opacity: 0.15, marginBottom: '12px' }}>☯</div>
           <h1 style={{ fontSize: '22px', fontWeight: 600, letterSpacing: '0.15em', color: 'var(--tx-0)', marginBottom: '8px' }}>
-            紫微合盘
+            Zi Wei Union Chart
           </h1>
           <p style={{ fontSize: '13px', color: 'var(--tx-3)', lineHeight: 1.6 }}>
-            输入两个人的出生信息，AI 基于倪海夏体系分析双方命盘的缘分匹配度、感情走向与相处建议
+            Enter two people's birth information — AI analyzes compatibility, relationship dynamics, and interaction advice based on the Ni Haixia system
           </p>
         </div>
 
-        {/* 双栏表单 */}
+        {/* Two-column form */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '24px' }}
           className="heming-grid">
-          {/* 甲方 */}
+          {/* Party A */}
           <div style={cardStyle}>
-            <span style={labelStyle}>甲方 — A</span>
+            <span style={labelStyle}>Party A</span>
             <BirthForm
               hideSubmit
               onSubmit={() => {}}
@@ -214,9 +214,9 @@ export default function HemingPage() {
             />
           </div>
 
-          {/* 乙方 */}
+          {/* Party B */}
           <div style={cardStyle}>
-            <span style={labelStyle}>乙方 — B</span>
+            <span style={labelStyle}>Party B</span>
             <BirthForm
               hideSubmit
               onSubmit={() => {}}
@@ -225,7 +225,7 @@ export default function HemingPage() {
           </div>
         </div>
 
-        {/* ═══ 大合盘分析框（视觉中心，始终显示）════════════════ */}
+        {/* ═══ Union chart analysis panel (visual center, always visible) ════ */}
         <div ref={analysisRef} style={{
           ...cardStyle,
           minHeight: '320px',
@@ -234,18 +234,18 @@ export default function HemingPage() {
           flexDirection: 'column',
           justifyContent: (!analysis && !analyzing) ? 'center' : 'flex-start',
         }}>
-          {/* 区块标题 */}
+          {/* Section title */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: (analysis || analyzing) ? '20px' : '24px' }}>
             <span style={{ color: 'var(--ac)', opacity: 0.6 }}>◉</span>
-            <span style={{ fontSize: '11px', letterSpacing: '0.3em', color: 'var(--tx-3)' }}>合盘分析 · HEMING</span>
+            <span style={{ fontSize: '11px', letterSpacing: '0.3em', color: 'var(--tx-3)' }}>Union Chart Analysis · HEMING</span>
           </div>
 
-          {/* 状态分支 */}
+          {/* State branches */}
           {!analysis && !analyzing && (
             <div style={{ textAlign: 'center', padding: '32px 0' }}>
               <div style={{ fontSize: '13px', color: 'var(--tx-3)', marginBottom: '24px', lineHeight: 1.7 }}>
-                填好双方出生信息后，点击下方按钮<br />
-                AI 将基于倪海夏体系深度分析两人缘分匹配度
+                Fill in both parties' birth information, then click the button below<br />
+                and AI will deeply analyze the compatibility of the two charts using the Ni Haixia system
               </div>
               <button
                 onClick={() => runAnalysis()}
@@ -260,7 +260,7 @@ export default function HemingPage() {
                 onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-1px)'; }}
                 onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; }}
               >
-                开始合盘分析
+                Start Union Chart Analysis
               </button>
               {formError && (
                 <div style={{ marginTop: '20px', fontSize: '13px', color: '#dc2626' }}>
@@ -277,7 +277,7 @@ export default function HemingPage() {
                 border: '2px solid var(--bdr-med)', borderTopColor: 'var(--ac)',
                 borderRadius: '50%', animation: 'spin 0.8s linear infinite',
               }} />
-              正在对比双方命盘…
+              Comparing both charts...
             </div>
           )}
 
@@ -285,26 +285,26 @@ export default function HemingPage() {
 
           {analysisError && (
             <div style={{ padding: '12px 16px', borderRadius: '10px', border: '1px solid var(--bdr)', background: 'var(--bg-card)', fontSize: '13px', color: 'var(--tx-2)', marginTop: '12px' }}>
-              分析暂时不可用，请重试。
+              Analysis temporarily unavailable — please try again.
             </div>
           )}
         </div>
 
-        {/* ═══ 针对合盘的追问聊天框（仅分析完成后显示）═══════════ */}
+        {/* ═══ Follow-up chat for union chart (only shown after analysis completes) ═══ */}
         {analysis && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '16px' }}>
             <div style={{ fontSize: '11px', letterSpacing: '0.2em', color: 'var(--tx-3)', marginBottom: '4px' }}>
-              针对此次合盘继续追问
+              Continue asking about this union chart
             </div>
 
-            {/* 快捷问题 */}
+            {/* Quick questions */}
             <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
               {[
-                '感情匹配度如何？',
-                '适合合伙创业吗？',
-                '两人结婚是否合适？',
-                '哪方面最容易产生矛盾？',
-                '财运是否互补？',
+                'How is the love compatibility?',
+                'Is this a good business partnership?',
+                'Is marriage between them suitable?',
+                'In which areas are conflicts most likely?',
+                'Do their wealth fortunes complement each other?',
               ].map(q => (
                 <button
                   key={q}
@@ -327,14 +327,14 @@ export default function HemingPage() {
               ))}
             </div>
 
-            {/* 输入框 + 追问按钮 */}
+            {/* Input + follow-up button */}
             <div style={{ display: 'flex', gap: '8px' }}>
               <input
                 type="text"
                 value={question}
                 onChange={e => setQuestion(e.target.value)}
                 onKeyDown={e => { if (e.key === 'Enter' && !analyzing) runAnalysis(question || undefined); }}
-                placeholder="继续追问，如：哪几年是两人感情关键期？"
+                placeholder="Ask more, e.g.: Which years are critical for their relationship?"
                 disabled={analyzing}
                 className="input-base"
                 style={{ fontSize: '13px', flex: 1 }}
@@ -351,7 +351,7 @@ export default function HemingPage() {
                   transition: 'all 0.15s', whiteSpace: 'nowrap',
                 }}
               >
-                {analyzing ? '分析中…' : '继续追问'}
+                {analyzing ? 'Analyzing...' : 'Ask More'}
               </button>
             </div>
           </div>

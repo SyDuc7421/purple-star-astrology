@@ -11,11 +11,11 @@ interface PalaceCellProps {
   isSelected?: boolean;
   isSanFang?: boolean;
   delay?: number;
-  /** 叠加四化：星名 → 四化类型（'禄'/'权'/'科'/'忌'） */
+  /** Overlaid Si Hua: star name → Si Hua type ('禄'/'权'/'科'/'忌') */
   overlayStarSiHua?: Record<string, string>;
-  /** 叠加标签：'年'（流年）或 '限'（大限） */
+  /** Overlay label: '年' (Liu Nian) or '限' (Da Xian) */
   overlayLabel?: string;
-  /** 点击叠加四化 badge 回调 */
+  /** Callback when overlaid Si Hua badge is clicked */
   onSiHuaClick?: (starName: string, siHua: string) => void;
 }
 

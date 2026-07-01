@@ -13,12 +13,12 @@ interface TimeNavProps {
   onYearChange: (year: number) => void;
 }
 
-/** 由年份计算天干索引 (0-9) */
+/** Calculate the heavenly stem index (0-9) from the year */
 export function getYearStemIndex(year: number): number {
   return ((year - 4) % 10 + 10) % 10;
 }
 
-/** 根据天干索引返回四化映射：starName → SiHua */
+/** Build the Si Hua overlay map from stem index: starName → SiHua */
 export function buildSiHuaOverlay(stemIndex: number): Record<string, string> {
   const stars = SI_HUA_TABLE[stemIndex];
   if (!stars) return {};
@@ -46,7 +46,7 @@ export default function TimeNav({
 }: TimeNavProps) {
   const currentDx = chart.daXians[chart.currentDaXianIndex];
 
-  // 计算当前叠加四化信息
+  // Compute current Si Hua overlay info
   const getOverlayInfo = (): { stemName: string; overlay: Record<string, string> } | null => {
     if (view === 'mingpan') return null;
 
@@ -75,28 +75,28 @@ export default function TimeNav({
 
   return (
     <div className="mb-3">
-      {/* Tab 行 */}
+      {/* Tab row */}
       <div
         className="flex items-center rounded-xl p-1 gap-1"
         style={{ background: 'var(--t-surface)', border: '1px solid var(--t-border)' }}
       >
-        {/* 本命 */}
+        {/* Natal chart */}
         <TabButton
           active={view === 'mingpan'}
           onClick={() => onViewChange('mingpan')}
         >
-          本命
+          Natal
         </TabButton>
 
-        {/* 大限 */}
+        {/* Da Xian */}
         <TabButton
           active={view === 'daxian'}
           onClick={() => onViewChange('daxian')}
         >
-          {currentDx ? `大限 ${currentDx.startAge}–${currentDx.endAge}` : '大限'}
+          {currentDx ? `Da Xian ${currentDx.startAge}–${currentDx.endAge}` : 'Da Xian'}
         </TabButton>
 
-        {/* 流年 — 含年份切换 */}
+        {/* Liu Nian — includes year selector */}
         <div
           className="relative flex-1 flex items-center justify-center rounded-lg py-1.5 gap-1 transition-all duration-200"
           style={{
@@ -113,9 +113,9 @@ export default function TimeNav({
             className="text-[10px] font-medium flex-1 text-center"
             style={{ color: view === 'liunian' ? 'var(--t-gold)' : 'var(--t-faint)' }}
           >
-            流年
+            Liu Nian
           </button>
-          {/* 年份 +/- */}
+          {/* Year +/- */}
           <div className="flex items-center gap-0.5">
             <button
               onClick={e => { e.stopPropagation(); onYearChange(liunianYear - 1); if (view !== 'liunian') onViewChange('liunian'); }}
@@ -142,7 +142,7 @@ export default function TimeNav({
         </div>
       </div>
 
-      {/* 叠加四化说明行 */}
+      {/* Overlaid Si Hua label row */}
       {overlayInfo && (
         <motion.div
           initial={{ opacity: 0, y: -4 }}
@@ -151,7 +151,7 @@ export default function TimeNav({
           className="flex items-center gap-2 mt-1.5 px-1 flex-wrap"
         >
           <span className="text-[9px]" style={{ color: 'var(--t-faint)' }}>
-            {view === 'daxian' ? '大限' : `${liunianYear}`}·{overlayInfo.stemName}年四化：
+            {view === 'daxian' ? 'Da Xian' : `${liunianYear}`} · {overlayInfo.stemName} Si Hua: 
           </span>
           {(['禄', '权', '科', '忌'] as const).map(sh => {
             const starName = Object.keys(overlayInfo.overlay).find(k => overlayInfo.overlay[k] === sh);

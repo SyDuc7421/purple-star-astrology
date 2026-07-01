@@ -1,9 +1,9 @@
 'use client';
 
 /**
- * 古籍库搜索框 — client component
+ * Classical text library search box — client component
  *
- * 输入 → 实时搜索 → 跳转 /library/search?q=xxx
+ * Input → real-time search → navigate to /library/search?q=xxx
  */
 
 import { useState, useTransition } from 'react';
@@ -36,7 +36,7 @@ export default function LibrarySearch() {
         value={q}
         onChange={e => setQ(e.target.value)}
         onKeyDown={e => e.key === 'Enter' && submit()}
-        placeholder="搜索古籍原文，如：七杀朝斗 / 双禄朝垣 / 化忌"
+        placeholder="Search classical texts, e.g.: 七杀朝斗 / 双禄朝垣 / 化忌"
         style={{
           flex: 1,
           padding: '10px 14px',
@@ -63,7 +63,7 @@ export default function LibrarySearch() {
           opacity: q.trim() ? 1 : 0.5,
         }}
       >
-        {isPending ? '…' : '搜索'}
+        {isPending ? '…' : 'Search'}
       </button>
     </div>
   );

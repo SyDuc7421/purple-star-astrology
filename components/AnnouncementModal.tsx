@@ -2,26 +2,26 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-// 公告版本号——以后想再弹新公告，改这里就行（旧版 key 失效，新版重新弹一次）
+// Announcement version — change this to show the modal again to users who already dismissed it
 const ANNOUNCEMENT_VERSION = '2026-05-01';
 const STORAGE_KEY = `announcement_seen_${ANNOUNCEMENT_VERSION}`;
 
 export default function AnnouncementModal() {
-  // 默认不开，client 端 useEffect 检查 localStorage 后立即决定是否弹出。
-  // 没看过 → 立即覆盖首页；看过 → 不再弹。
+  // Default closed; useEffect checks localStorage on the client and decides immediately.
+  // Not seen yet → show over the homepage; already seen → don't show again.
   const [open, setOpen] = useState(false);
-  const [decided, setDecided] = useState(false); // hydration 完成标志
+  const [decided, setDecided] = useState(false); // true once hydration check is complete
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
     try {
       const seen = localStorage.getItem(STORAGE_KEY);
       if (!seen) setOpen(true);
-    } catch { /* localStorage 可能被禁，忽略 */ }
+    } catch { /* localStorage may be disabled, ignore */ }
     setDecided(true);
   }, []);
 
-  // 公告打开时锁住 body 滚动，防止背后首页可滚（仪式感更强）
+  // Lock body scroll when the announcement is open, to prevent scrolling behind it
   useEffect(() => {
     if (typeof document === 'undefined') return;
     if (open) {
@@ -46,7 +46,7 @@ export default function AnnouncementModal() {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.25 }}
-          // 不点击外部关闭——强制用户按"我知道了"按钮才能进入首页
+          // No click-outside-to-close — user must press the button to proceed
           style={{
             position: 'fixed', inset: 0, zIndex: 9999,
             background: 'rgba(20,12,2,0.88)',
@@ -76,7 +76,7 @@ export default function AnnouncementModal() {
               fontFamily: '"PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif',
             }}
           >
-            {/* 顶部装饰 + 关闭按钮 */}
+            {/* Top decoration + close button */}
             <div style={{
               padding: '22px 28px 14px',
               borderBottom: '1px solid rgba(184,146,42,0.15)',
@@ -88,11 +88,11 @@ export default function AnnouncementModal() {
                 A LETTER TO USERS
               </div>
               <h2 style={{ fontSize: '19px', fontWeight: 700, color: '#3d2f10', letterSpacing: '0.08em', margin: 0 }}>
-                致正在使用这个平台的你
+                To you, using this platform
               </h2>
               <button
                 onClick={close}
-                aria-label="关闭"
+aria-label="Close"
                 style={{
                   position: 'absolute', top: '14px', right: '16px',
                   width: '28px', height: '28px',
@@ -106,7 +106,7 @@ export default function AnnouncementModal() {
               >×</button>
             </div>
 
-            {/* 限时免费 banner（最关键信息，置顶强调）*/}
+            {/* Limited-time free banner (most important info, pinned at top) */}
             <div style={{
               margin: '14px 22px 0',
               padding: '12px 16px',
@@ -117,16 +117,16 @@ export default function AnnouncementModal() {
               textAlign: 'center',
             }}>
               <div style={{ fontSize: '10px', letterSpacing: '0.3em', color: '#c45a2d', marginBottom: '4px', fontWeight: 600 }}>
-                LIMITED TIME · 限时回馈
+                LIMITED TIME · Thank You Offer
               </div>
               <div style={{ fontSize: '14px', color: '#8b3a1a', fontWeight: 600, lineHeight: 1.6 }}>
-                <span style={{ fontSize: '16px', color: '#c45a2d', fontWeight: 700 }}>5 月 1 日 — 5 月 8 日</span>
+                <span style={{ fontSize: '16px', color: '#c45a2d', fontWeight: 700 }}>May 1 — May 8</span>
                 <br />
-                平台全部功能 + AI 提问 全部免费开放
+                All features + AI questions — completely free
               </div>
             </div>
 
-            {/* 正文（可滚动）*/}
+            {/* Body (scrollable) */}
             <div style={{
               padding: '18px 28px 24px',
               overflowY: 'auto',
@@ -136,13 +136,13 @@ export default function AnnouncementModal() {
               flex: 1,
             }}>
               <p style={{ margin: '0 0 12px' }}>
-                说实话，我真的没想到会有这么大的流量。
+                Honestly, I didn't expect this much traffic.
               </p>
               <p style={{ margin: '0 0 12px' }}>
-                最开始做这个平台，我的初心其实很简单：在 AI 时代，把倪师这套原本复杂、门槛很高的体系，尽量做得更简单、更高效、更容易理解。
+                When I first built this platform, my intention was simple: in the AI era, take Ni Haixia's system — originally complex and high-barrier — and make it as simple, efficient, and accessible as possible.
               </p>
               <p style={{ margin: '0 0 12px' }}>
-                不一定每个人都要先学很久、看很多书，才能接触这些内容。我们希望通过这个平台，让大家用更轻松的方式，获得一些对自我、人生阶段、选择方向的参考和启发。
+                Not everyone needs to study for years or read many books before accessing this content. We hope this platform lets people gain insights about themselves, their life stage, and their direction — in a more effortless way.
               </p>
               <p style={{
                 margin: '0 0 12px',
@@ -153,26 +153,26 @@ export default function AnnouncementModal() {
                 fontStyle: 'italic',
                 color: '#7a5e2a',
               }}>
-                倪师曾说过一句话：人怎么可能发明出完全没有用的东西呢？
+                Ni Haixia once said: "How could humans possibly invent something completely useless?"
               </p>
               <p style={{ margin: '0 0 12px' }}>
-                我一直觉得，易经如此，紫微斗数也是如此。它们真正有价值的地方，不是让人被某个结果困住，而是让我们更早看见自己的性格惯性、人生课题和选择方向。看见之后，才有机会调整；理解之后，才有机会变得更好。
+                I've always felt this way about the Yi Jing, and it's true of Zi Wei Dou Shu as well. Their real value isn't to trap people in a fixed outcome, but to help us see our personality patterns, life lessons, and direction sooner. Only by seeing can we adjust; only by understanding can we grow.
               </p>
               <p style={{ margin: '0 0 12px' }}>
-                至于那些说&ldquo;你当下在看这些，其实也是命运的一部分&rdquo;之类的话，我就不多评价了。
+                As for those who say &ldquo;the fact that you're reading this is itself part of your fate&rdquo; — I'll leave that without comment.
               </p>
               <p style={{ margin: '0 0 12px' }}>
-                这几天账号被小红书抬走了，<strong style={{ color: '#c45a2d' }}>5 月 3 号开始恢复正常更新。</strong>
+                The account was temporarily taken down by Xiaohongshu — <strong style={{ color: '#c45a2d' }}>regular updates resume from May 3.</strong>
               </p>
               <p style={{ margin: '0 0 16px', color: '#3d2f10', fontWeight: 500 }}>
-                最后，真心祝愿大家都能越来越了解自己，越来越爱自己，也越来越有能力爱身边的人。
+                Finally, I sincerely wish everyone a growing understanding of themselves, growing love for themselves, and a growing capacity to love those around them.
               </p>
               <p style={{ margin: 0, textAlign: 'right', fontSize: '13px', color: '#7a5e2a' }}>
-                ——谢谢大家 🙏
+                — Thank you all 🙏
               </p>
             </div>
 
-            {/* 底部按钮 */}
+            {/* Footer button */}
             <div style={{
               padding: '14px 22px',
               borderTop: '1px solid rgba(184,146,42,0.15)',
@@ -197,7 +197,7 @@ export default function AnnouncementModal() {
                   boxShadow: '0 4px 12px rgba(184,146,42,0.3)',
                 }}
               >
-                我知道了
+                Got it
               </button>
             </div>
           </motion.div>

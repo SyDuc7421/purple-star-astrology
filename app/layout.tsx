@@ -5,31 +5,31 @@ import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 
 export const metadata: Metadata = {
-  title: '紫微命盘 · 倪海夏正宗紫微斗数',
-  description: '基于倪海夏正宗紫微斗数体系，AI深度解读您的命盘格局、大限流年、感情事业财富健康全方位解析',
-  keywords: '紫微斗数, 倪海夏, 倪海厦, 紫微斗数全集, 紫微斗数全书, 骨髓赋, 命盘, 命理, 14主星, 12宫位',
+  title: 'Zi Wei Chart · Ni Haixia Authentic Zi Wei Dou Shu',
+  description: 'Authentic Ni Haixia Zi Wei Dou Shu — AI-powered deep readings covering your chart pattern, Da Xian, Liu Nian, love, career, wealth, and health',
+  keywords: 'Zi Wei Dou Shu, Ni Haixia, Ni Haixia, complete Zi Wei, Zi Wei Quan Shu, Gu Sui Fu, chart, destiny, 14 major stars, 12 palaces',
   metadataBase: new URL('https://wdyziweidoushu666.com'),
   alternates: {
     canonical: '/',
   },
   openGraph: {
-    title: '紫微命盘 · 倪海夏正宗紫微斗数',
-    description: '基于倪海夏正宗紫微斗数体系，AI深度解读您的命盘格局、大限流年、感情事业财富健康全方位解析',
+    title: 'Zi Wei Chart · Ni Haixia Authentic Zi Wei Dou Shu',
+    description: 'Authentic Ni Haixia Zi Wei Dou Shu — AI-powered deep readings covering your chart pattern, Da Xian, Liu Nian, love, career, wealth, and health',
     url: 'https://wdyziweidoushu666.com',
-    siteName: '紫微研究',
+    siteName: 'Zi Wei Research',
     locale: 'zh_CN',
     type: 'website',
   },
-  // 站长平台验证（拿到 verification code 后填入对应字段，重新部署即可）
+  // Webmaster verification (paste the code into the relevant field, redeploy to activate)
   verification: {
-    // Google Search Console: 在 https://search.google.com/search-console 添加站点后获取
+    // Google Search Console: add the site at https://search.google.com/search-console to get this
     google: process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION || undefined,
-    // Bing Webmaster Tools: 在 https://www.bing.com/webmasters 添加站点后获取
+    // Bing Webmaster Tools: add the site at https://www.bing.com/webmasters to get this
     other: {
       'msvalidate.01': process.env.NEXT_PUBLIC_BING_VERIFICATION || '808FFC6023A2C359B375DD860FEDA856',
-      // 百度站长（等执照下来后）
+      // Baidu Webmaster (after business license is approved)
       'baidu-site-verification': process.env.NEXT_PUBLIC_BAIDU_VERIFICATION || '',
-      // 360 站长（等执照下来后）
+      // 360 Webmaster (after business license is approved)
       '360-site-verification': process.env.NEXT_PUBLIC_360_VERIFICATION || '',
     },
   },

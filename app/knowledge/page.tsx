@@ -1,6 +1,6 @@
 /**
- * /knowledge — 知识库主页
- * 列出 14 主星，每星可看其在 13 宫位的解读
+ * /knowledge — knowledge base home page
+ * Lists 14 major stars; each star links to readings for all 13 palaces
  */
 
 import Link from 'next/link';
@@ -8,9 +8,9 @@ import { ALL_STARS, ALL_TOPICS, getKnowledge, STAR_BRIEF_SEO, STAR_TO_SLUG } fro
 import { TOPIC_LABEL } from '@/lib/ziwei/db-analysis';
 
 export const metadata = {
-  title: '紫微斗数知识库 · 14 主星 × 13 宫位 · 倪海夏正宗体系',
-  description: '基于倪海夏《天纪》体系与古籍《紫微斗数全集》《骨髓赋》编纂的紫微斗数知识库。覆盖 14 主星在 13 个宫位的完整论断，含一句话定调、核心论断、命盘依据、经典出处。',
-  keywords: ['紫微斗数', '倪海夏', '倪海厦紫微斗数', '紫微斗数全集', '紫微斗数全书', '14 主星', '12 宫位'],
+  title: 'Zi Wei Dou Shu Knowledge Base · 14 Major Stars × 13 Palaces · Ni Haixia Authentic System',
+  description: 'Zi Wei Dou Shu knowledge base compiled from Ni Haixia Tian Ji system and classical texts Zi Wei Dou Shu Quan Ji and Gu Sui Fu. Covers full judgments for 14 major stars in 13 palaces, including one-line summary, core judgment, chart basis, and classical source.',
+  keywords: ['Zi Wei Dou Shu', 'Ni Haixia', 'Ni Haixia Zi Wei Dou Shu', 'Zi Wei Dou Shu Quan Ji', 'Zi Wei Dou Shu Quan Shu', '14 major stars', '12 palaces'],
 };
 
 export default function KnowledgeHomePage() {
@@ -18,17 +18,17 @@ export default function KnowledgeHomePage() {
 
   return (
     <div style={{ background: 'var(--bg-page)', minHeight: '100vh' }}>
-      {/* 顶栏 */}
+      {/* Top bar */}
       <div className="px-6 py-4 flex items-center justify-between"
         style={{ borderBottom: '1px solid rgba(184,146,42,0.15)', background: 'var(--bg-page)' }}>
         <Link href="/" style={{ fontSize: '12px', color: 'var(--ac)', letterSpacing: '0.3em', textDecoration: 'none' }}>
-          ← 首页
+          ← Home
         </Link>
         <div style={{ fontSize: '12px', color: 'var(--tx-3)', letterSpacing: '0.2em' }}>
-          倪师方法论 · 知识库
+          Ni Haixia Methodology · Knowledge Base
         </div>
         <Link href="/library" style={{ fontSize: '12px', color: 'var(--ac)', letterSpacing: '0.2em', textDecoration: 'none' }}>
-          古籍 →
+          Classics →
         </Link>
       </div>
 
@@ -40,18 +40,18 @@ export default function KnowledgeHomePage() {
           <div style={{ height: '1px', width: '48px', background: 'linear-gradient(to left, transparent, rgba(184,146,42,0.4))' }} />
         </div>
         <h1 style={{ fontSize: 'clamp(28px, 4vw, 42px)', fontWeight: 700, color: 'var(--tx-0)', letterSpacing: '0.15em', marginBottom: '12px' }}>
-          紫微斗数知识库
+          Zi Wei Dou Shu Knowledge Base
         </h1>
         <p style={{ fontSize: '14px', color: 'var(--tx-2)', letterSpacing: '0.08em', maxWidth: '600px', margin: '0 auto', lineHeight: 1.7 }}>
-          14 主星 × 13 宫位 = <strong style={{ color: 'var(--ac)' }}>{ALL_STARS.length * ALL_TOPICS.length}</strong> 项专题<br />
-          基于倪海夏《天纪》体系编纂 · 含古籍引证
+          14 major stars × 13 palaces = <strong style={{ color: 'var(--ac)' }}>{ALL_STARS.length * ALL_TOPICS.length}</strong> topics<br />
+          Compiled from Ni Haixia Tian Ji system · with classical citations
         </p>
       </div>
 
-      {/* 14 主星卡片 */}
+      {/* 14 major star cards */}
       <div className="max-w-5xl mx-auto px-6 pb-20">
         <div style={{ fontSize: '11px', color: 'var(--tx-3)', letterSpacing: '0.3em', textAlign: 'center', marginBottom: '24px' }}>
-          十四主星
+          Fourteen Major Stars
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3">
           {ALL_STARS.map(star => (
@@ -77,7 +77,7 @@ export default function KnowledgeHomePage() {
           ))}
         </div>
 
-        {/* 详细列表（每个主星 + 简介 + 进入按钮） */}
+        {/* Detail list (each star + description + entry button) */}
         <div className="mt-14 space-y-4">
           {ALL_STARS.map(star => (
             <div key={star} style={{
@@ -88,7 +88,7 @@ export default function KnowledgeHomePage() {
             }}>
               <div className="flex items-baseline gap-3 mb-2">
                 <span style={{ fontSize: '20px', fontWeight: 700, color: 'var(--tx-0)', letterSpacing: '0.1em' }}>
-                  {star}星
+                  {star}
                 </span>
                 <span style={{ fontSize: '11px', color: 'var(--tx-3)', letterSpacing: '0.15em' }}>
                   ZI WEI · 14 STARS
@@ -115,7 +115,7 @@ export default function KnowledgeHomePage() {
                         textDecoration: 'none',
                       }}
                     >
-                      入{k.palaceName} · {TOPIC_LABEL[t]}
+                      {k.palaceName} · {TOPIC_LABEL[t]}
                     </Link>
                   );
                 })}
