@@ -10,7 +10,7 @@ interface StarDetailPanelProps {
 }
 
 // Per-star detailed reading in the Ni Haixia system (sources: Gu Xianghong's Complete Flying-Stars Zi Wei and Nanbeishanren's Complete Zi Wei)
-// Luận giải chi tiết từng sao theo hệ thống Nghê Hải Hạ (nguồn: Phi Tinh Tử Vi Toàn Thư của Cổ Tương Hồng và Tử Vi Toàn Thư của Nam Bắc Sơn Nhân)
+// Luận giải chi tiết từng sao theo hệ thống Ni Haixia (nguồn: Phi Tinh Tử Vi Toàn Thư của Cổ Tương Hồng và Tử Vi Toàn Thư của Nam Bắc Sơn Nhân)
 const STAR_DETAIL: Record<string, {
   niHaixia: string;
   classical: string;
@@ -261,7 +261,7 @@ export default function StarDetailPanel({ star, palaceName, onClose }: StarDetai
             )}
 
             {/* Ni Haixia reading */}
-            {/* Luận giải của Nghê Hải Hạ */}
+            {/* Luận giải của Ni Haixia */}
             {detail && (
               <>
                 <div>
