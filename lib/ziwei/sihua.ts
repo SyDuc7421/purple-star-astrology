@@ -115,10 +115,15 @@ export function getLiuYueStemIndex(yearStem: number, month: number): number {
   // Ngũ Hổ Độn: can của tháng âm lịch đầu tiên (tháng Dần)
   const startStemOfYin: Record<number, number> = {
     0: 2, 5: 2,  // 甲/己 → 丙
+    // Giáp/Kỷ → Bính
     1: 4, 6: 4,  // 乙/庚 → 戊
+    // Ất/Canh → Mậu
     2: 6, 7: 6,  // 丙/辛 → 庚
+    // Bính/Tân → Canh
     3: 8, 8: 8,  // 丁/壬 → 壬
+    // Đinh/Nhâm → Nhâm
     4: 0, 9: 0,  // 戊/癸 → 甲
+    // Mậu/Quý → Giáp
   };
   const yinStem = startStemOfYin[yearStem] ?? 0;
   // From Yin (first month) to the target month (1-12)
