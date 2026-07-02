@@ -19,6 +19,7 @@ export function useHistory() {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) setHistory(JSON.parse(raw));
     } catch { /* fail silently when localStorage is unavailable */ }
+    /* âm thầm bỏ qua lỗi khi localStorage không khả dụng */
   }, []);
 
   const save = useCallback((form: BirthFormState) => {
@@ -38,6 +39,7 @@ export function useHistory() {
 
     setHistory(prev => {
       // Deduplicate: same birth date + gender + shichen = same record
+      // Khử trùng lặp: cùng ngày sinh + giới tính + giờ sinh = cùng một bản ghi
       const deduped = prev.filter(e =>
         !(e.form.year === form.year &&
           e.form.month === form.month &&

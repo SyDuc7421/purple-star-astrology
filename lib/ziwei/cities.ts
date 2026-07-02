@@ -1,6 +1,7 @@
 export interface CityInfo {
   name: string;
   longitude: number; // degrees East
+                      // kinh độ Đông
 }
 
 export interface ProvinceInfo {
@@ -10,6 +11,7 @@ export interface ProvinceInfo {
 
 export const PROVINCES: ProvinceInfo[] = [
   // ─── Direct-controlled municipalities ──────────────────
+  // ─── Thành phố trực thuộc trung ương ──────────────────
   {
     name: '北京市',
     cities: [{ name: '北京', longitude: 116.4 }],
@@ -33,6 +35,7 @@ export const PROVINCES: ProvinceInfo[] = [
   },
 
   // ─── North China ──────────────────────────────────────
+  // ─── Hoa Bắc ──────────────────────────────────────
   {
     name: '河北省',
     cities: [
@@ -80,6 +83,7 @@ export const PROVINCES: ProvinceInfo[] = [
   },
 
   // ─── Northeast China ──────────────────────────────────
+  // ─── Đông Bắc ──────────────────────────────────
   {
     name: '辽宁省',
     cities: [
@@ -131,6 +135,7 @@ export const PROVINCES: ProvinceInfo[] = [
   },
 
   // ─── East China ───────────────────────────────────────
+  // ─── Hoa Đông ───────────────────────────────────────
   {
     name: '江苏省',
     cities: [
@@ -237,6 +242,7 @@ export const PROVINCES: ProvinceInfo[] = [
   },
 
   // ─── Central China ────────────────────────────────────
+  // ─── Hoa Trung ────────────────────────────────────
   {
     name: '河南省',
     cities: [
@@ -298,6 +304,7 @@ export const PROVINCES: ProvinceInfo[] = [
   },
 
   // ─── South China ──────────────────────────────────────
+  // ─── Hoa Nam ──────────────────────────────────────
   {
     name: '广东省',
     cities: [
@@ -357,6 +364,7 @@ export const PROVINCES: ProvinceInfo[] = [
   },
 
   // ─── Southwest China ──────────────────────────────────
+  // ─── Tây Nam ──────────────────────────────────
   {
     name: '四川省',
     cities: [
@@ -432,6 +440,7 @@ export const PROVINCES: ProvinceInfo[] = [
   },
 
   // ─── Northwest China ──────────────────────────────────
+  // ─── Tây Bắc ──────────────────────────────────
   {
     name: '陕西省',
     cities: [
