@@ -10,6 +10,7 @@ interface StarDetailPanelProps {
 }
 
 // Per-star detailed reading in the Ni Haixia system (sources: Gu Xianghong's Complete Flying-Stars Zi Wei and Nanbeishanren's Complete Zi Wei)
+// Luận giải chi tiết từng sao theo hệ thống Nghê Hải Hạ (nguồn: Phi Tinh Tử Vi Toàn Thư của Cổ Tương Hồng và Tử Vi Toàn Thư của Nam Bắc Sơn Nhân)
 const STAR_DETAIL: Record<string, {
   niHaixia: string;
   classical: string;
@@ -192,6 +193,7 @@ export default function StarDetailPanel({ star, palaceName, onClose }: StarDetai
           className="card-glass rounded-xl overflow-hidden"
         >
           {/* Header bar */}
+          {/* Thanh tiêu đề */}
           <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: '1px solid var(--t-border)' }}>
             <div className="flex items-center gap-2">
               <span className="text-xl font-bold" style={{ color: 'var(--t-gold)' }}>{star.name}</span>
@@ -211,6 +213,7 @@ export default function StarDetailPanel({ star, palaceName, onClose }: StarDetai
 
           <div className="p-4 space-y-4 overflow-y-auto max-h-[560px]">
             {/* Basic info */}
+            {/* Thông tin cơ bản */}
             {desc && (
               <div className="flex flex-wrap gap-1.5">
                 {[
@@ -231,6 +234,7 @@ export default function StarDetailPanel({ star, palaceName, onClose }: StarDetai
             )}
 
             {/* Keywords */}
+            {/* Từ khóa */}
             {desc && (
               <div>
                 <div className="text-[10px] tracking-widest mb-1.5" style={{ color: 'var(--t-faint)' }}>Star Traits</div>
@@ -246,6 +250,7 @@ export default function StarDetailPanel({ star, palaceName, onClose }: StarDetai
             )}
 
             {/* Classical texts */}
+            {/* Cổ văn kinh điển */}
             {detail && (
               <div className="rounded-xl p-3" style={{ background: 'rgba(212,168,67,0.04)', border: '1px solid rgba(212,168,67,0.12)' }}>
                 <div className="text-[10px] tracking-widest mb-1.5 flex items-center gap-1" style={{ color: 'var(--t-gold)', opacity: 0.7 }}>
@@ -256,6 +261,7 @@ export default function StarDetailPanel({ star, palaceName, onClose }: StarDetai
             )}
 
             {/* Ni Haixia reading */}
+            {/* Luận giải của Nghê Hải Hạ */}
             {detail && (
               <>
                 <div>
@@ -298,6 +304,7 @@ export default function StarDetailPanel({ star, palaceName, onClose }: StarDetai
             )}
 
             {/* Support/Sha star description */}
+            {/* Mô tả sao phụ tinh/sát tinh */}
             {!detail && star.type !== 'major' && (
               <div className="text-xs leading-relaxed" style={{ color: 'var(--t-text2)' }}>
                 {star.type === 'lucky' && (

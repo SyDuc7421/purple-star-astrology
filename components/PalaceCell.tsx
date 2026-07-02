@@ -12,10 +12,13 @@ interface PalaceCellProps {
   isSanFang?: boolean;
   delay?: number;
   /** Overlaid Si Hua: star name → Si Hua type ('禄'/'权'/'科'/'忌') */
+  /** Tứ Hóa lớp phủ: tên sao → loại Tứ Hóa ('禄'/'权'/'科'/'忌') */
   overlayStarSiHua?: Record<string, string>;
   /** Overlay label: '年' (Liu Nian) or '限' (Da Xian) */
+  /** Nhãn lớp phủ: '年' (Lưu Niên) hoặc '限' (Đại Hạn) */
   overlayLabel?: string;
   /** Callback when overlaid Si Hua badge is clicked */
+  /** Callback khi nhấn vào huy hiệu Tứ Hóa lớp phủ */
   onSiHuaClick?: (starName: string, siHua: string) => void;
 }
 
@@ -92,6 +95,8 @@ export default function PalaceCell({
       }}
     >
       {/* 大限年龄 */}
+      {/* Da Xian age */}
+      {/* Tuổi Đại Hạn */}
       {daXianAge && (
         <div className={clsx(
           'absolute top-1 right-1 text-[9px] font-mono tabular-nums',
@@ -104,6 +109,8 @@ export default function PalaceCell({
       )}
 
       {/* 宫名行 */}
+      {/* Palace name row */}
+      {/* Hàng tên cung */}
       <div className="flex items-center gap-1 mb-0.5 pr-8">
         <span className={clsx('text-[10px] font-medium tracking-wide',
           isMingGong ? 'text-amber-500' : isShenGong ? 'text-sky-500' : ''
@@ -121,9 +128,13 @@ export default function PalaceCell({
       </div>
 
       {/* 干支 */}
+      {/* Stem-branch */}
+      {/* Can chi */}
       <div className="text-[9px] font-mono mb-1" style={{ color: 'var(--t-faint)', opacity: 0.75 }}>{ganzhi}</div>
 
       {/* 主星 */}
+      {/* Major stars */}
+      {/* Chính tinh */}
       <div className="flex flex-col gap-0.5 flex-1">
         {majorStars.length === 0 && (
           <span className="text-[10px] italic" style={{ color: 'var(--t-faint)', opacity: 0.6 }}>空宫</span>
@@ -160,6 +171,8 @@ export default function PalaceCell({
       </div>
 
       {/* 吉星 */}
+      {/* Lucky stars */}
+      {/* Cát tinh */}
       {luckyStars.length > 0 && (
         <div className="flex flex-wrap gap-x-1 mt-0.5">
           {luckyStars.map(s => {
@@ -186,6 +199,8 @@ export default function PalaceCell({
       )}
 
       {/* 煞星 */}
+      {/* Sha (malefic) stars */}
+      {/* Sát tinh */}
       {shaStars.length > 0 && (
         <div className="flex flex-wrap gap-x-1">
           {shaStars.map(s => (
