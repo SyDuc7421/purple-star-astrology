@@ -1,18 +1,28 @@
 /**
  * Zi Wei Dou Shu compatibility reading (He Ming) knowledge base
+ * Cơ sở tri thức luận giải hợp tuổi (He Ming) của Tử Vi Đẩu Số
  * Based on Ni Haixia's "Tian Ji" system + "Zi Wei Dou Shu Quan Shu" classical judgments
+ * Dựa trên hệ thống "Tian Ji" của Ni Haixia + các luận đoán cổ thư "Zi Wei Dou Shu Quan Shu"
  * + curated professional sources. Used by the He Ming AI analysis.
+ * + các nguồn chuyên môn được chọn lọc. Được sử dụng bởi phân tích AI He Ming.
  */
 
 // ─── Complete judgments for 14 major stars in the Spouse Palace ──
+// ─── Luận đoán đầy đủ cho 14 chính tinh tại Cung Phu Thê ──
 
 export const STAR_IN_FUQI_GU: Record<string, {
   summary: string;       // one-sentence core judgment
+  // nhận định cốt lõi trong một câu
   good: string;          // auspicious conditions / expressions
+  // các điều kiện / biểu hiện tốt lành
   bad: string;           // inauspicious signs / cautions
+  // các dấu hiệu / lưu ý không tốt lành
   spouse_traits: string; // spouse appearance and personality
+  // ngoại hình và tính cách của người bạn đời
   timing: string;        // marriage timing recommendation
+  // gợi ý về thời điểm kết hôn
   ni_quote?: string;     // direct quote from Ni Haixia
+  // trích dẫn trực tiếp từ Ni Haixia
 }> = {
   '紫微': {
     summary: '配偶高傲能干，宜晚婚，感情以尊重为基础',
@@ -124,6 +134,7 @@ export const STAR_IN_FUQI_GU: Record<string, {
 };
 
 // ─── Complete judgments for Si Hua in the Spouse Palace ──────────────────────
+// ─── Luận đoán đầy đủ cho Tứ Hóa tại Cung Phu Thê ──────────────────────
 
 export const SIHUA_IN_FUQI_GU = {
   '化禄': '与配偶有先天缘分，配偶个性乐观，婚后感情更好，配偶越来越会赚钱，缘分深厚；自化禄则财来财去，感情有但难守',
@@ -133,6 +144,7 @@ export const SIHUA_IN_FUQI_GU = {
 };
 
 // ─── He Ming core methodology ─────────────────────────────────────
+// ─── Phương pháp luận cốt lõi của He Ming ─────────────────────────────────────
 
 export const HEMING_METHODOLOGY = `
 ## 合盘分析核心框架（倪海夏体系 + 《紫微斗数全书》综合）
@@ -307,6 +319,7 @@ export const HEMING_METHODOLOGY = `
 `;
 
 // ─── Marriage judgment reference table ─────────────────────────────
+// ─── Bảng tham chiếu luận đoán hôn nhân ─────────────────────────────
 
 export const MARRIAGE_STARS_BRIEF: Record<string, string> = {
   '红鸾': '婚恋正缘，入命身主动成婚；流年逢红鸾该年婚恋有动',

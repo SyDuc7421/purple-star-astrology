@@ -26,12 +26,14 @@ interface BirthFormProps {
   initialData?: Partial<BirthFormState>;
   onFormSave?: (data: BirthFormState) => void;
   /** Hide the internal submit button (for union-chart mode where the parent triggers submission) */
+  /** Ẩn nút gửi nội bộ (dùng cho chế độ lá số hợp trong đó component cha kích hoạt việc gửi) */
   hideSubmit?: boolean;
 }
 
 const SHICHEN_NAMES = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'];
 
 /** Calculate the true solar time shichen branch (0-11) from Beijing time + longitude */
+/** Tính chi giờ (thời thần) theo giờ mặt trời thực (0-11) từ giờ Bắc Kinh + kinh độ */
 function calcTrueSolarBranch(clockHour: number, clockMinute: number, longitude: number): number {
   const clockMins = clockHour * 60 + clockMinute;
   const offset = (longitude - 120) * 4;
@@ -41,6 +43,7 @@ function calcTrueSolarBranch(clockHour: number, clockMinute: number, longitude: 
 }
 
 /** Check whether a calendar date is valid */
+/** Kiểm tra xem một ngày lịch có hợp lệ hay không */
 function isValidDate(y: number, m: number, d: number): boolean {
   if (!y || !m || !d) return false;
   const date = new Date(y, m - 1, d);
@@ -69,6 +72,7 @@ export default function BirthForm({ onSubmit, loading, initialData, onFormSave, 
   const [submitAttempted, setSubmitAttempted] = useState(false);
 
   // Sync form state to parent on every change (parent collects both persons' data in union-chart mode)
+  // Đồng bộ trạng thái biểu mẫu với component cha mỗi khi có thay đổi (component cha thu thập dữ liệu của cả hai người trong chế độ lá số hợp)
   useEffect(() => {
     onFormSave?.({ ...form });
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -92,6 +96,7 @@ export default function BirthForm({ onSubmit, loading, initialData, onFormSave, 
   const shichenInfo = SHICHEN[branch];
 
   // ─── Validation ────────────────────────────────────────────
+  // ─── Xác thực dữ liệu ────────────────────────────────────────────
   const y = parseInt(form.year) || 0;
   const m = parseInt(form.month) || 0;
   const d = parseInt(form.day) || 0;
@@ -108,15 +113,18 @@ export default function BirthForm({ onSubmit, loading, initialData, onFormSave, 
   const hasError = Object.values(errors).some(Boolean);
 
   // ─── Completion (for progress bar) ─────────────────────────
+  // ─── Mức độ hoàn thành (cho thanh tiến trình) ─────────────────────────
   const steps = [
     !!form.year && !!form.month && !!form.day && !errors.year && !errors.month && !errors.day,
     !!form.province && !!form.city,
     form.unknownTime || (!!form.clockHour && !!form.clockMinute),
     true, // gender always has a default value
+    // giới tính luôn có giá trị mặc định
   ];
   const completedSteps = steps.filter(Boolean).length;
 
   // ─── Summary chip: shown when all required fields are complete ─
+  // ─── Thẻ tóm tắt: hiển thị khi tất cả các trường bắt buộc đã hoàn thành ─
   const showSummary = steps[0] && steps[2] && !hasError;
   const summaryText = showSummary
     ? [
@@ -149,13 +157,16 @@ export default function BirthForm({ onSubmit, loading, initialData, onFormSave, 
   };
 
   // ─── Style variables ───────────────────────────────────────
+  // ─── Các biến kiểu dáng ───────────────────────────────────────
   const bg = isDark ? 'rgba(8,16,40,0.85)' : 'rgba(255,255,255,0.92)';
   const border = isDark ? 'rgba(255,255,255,0.12)' : 'rgba(200,160,60,0.2)';
   // Dark mode label brightness: from rgba(74,112,144,1) → rgba(180,200,225,0.9)
+  // Độ sáng nhãn ở chế độ tối: từ rgba(74,112,144,1) → rgba(180,200,225,0.9)
   const labelClr = isDark ? 'rgba(180,200,225,0.9)' : 'rgba(120,80,10,0.55)';
   const inputBg = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(255,252,240,0.8)';
   const inputBorder = isDark ? 'rgba(255,255,255,0.18)' : 'rgba(200,160,60,0.25)';
   // Input text brightness: from #c8d8f0 → #e8eef8
+  // Độ sáng văn bản nhập liệu: từ #c8d8f0 → #e8eef8
   const inputClr = isDark ? '#e8eef8' : '#2a1a00';
   const focusBorder = isDark ? 'rgba(212,168,67,0.5)' : 'rgba(180,120,20,0.5)';
   const errorClr = isDark ? '#f87171' : '#dc2626';
@@ -209,11 +220,13 @@ export default function BirthForm({ onSubmit, loading, initialData, onFormSave, 
       style={{ background: bg, border: `1px solid ${border}`, borderRadius: '24px', padding: '28px', backdropFilter: 'blur(20px)' }}
     >
       {/* Title */}
+      {/* Tiêu đề */}
       <h3 style={{ color: goldText, fontSize: '12px', letterSpacing: '0.4em', textAlign: 'center', marginBottom: '20px', fontWeight: 500 }}>
         ── Enter Birth Info ──
       </h3>
 
       {/* ── Progress bar ── */}
+      {/* ── Thanh tiến trình ── */}
       <div style={{ display: 'flex', gap: '4px', marginBottom: '20px' }}>
         {steps.map((done, i) => (
           <motion.div
@@ -226,6 +239,7 @@ export default function BirthForm({ onSubmit, loading, initialData, onFormSave, 
       </div>
 
       {/* ── Name ── */}
+      {/* ── Họ tên ── */}
       <div style={{ marginBottom: '16px' }}>
         <label style={{ display: 'block', fontSize: '11px', color: labelClr, marginBottom: '6px', letterSpacing: '0.05em' }}>Name (optional)</label>
         <input
@@ -240,6 +254,7 @@ export default function BirthForm({ onSubmit, loading, initialData, onFormSave, 
       </div>
 
       {/* ── Birth date ── */}
+      {/* ── Ngày sinh ── */}
       <div style={{ marginBottom: '16px' }}>
         <label style={{ display: 'block', fontSize: '11px', color: labelClr, marginBottom: '6px', letterSpacing: '0.05em' }}>Birth Date (Gregorian)</label>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '8px' }}>
@@ -289,6 +304,7 @@ export default function BirthForm({ onSubmit, loading, initialData, onFormSave, 
       </div>
 
       {/* ── Birthplace ── */}
+      {/* ── Nơi sinh ── */}
       <div style={{ marginBottom: '16px' }}>
         <label style={{ display: 'block', fontSize: '11px', color: labelClr, marginBottom: '6px', letterSpacing: '0.05em' }}>Birthplace (for true solar time correction)</label>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
@@ -344,6 +360,7 @@ export default function BirthForm({ onSubmit, loading, initialData, onFormSave, 
       </div>
 
       {/* ── Birth time ── */}
+      {/* ── Giờ sinh ── */}
       <div style={{ marginBottom: '16px' }}>
         <label style={{ display: 'block', fontSize: '11px', color: labelClr, marginBottom: '6px', letterSpacing: '0.05em' }}>Birth Time (Beijing time)</label>
         <div style={{ borderRadius: '14px', padding: '12px', background: panelBg, border: `1px solid ${panelBorder}`, opacity: form.unknownTime ? 0.45 : 1, pointerEvents: form.unknownTime ? 'none' : 'auto', transition: 'opacity 0.2s' }}>
@@ -368,6 +385,7 @@ export default function BirthForm({ onSubmit, loading, initialData, onFormSave, 
             </select>
           </div>
           {/* True solar time result */}
+          {/* Kết quả giờ mặt trời thực */}
           <div style={{ textAlign: 'center', padding: '4px 0' }}>
 <span style={{ fontSize: '10px', color: isDark ? 'rgba(170,195,220,0.75)' : 'rgba(140,100,20,0.5)' }}>True solar time → </span>
             <span style={{ fontSize: '15px', color: goldText, fontWeight: 600, letterSpacing: '0.08em' }}>
@@ -394,6 +412,7 @@ export default function BirthForm({ onSubmit, loading, initialData, onFormSave, 
       </div>
 
       {/* ── Gender ── */}
+      {/* ── Giới tính ── */}
       <div style={{ marginBottom: '20px' }}>
         <label style={{ display: 'block', fontSize: '11px', color: labelClr, marginBottom: '6px', letterSpacing: '0.05em' }}>Gender</label>
         <div style={{ display: 'flex', gap: '10px' }}>
@@ -428,6 +447,7 @@ export default function BirthForm({ onSubmit, loading, initialData, onFormSave, 
       </div>
 
       {/* ── Summary chip ── */}
+      {/* ── Thẻ tóm tắt ── */}
       <AnimatePresence>
         {showSummary && (
           <motion.div
@@ -455,6 +475,7 @@ export default function BirthForm({ onSubmit, loading, initialData, onFormSave, 
       </AnimatePresence>
 
       {/* ── Submit button ── */}
+      {/* ── Nút gửi ── */}
       {!hideSubmit && <motion.button
         type="submit"
         disabled={loading}

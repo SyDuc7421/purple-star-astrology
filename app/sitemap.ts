@@ -1,10 +1,15 @@
 /**
  * Auto-generated sitemap.xml
+ * Tự động tạo sitemap.xml
  *
  * Includes:
+ * Bao gồm:
  *  - Home, chart page, union-chart page
+ *  - Trang chủ, trang lá số, trang lá số hợp
  *  - /library classical texts (home + 3 books + chapter pages)
+ *  - /library sách kinh điển (trang chủ + 3 cuốn sách + các trang chương)
  *  - /knowledge knowledge base (home + 14×13 topic pages)
+ *  - /knowledge cơ sở tri thức (trang chủ + 14×13 trang chủ đề)
  */
 
 import type { MetadataRoute } from 'next';
@@ -27,6 +32,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ];
 
   // Classical text pages
+  // Các trang sách kinh điển
   const libraryPages: MetadataRoute.Sitemap = ALL_BOOKS.flatMap(book => {
     const bookHome: MetadataRoute.Sitemap[number] = {
       url: `${BASE_URL}/library/${book.slug}`,
@@ -44,6 +50,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   });
 
   // Knowledge base 14×13
+  // Cơ sở tri thức 14×13
   const knowledgePages: MetadataRoute.Sitemap = getAllKnowledgeRoutes().map(({ slug, topic }) => ({
     url: `${BASE_URL}/knowledge/${slug}/${topic}`,
     priority: 0.7,

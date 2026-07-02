@@ -1,7 +1,9 @@
 /**
  * Classical texts library · home page
+ * Trang chủ thư viện cổ thư
  *
  * Lists all collected classical texts + global search entry
+ * Liệt kê toàn bộ cổ thư đã sưu tầm + lối vào tìm kiếm toàn cục
  */
 
 import Link from 'next/link';
@@ -17,6 +19,7 @@ export default function LibraryHomePage() {
   return (
     <div style={{ background: 'var(--bg-page)', minHeight: '100vh' }}>
       {/* Top bar */}
+      {/* Thanh trên cùng */}
       <div className="px-6 py-4 flex items-center justify-between"
         style={{ borderBottom: '1px solid rgba(184,146,42,0.15)', background: 'var(--bg-page)' }}>
         <Link href="/" style={{ fontSize: '12px', color: 'var(--ac)', letterSpacing: '0.3em', textDecoration: 'none' }}>
@@ -31,6 +34,7 @@ export default function LibraryHomePage() {
       </div>
 
       {/* Hero */}
+      {/* Phần giới thiệu nổi bật */}
       <div className="text-center px-6 py-16">
         <div className="flex items-center justify-center gap-3 mb-4">
           <div style={{ height: '1px', width: '48px', background: 'linear-gradient(to right, transparent, rgba(184,146,42,0.4))' }} />
@@ -47,11 +51,13 @@ export default function LibraryHomePage() {
       </div>
 
       {/* Search */}
+      {/* Tìm kiếm */}
       <div className="max-w-2xl mx-auto px-6 mb-12">
         <LibrarySearch />
       </div>
 
       {/* Classical text list */}
+      {/* Danh sách cổ thư */}
       <div className="max-w-5xl mx-auto px-6 pb-20">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {ALL_BOOKS.map(book => (
@@ -99,6 +105,7 @@ export default function LibraryHomePage() {
         </div>
 
         {/* Footer note */}
+        {/* Ghi chú cuối trang */}
         <div style={{ marginTop: '60px', padding: '24px', background: 'rgba(184,146,42,0.05)', borderRadius: '10px', textAlign: 'center' }}>
           <div style={{ fontSize: '11px', color: 'var(--ac-dim)', fontWeight: 600, letterSpacing: '0.15em', marginBottom: '8px' }}>
             About this library

@@ -1,15 +1,24 @@
 /**
  * /knowledge/[star]/[topic] — SEO landing page
+ * /knowledge/[star]/[topic] — Trang landing SEO
  *
  * 14 major stars × 13 topics = 182 independent URLs
+ * 14 chính tinh × 13 chủ đề = 182 URL độc lập
  * Each page contains the full 4-section STAR_DB judgment (one-line summary / core judgment / chart basis / classical source)
+ * Mỗi trang chứa đầy đủ 4 phần luận giải STAR_DB (tóm tắt một dòng / luận giải cốt lõi / căn cứ lá số / nguồn gốc cổ văn)
  *
  * SEO notes:
+ * Ghi chú SEO:
  *  - title contains main keyword (e.g. "Zi Wei in Ming Gong · Ni Haixia system detailed")
+ *  - tiêu đề chứa từ khóa chính (ví dụ: "Tử Vi tại Mệnh Cung · Chi tiết theo hệ thống Ni Haixia")
  *  - description uses dingdiao (one-line summary)
+ *  - mô tả sử dụng dingdiao (tóm tắt một dòng)
  *  - JSON-LD Article structured data
+ *  - dữ liệu có cấu trúc JSON-LD Article
  *  - internal links: same star other 12 palaces + same palace other 13 stars
+ *  - liên kết nội bộ: cùng sao ở 12 cung khác + cùng cung với 13 sao khác
  *  - generateStaticParams static generation, zero runtime cost
+ *  - generateStaticParams tạo tĩnh, không tốn chi phí runtime
  */
 
 import Link from 'next/link';
@@ -26,12 +35,15 @@ import {
 } from '@/lib/seo/knowledge';
 
 // Allow dynamic params: if a star/topic combo is not in generateStaticParams list
+// Cho phép tham số động: nếu tổ hợp star/topic không có trong danh sách generateStaticParams
 // also allow on-demand rendering, avoiding 404s from Chinese URL encoding issues
+// vẫn cho phép render theo yêu cầu, tránh lỗi 404 do vấn đề mã hóa URL tiếng Trung
 export const dynamicParams = false;
 
 export async function generateStaticParams() {
   const routes = getAllKnowledgeRoutes();
   // URL uses pinyin slug instead of Chinese, avoiding Vercel/CDN Chinese routing edge cases
+  // URL sử dụng slug pinyin thay vì tiếng Trung, tránh các trường hợp đặc biệt về định tuyến tiếng Trung trên Vercel/CDN
   return routes.map(r => ({ star: r.slug, topic: r.topic }));
 }
 
@@ -74,11 +86,14 @@ export default async function KnowledgePage({ params }: { params: Promise<{ star
   if (!data.exists) notFound();
 
   // Same star, other topics
+  // Cùng sao, các chủ đề khác
   const otherTopicsForStar = ALL_TOPICS.filter(t => t !== topic && getKnowledge(star, t).exists);
   // Same topic, other stars
+  // Cùng chủ đề, các sao khác
   const otherStarsForTopic = ALL_STARS.filter(s => s !== star && getKnowledge(s, topic as TopicKey).exists);
 
   // JSON-LD
+  // Dữ liệu JSON-LD
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
@@ -102,6 +117,7 @@ export default async function KnowledgePage({ params }: { params: Promise<{ star
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
       {/* Top bar */}
+      {/* Thanh trên cùng */}
       <div className="px-6 py-4 flex items-center justify-between"
         style={{ borderBottom: '1px solid rgba(184,146,42,0.15)', background: 'var(--bg-page)' }}>
         <Link href="/" style={{ fontSize: '12px', color: 'var(--ac)', letterSpacing: '0.3em', textDecoration: 'none' }}>
@@ -117,6 +133,7 @@ export default async function KnowledgePage({ params }: { params: Promise<{ star
 
       <article className="max-w-3xl mx-auto px-6 py-12">
         {/* Breadcrumb */}
+        {/* Điều hướng breadcrumb */}
         <nav style={{ fontSize: '11px', color: 'var(--tx-3)', letterSpacing: '0.1em', marginBottom: '16px' }}>
           <Link href="/" style={{ color: 'var(--tx-3)', textDecoration: 'none' }}>Home</Link>
           <span style={{ margin: '0 8px' }}>/</span>
@@ -128,6 +145,7 @@ export default async function KnowledgePage({ params }: { params: Promise<{ star
         </nav>
 
         {/* Title area */}
+        {/* Khu vực tiêu đề */}
         <header style={{ marginBottom: '36px' }}>
           <div style={{ fontSize: '11px', color: 'var(--tx-3)', letterSpacing: '0.25em', marginBottom: '8px' }}>
             {data.topicLabel} · Ni Haixia System
@@ -143,6 +161,7 @@ export default async function KnowledgePage({ params }: { params: Promise<{ star
         </header>
 
         {/* 4 content sections */}
+        {/* 4 phần nội dung */}
         {data.parsed.dingdiao && (
           <Section title="One-Line Summary" gradient>
             <p style={{ fontSize: '17px', color: 'var(--tx-0)', lineHeight: 1.9, fontWeight: 500, letterSpacing: '0.04em' }}>
@@ -176,6 +195,7 @@ export default async function KnowledgePage({ params }: { params: Promise<{ star
         )}
 
         {/* CTA */}
+        {/* CTA — Lời kêu gọi hành động */}
         <div style={{
           margin: '40px 0 30px',
           padding: '24px',
@@ -207,6 +227,7 @@ export default async function KnowledgePage({ params }: { params: Promise<{ star
         </div>
 
         {/* Internal links: same star, other topics */}
+        {/* Liên kết nội bộ: cùng sao, các chủ đề khác */}
         <Section title={`${star} — Other Palace Readings`} minimal>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
             {otherTopicsForStar.map(t => {
@@ -233,6 +254,7 @@ export default async function KnowledgePage({ params }: { params: Promise<{ star
         </Section>
 
         {/* Internal links: same topic, other stars */}
+        {/* Liên kết nội bộ: cùng chủ đề, các sao khác */}
         <Section title={`Other Stars in ${data.palaceName}`} minimal>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
             {otherStarsForTopic.slice(0, 13).map(s => (
@@ -256,6 +278,7 @@ export default async function KnowledgePage({ params }: { params: Promise<{ star
         </Section>
 
         {/* Classical texts link */}
+        {/* Liên kết đến cổ văn */}
         <div style={{
           marginTop: '40px',
           padding: '16px 20px',
@@ -274,6 +297,7 @@ export default async function KnowledgePage({ params }: { params: Promise<{ star
       </article>
 
       {/* Footer */}
+      {/* Chân trang */}
       <footer style={{ borderTop: '1px solid rgba(184,146,42,0.15)', padding: '20px 24px', textAlign: 'center', fontSize: '11px', color: 'var(--tx-3)', letterSpacing: '0.1em' }}>
         <div style={{ marginBottom: '6px' }}>Zi Wei Research · Based on the Ni Haixia authentic system · For learning reference only</div>
         <div style={{ opacity: 0.85 }}>This platform does not constitute medical, investment, legal, or major life-decision advice</div>

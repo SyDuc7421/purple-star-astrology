@@ -1,29 +1,47 @@
 /**
  * Zi Wei Dou Shu chart pattern detection (v2 strict edition)
+ * Phát hiện cách cục Tử Vi Đẩu Số (bản v2 nghiêm ngặt)
  *
  * Design principles:
+ * Nguyên tắc thiết kế:
  * 1. Classical text conditions first: each pattern has a three-tier structure
  *    (required / bonus / pattern-breaking) with traceable classical sources
+ * 1. Ưu tiên điều kiện theo cổ thư trước: mỗi cách cục có cấu trúc ba tầng
+ *    (bắt buộc / cộng điểm / phá cách) có thể truy nguồn cổ thư
  * 2. Ni Haixia's position: no palace-stem self-Hua, Da Xian Si Hua, or
  *    origin-palace tools (flying-star school features)
+ * 2. Quan điểm của Ni Haixia: không dùng tự hóa can cung, Tứ Hóa Đại Hạn,
+ *    hay công cụ cung gốc (đặc trưng của phái phi tinh)
  * 3. Brightness: uses the `brightness` field (bright = miao/wang, normal, dim = xian)
+ * 3. Độ sáng sao: dùng trường `brightness` (sáng = miếu/vượng, bình hòa, tối = hãm)
  * 4. San Fang Si Zheng (Three Directions & Four Directions): Ming Gong + Cai Bo + Guan Lu + Qian Yi
+ * 4. Tam Phương Tứ Chính: Mệnh Cung + Cung Tài Bạch + Cung Quan Lộc + Cung Thiên Di
  * 5. Jia Gong (flanking palaces): the two palaces adjacent to Ming Gong
+ * 5. Giáp Cung (cung kẹp): hai cung liền kề Mệnh Cung
  *
  * Primary classical sources:
+ * Nguồn cổ thư chính:
  *  - "Zi Wei Dou Shu Quan Ji" (transmitted by Chen Tuan, Ming dynasty edition)
+ *  - "Zi Wei Dou Shu Quan Ji" (do Chen Tuan truyền lại, bản đời Minh)
  *  - "Zi Wei Dou Shu Quan Shu" (compiled by Luo Honxian, Ming dynasty edition)
+ *  - "Zi Wei Dou Shu Quan Shu" (do Luo Honxian biên soạn, bản đời Minh)
+ *  - "Gu Sui Fu", "Nu Ming Gu Sui Fu", "Shi Er Gong Zhu Xing De Di He Ge Jue"
  *  - "Gu Sui Fu", "Nu Ming Gu Sui Fu", "Shi Er Gong Zhu Xing De Di He Ge Jue"
  *  - Ni Haixia "Tian Ji" Zi Wei Dou Shu lecture notes
+ *  - Ghi chép bài giảng Tử Vi Đẩu Số "Tian Ji" của Ni Haixia
  */
 
 import type { ZiweiChart, Palace, Star } from './types';
 
 // ────────────────── Types ──────────────────
+// ────────────────── Kiểu dữ liệu ──────────────────
 export interface PatternCondition {
   required: string[];   // must-satisfy conditions (already matched)
+                         // điều kiện bắt buộc phải thỏa (đã khớp)
   bonus?: string[];     // bonus conditions (triggered)
+                         // điều kiện cộng điểm (đã kích hoạt)
   breaking?: string[];  // pattern-breaking warnings (triggered)
+                         // cảnh báo phá cách (đã kích hoạt)
 }
 
 export interface Pattern {
@@ -31,19 +49,26 @@ export interface Pattern {
   level: 'excellent' | 'good' | 'neutral' | 'caution';
   description: string;
   palaces: string[];                 // palaces involved
+                                      // các cung liên quan
   conditions?: PatternCondition;     // tiered conditions (added in v2)
+                                      // điều kiện phân tầng (thêm ở v2)
   source?: string;                   // classical source citation (added in v2)
+                                      // trích dẫn nguồn cổ thư (thêm ở v2)
 }
 
 // ────────────────── Constants ──────────────────
+// ────────────────── Hằng số ──────────────────
 const SHA_NAMES = ['擎羊', '陀罗', '火星', '铃星', '地空', '地劫'];
 const SHA_HARD = ['擎羊', '陀罗', '火星', '铃星'];   // four sha stars
+                                                      // bốn sát tinh
 const SHA_KONG = ['地空', '地劫'];                  // kong-jie (void) stars
+                                                      // sao không-kiếp (hư không)
 const ZUO_YOU = ['左辅', '右弼'];
 const CHANG_QU = ['文昌', '文曲'];
 const KUI_YUE = ['天魁', '天钺'];
 
 // ────────────────── Helper functions ──────────────────
+// ────────────────── Hàm hỗ trợ ──────────────────
 function getMajorStarNames(palace: Palace): string[] {
   return palace.stars.filter(s => s.type === 'major').map(s => s.name);
 }
@@ -103,8 +128,10 @@ function getStarSiHua(palace: Palace, starName: string): Star['siHua'] | undefin
 const BRANCH_NAMES = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'];
 
 // ────────────────── Positive pattern detectors ──────────────────
+// ────────────────── Bộ phát hiện cách cục tốt ──────────────────
 
 /** Jun Chen Qing Hui: Zi Wei in Life Palace, Zuo Fu & You Bi converge (same palace or San Fang) */
+/** Quân Thần Khánh Hội: Tử Vi tại Mệnh Cung, Tả Phù & Hữu Bật hội tụ (đồng cung hoặc Tam Phương) */
 function detectJunChenQingHui(chart: ZiweiChart, ming: Palace, patterns: Pattern[]) {
   if (!hasStar(ming, '紫微')) return;
   const sanFangSet = sanFangAllStars(chart);
@@ -131,6 +158,7 @@ function detectJunChenQingHui(chart: ZiweiChart, ming: Palace, patterns: Pattern
 }
 
 /** Zi Fu Tong Gong: Zi Wei + Tian Fu together in Life Palace (Yin or Shen palace only) */
+/** Tử Phủ Đồng Cung: Tử Vi + Thiên Phủ cùng tại Mệnh Cung (chỉ tại cung Dần hoặc Thân) */
 function detectZiFu(chart: ZiweiChart, ming: Palace, patterns: Pattern[]) {
   const ziwei = findStarPalace(chart, '紫微');
   const tianfu = findStarPalace(chart, '天府');
@@ -161,6 +189,7 @@ function detectZiFu(chart: ZiweiChart, ming: Palace, patterns: Pattern[]) {
 }
 
 /** Fu Xiang Chao Yuan: Tian Fu & Tian Xiang each occupy San Fang Si Zheng of the Life Palace */
+/** Phủ Tướng Triều Viên: Thiên Phủ & Thiên Tướng mỗi sao chiếm một cung trong Tam Phương Tứ Chính của Mệnh Cung */
 function detectFuXiangChaoYuan(chart: ZiweiChart, ming: Palace, patterns: Pattern[]) {
   const tianfu = findStarPalace(chart, '天府');
   const tianxiang = findStarPalace(chart, '天相');
@@ -188,6 +217,7 @@ function detectFuXiangChaoYuan(chart: ZiweiChart, ming: Palace, patterns: Patter
 }
 
 /** Yang Liang Chang Lu: Tai Yang + Tian Liang + Wen Chang + Lu Cun all converge on Life Palace — high nobility pattern */
+/** Dương Lương Xương Lộc: Thái Dương + Thiên Lương + Văn Xương + Lộc Tồn cùng hội chiếu Mệnh Cung — cách cục quý hiển */
 function detectYangLiangChangLu(chart: ZiweiChart, ming: Palace, patterns: Pattern[]) {
   const sanFangSet = sanFangAllStars(chart);
   if (!sanFangSet.has('太阳') || !sanFangSet.has('天梁') ||
@@ -220,6 +250,7 @@ function detectYangLiangChangLu(chart: ZiweiChart, ming: Palace, patterns: Patte
 }
 
 /** Huo Tan / Ling Tan: Tan Lang + Huo Xing or Tan Lang + Ling Xing — same palace or convergence */
+/** Hỏa Tham / Linh Tham: Tham Lang + Hỏa Tinh hoặc Tham Lang + Linh Tinh — đồng cung hoặc hội chiếu */
 function detectHuoTanLingTan(chart: ZiweiChart, ming: Palace, patterns: Pattern[]) {
   const tan = findStarPalace(chart, '贪狼');
   if (!tan) return;
@@ -256,6 +287,7 @@ function detectHuoTanLingTan(chart: ZiweiChart, ming: Palace, patterns: Pattern[
 }
 
 /** Wu Tan: Wu Qu + Tan Lang in same palace (Chou or Wei) or opposing */
+/** Vũ Tham: Vũ Khúc + Tham Lang đồng cung (tại Sửu hoặc Mùi) hoặc xung chiếu */
 function detectWuTan(chart: ZiweiChart, ming: Palace, patterns: Pattern[]) {
   const wu = findStarPalace(chart, '武曲');
   const tan = findStarPalace(chart, '贪狼');
@@ -287,6 +319,7 @@ function detectWuTan(chart: ZiweiChart, ming: Palace, patterns: Pattern[]) {
 }
 
 /** Sha Po Lang: Qi Sha, Po Jun, Tan Lang gathered across the three directions */
+/** Sát Phá Tham: Thất Sát, Phá Quân, Tham Lang hội tụ khắp Tam Phương */
 function detectShaPoLang(chart: ZiweiChart, ming: Palace, patterns: Pattern[]) {
   const sanFangSet = sanFangAllStars(chart);
   const has = ['七杀', '破军', '贪狼'].filter(s => sanFangSet.has(s));
@@ -311,6 +344,7 @@ function detectShaPoLang(chart: ZiweiChart, ming: Palace, patterns: Pattern[]) {
 }
 
 /** Ji Yue Tong Liang: Tian Ji, Tai Yin, Tian Tong, Tian Liang all in Life/Travel/Wealth/Career palaces */
+/** Cơ Nguyệt Đồng Lương: Thiên Cơ, Thái Âm, Thiên Đồng, Thiên Lương đều tại các cung Mệnh/Thiên Di/Tài Bạch/Quan Lộc */
 function detectJiYueTongLiang(chart: ZiweiChart, ming: Palace, patterns: Pattern[]) {
   const sanFangSet = sanFangAllStars(chart);
   const has = ['天机', '太阴', '天同', '天梁'].filter(s => sanFangSet.has(s));
@@ -335,6 +369,7 @@ function detectJiYueTongLiang(chart: ZiweiChart, ming: Palace, patterns: Pattern
 }
 
 /** Lian Zhen Tian Xiang: same palace */
+/** Liêm Trinh Thiên Tướng: đồng cung */
 function detectLianXiang(chart: ZiweiChart, patterns: Pattern[]) {
   const lian = findStarPalace(chart, '廉贞');
   const xiang = findStarPalace(chart, '天相');
@@ -360,6 +395,7 @@ function detectLianXiang(chart: ZiweiChart, patterns: Pattern[]) {
 }
 
 /** Wu Qu Qi Sha: same palace — general star paired with wealth star */
+/** Vũ Khúc Thất Sát: đồng cung — tướng tinh kết hợp với tài tinh */
 function detectWuQiSha(chart: ZiweiChart, patterns: Pattern[]) {
   const wu = findStarPalace(chart, '武曲');
   const qi = findStarPalace(chart, '七杀');
@@ -385,6 +421,7 @@ function detectWuQiSha(chart: ZiweiChart, patterns: Pattern[]) {
 }
 
 /** Tian Tong Tian Liang: same palace */
+/** Thiên Đồng Thiên Lương: đồng cung */
 function detectTongLiang(chart: ZiweiChart, patterns: Pattern[]) {
   const tong = findStarPalace(chart, '天同');
   const liang = findStarPalace(chart, '天梁');
@@ -408,11 +445,13 @@ function detectTongLiang(chart: ZiweiChart, patterns: Pattern[]) {
 }
 
 /** Ri Yue Tong Gong: Tai Yang & Tai Yin together in Chou or Wei palace */
+/** Nhật Nguyệt Đồng Cung: Thái Dương & Thái Âm cùng tại cung Sửu hoặc Mùi */
 function detectRiYueTongGong(chart: ZiweiChart, patterns: Pattern[]) {
   const sun = findStarPalace(chart, '太阳');
   const moon = findStarPalace(chart, '太阴');
   if (!sun || !moon || sun.branch !== moon.branch) return;
   if (sun.branch !== 1 && sun.branch !== 7) return;  // must be Chou(1) or Wei(7)
+                                                      // phải là cung Sửu(1) hoặc Mùi(7)
 
   const inMing = sun.branch === chart.mingGongBranch;
   const required = [`太阳太阴同入${BRANCH_NAMES[sun.branch]}宫`];
@@ -433,6 +472,7 @@ function detectRiYueTongGong(chart: ZiweiChart, patterns: Pattern[]) {
 }
 
 /** Ri Yue Jia Ming: Tai Yang & Tai Yin flank the Life Palace on both sides */
+/** Nhật Nguyệt Giáp Mệnh: Thái Dương & Thái Âm kẹp hai bên Mệnh Cung */
 function detectRiYueJiaMing(chart: ZiweiChart, patterns: Pattern[]) {
   const { prev, next } = getJiaPalaces(chart, chart.mingGongBranch);
   if (!prev || !next) return;
@@ -463,11 +503,13 @@ function detectRiYueJiaMing(chart: ZiweiChart, patterns: Pattern[]) {
 }
 
 /** Ju Ri Tong Gong: Ju Men & Tai Yang together in Yin or Shen palace */
+/** Cự Nhật Đồng Cung: Cự Môn & Thái Dương cùng tại cung Dần hoặc Thân */
 function detectJuRiTongGong(chart: ZiweiChart, patterns: Pattern[]) {
   const ju = findStarPalace(chart, '巨门');
   const sun = findStarPalace(chart, '太阳');
   if (!ju || !sun || ju.branch !== sun.branch) return;
   if (ju.branch !== 2 && ju.branch !== 8) return;  // must be Yin(2) or Shen(8)
+                                                    // phải là cung Dần(2) hoặc Thân(8)
 
   const inMing = ju.branch === chart.mingGongBranch;
   const required = [`巨门太阳同入${BRANCH_NAMES[ju.branch]}宫`];
@@ -489,9 +531,11 @@ function detectJuRiTongGong(chart: ZiweiChart, patterns: Pattern[]) {
 }
 
 /** Shi Zhong Yin Yu: Ju Men in Life Palace at Zi or Wu palace */
+/** Thạch Trung Ẩn Ngọc: Cự Môn tại Mệnh Cung ở cung Tý hoặc Ngọ */
 function detectShiZhongYinYu(chart: ZiweiChart, ming: Palace, patterns: Pattern[]) {
   if (!hasStar(ming, '巨门')) return;
   if (ming.branch !== 0 && ming.branch !== 6) return;  // must be Zi(0) or Wu(6)
+                                                        // phải là cung Tý(0) hoặc Ngọ(6)
 
   const required = [`巨门入命于${BRANCH_NAMES[ming.branch]}宫`];
   const bonus: string[] = [];
@@ -512,9 +556,12 @@ function detectShiZhongYinYu(chart: ZiweiChart, ming: Palace, patterns: Pattern[
 }
 
 /** Ming Zhu Chu Hai: Life Palace in Wei (empty), opposite Chou palace has Tai Yang & Tai Yin */
+/** Minh Châu Xuất Hải: Mệnh Cung tại cung Mùi (cung không sao), cung Sửu đối diện có Thái Dương & Thái Âm */
 function detectMingZhuChuHai(chart: ZiweiChart, ming: Palace, patterns: Pattern[]) {
   if (ming.branch !== 7) return;   // Life Palace must be Wei
+                                    // Mệnh Cung phải là cung Mùi
   if (getMajorStarNames(ming).length > 0) return;   // Life Palace must be empty
+                                                      // Mệnh Cung phải là cung không sao
   const dui = getDuiGong(chart, ming.branch);
   if (!dui) return;
   if (!hasStar(dui, '太阳') || !hasStar(dui, '太阴')) return;
@@ -537,6 +584,7 @@ function detectMingZhuChuHai(chart: ZiweiChart, ming: Palace, patterns: Pattern[
 }
 
 /** Zi Wei alone in Life Palace */
+/** Tử Vi độc thủ Mệnh Cung */
 function detectZiWeiInMing(chart: ZiweiChart, ming: Palace, patterns: Pattern[]) {
   if (!hasStar(ming, '紫微') || hasStar(ming, '天府')) return;
 
@@ -560,6 +608,7 @@ function detectZiWeiInMing(chart: ZiweiChart, ming: Palace, patterns: Pattern[])
 }
 
 /** Zuo Fu & You Bi flanking Life Palace */
+/** Tả Phù & Hữu Bật kẹp Mệnh Cung */
 function detectFuBiJiaMing(chart: ZiweiChart, patterns: Pattern[]) {
   const { prev, next } = getJiaPalaces(chart, chart.mingGongBranch);
   if (!prev || !next) return;
@@ -585,6 +634,7 @@ function detectFuBiJiaMing(chart: ZiweiChart, patterns: Pattern[]) {
 }
 
 /** Wen Chang & Wen Qu flanking Life Palace */
+/** Văn Xương & Văn Khúc kẹp Mệnh Cung */
 function detectChangQuJiaMing(chart: ZiweiChart, patterns: Pattern[]) {
   const { prev, next } = getJiaPalaces(chart, chart.mingGongBranch);
   if (!prev || !next) return;
@@ -605,6 +655,7 @@ function detectChangQuJiaMing(chart: ZiweiChart, patterns: Pattern[]) {
 }
 
 /** Tian Kui & Tian Yue flanking Life Palace */
+/** Thiên Khôi & Thiên Việt kẹp Mệnh Cung */
 function detectKuiYueJiaMing(chart: ZiweiChart, patterns: Pattern[]) {
   const { prev, next } = getJiaPalaces(chart, chart.mingGongBranch);
   if (!prev || !next) return;
@@ -623,6 +674,7 @@ function detectKuiYueJiaMing(chart: ZiweiChart, patterns: Pattern[]) {
 }
 
 /** Shuang Lu Chao Yuan: Hua Lu + Lu Cun both converge in San Fang */
+/** Song Lộc Triều Viên: Hóa Lộc + Lộc Tồn cùng hội tụ trong Tam Phương */
 function detectShuangLuChaoYuan(chart: ZiweiChart, ming: Palace, patterns: Pattern[]) {
   const sanFang = getSanFangPalaces(chart);
   let huaLuFound = false;
@@ -647,6 +699,7 @@ function detectShuangLuChaoYuan(chart: ZiweiChart, ming: Palace, patterns: Patte
 }
 
 /** San Qi Jia Hui: Hua Lu, Hua Quan, Hua Ke all converge in San Fang */
+/** Tam Kỳ Gia Hội: Hóa Lộc, Hóa Quyền, Hóa Khoa cùng hội tụ trong Tam Phương */
 function detectSanQiJiaHui(chart: ZiweiChart, patterns: Pattern[]) {
   const sanFangPalaces = getSanFangPalaces(chart);
   let lu = false, quan = false, ke = false;
@@ -670,6 +723,7 @@ function detectSanQiJiaHui(chart: ZiweiChart, patterns: Pattern[]) {
 }
 
 /** Hua Lu entering Life / Career / Wealth palace */
+/** Hóa Lộc nhập Mệnh / Quan Lộc / Tài Bạch */
 function detectHuaLuRuMing(chart: ZiweiChart, ming: Palace, patterns: Pattern[]) {
   const huaLuStar = ming.stars.find(s => s.siHua === '禄' && s.type === 'major');
   if (!huaLuStar) return;
@@ -685,8 +739,10 @@ function detectHuaLuRuMing(chart: ZiweiChart, ming: Palace, patterns: Pattern[])
 }
 
 // ────────────────── Negative pattern detectors ──────────────────
+// ────────────────── Bộ phát hiện cách cục xấu ──────────────────
 
 /** Hua Ji entering Life / Travel palace */
+/** Hóa Kỵ nhập Mệnh / Thiên Di */
 function detectHuaJiRuMingQian(chart: ZiweiChart, patterns: Pattern[]) {
   const qianBranch = (chart.mingGongBranch + 6) % 12;
   for (const palace of chart.palaces) {
@@ -709,11 +765,13 @@ function detectHuaJiRuMingQian(chart: ZiweiChart, patterns: Pattern[]) {
 }
 
 /** Yang Tuo Jia Ji: Hua Ji in a palace flanked on both sides by Qing Yang & Tuo Luo */
+/** Dương Đà Giáp Kỵ: Hóa Kỵ tại một cung bị Kình Dương & Đà La kẹp hai bên */
 function detectYangTuoJiaJi(chart: ZiweiChart, patterns: Pattern[]) {
   for (const palace of chart.palaces) {
     const jiStar = palace.stars.find(s => s.siHua === '忌');
     if (!jiStar) continue;
     if (palace.branch !== chart.mingGongBranch) continue;   // only check flanking of Life Palace
+                                                              // chỉ kiểm tra cung kẹp quanh Mệnh Cung
 
     const { prev, next } = getJiaPalaces(chart, palace.branch);
     if (!prev || !next) continue;
@@ -734,6 +792,7 @@ function detectYangTuoJiaJi(chart: ZiweiChart, patterns: Pattern[]) {
 }
 
 /** Huo Ling Jia Ming: Huo Xing & Ling Xing flank Life Palace on both sides */
+/** Hỏa Linh Giáp Mệnh: Hỏa Tinh & Linh Tinh kẹp hai bên Mệnh Cung */
 function detectHuoLingJiaMing(chart: ZiweiChart, patterns: Pattern[]) {
   const { prev, next } = getJiaPalaces(chart, chart.mingGongBranch);
   if (!prev || !next) return;
@@ -752,6 +811,7 @@ function detectHuoLingJiaMing(chart: ZiweiChart, patterns: Pattern[]) {
 }
 
 /** Kong Jie Jia Ming: Di Kong & Di Jie flank Life Palace on both sides */
+/** Không Kiếp Giáp Mệnh: Địa Không & Địa Kiếp kẹp hai bên Mệnh Cung */
 function detectKongJieJiaMing(chart: ZiweiChart, patterns: Pattern[]) {
   const { prev, next } = getJiaPalaces(chart, chart.mingGongBranch);
   if (!prev || !next) return;
@@ -770,6 +830,7 @@ function detectKongJieJiaMing(chart: ZiweiChart, patterns: Pattern[]) {
 }
 
 /** Lian Sha Yang: Lian Zhen, Qi Sha, Qing Yang converge — most inauspicious in Liu Nian/Da Xian */
+/** Liêm Sát Dương: Liêm Trinh, Thất Sát, Kình Dương hội tụ — hung hiểm nhất khi gặp Lưu Niên/Đại Hạn */
 function detectLianShaYang(chart: ZiweiChart, patterns: Pattern[]) {
   const sanFangSet = sanFangAllStars(chart);
   if (!(sanFangSet.has('廉贞') && sanFangSet.has('七杀') && sanFangSet.has('擎羊'))) return;
@@ -785,6 +846,7 @@ function detectLianShaYang(chart: ZiweiChart, patterns: Pattern[]) {
 }
 
 /** Ju Huo Yang: Ju Men, Huo Xing, Qing Yang converge */
+/** Cự Hỏa Dương: Cự Môn, Hỏa Tinh, Kình Dương hội tụ */
 function detectJuHuoYang(chart: ZiweiChart, patterns: Pattern[]) {
   const sanFangSet = sanFangAllStars(chart);
   if (!(sanFangSet.has('巨门') && sanFangSet.has('火星') && sanFangSet.has('擎羊'))) return;
@@ -800,6 +862,7 @@ function detectJuHuoYang(chart: ZiweiChart, patterns: Pattern[]) {
 }
 
 /** Ling Chang Tuo Wu: Ling Xing, Wen Chang, Tuo Luo, Wu Qu converge — classically the most severe negative pattern */
+/** Linh Xương Đà Vũ: Linh Tinh, Văn Xương, Đà La, Vũ Khúc hội tụ — cách cục xấu nghiêm trọng nhất theo cổ thư */
 function detectLingChangTuoWu(chart: ZiweiChart, patterns: Pattern[]) {
   const sanFangSet = sanFangAllStars(chart);
   if (!(sanFangSet.has('铃星') && sanFangSet.has('文昌') && sanFangSet.has('陀罗') && sanFangSet.has('武曲'))) return;
@@ -815,8 +878,10 @@ function detectLingChangTuoWu(chart: ZiweiChart, patterns: Pattern[]) {
 }
 
 /** Ma Tou Dai Jian: Qing Yang in Life Palace at Wu palace */
+/** Mã Đầu Đới Kiếm: Kình Dương tại Mệnh Cung ở cung Ngọ */
 function detectMaTouDaiJian(chart: ZiweiChart, ming: Palace, patterns: Pattern[]) {
   if (ming.branch !== 6) return;   // must be Wu(6)
+                                    // phải là cung Ngọ(6)
   if (!hasStar(ming, '擎羊')) return;
 
   const required = ['擎羊于午宫坐命'];
@@ -836,11 +901,16 @@ function detectMaTouDaiJian(chart: ZiweiChart, ming: Palace, patterns: Pattern[]
 }
 
 // ────────────────── Basic patterns (improve detection coverage) ──────────────────
+// ────────────────── Cách cục cơ bản (tăng độ phủ phát hiện) ──────────────────
 // Design: ensures an average chart can still match 1-3 common patterns,
 // rather than failing all 30+ strict classical patterns. These are lightweight,
 // single-condition detectors; level is usually neutral / good.
+// Thiết kế: đảm bảo một lá số trung bình vẫn khớp được 1-3 cách cục phổ biến,
+// thay vì trượt hết hơn 30 cách cục nghiêm ngặt theo cổ thư. Đây là các bộ
+// phát hiện đơn giản, một điều kiện; mức độ thường là bình hòa / tốt.
 
 /** Lu Cun Shou Shen: Lu Cun in Body Palace (or Life Palace = Body Palace) */
+/** Lộc Tồn Thủ Thân: Lộc Tồn tại Thân Cung (hoặc Mệnh Cung = Thân Cung) */
 function detectLuCunShouShen(chart: ZiweiChart, patterns: Pattern[]) {
   const luCunPalace = findStarPalace(chart, '禄存');
   if (!luCunPalace) return;
@@ -860,6 +930,7 @@ function detectLuCunShouShen(chart: ZiweiChart, patterns: Pattern[]) {
 }
 
 /** Tian Ma entering Life / Travel palace: the courier star is active */
+/** Thiên Mã nhập Mệnh / Thiên Di: sao dịch mã đang hoạt động */
 function detectTianMaRuMing(chart: ZiweiChart, patterns: Pattern[]) {
   const tianMaPalace = findStarPalace(chart, '天马');
   if (!tianMaPalace) return;
@@ -879,6 +950,7 @@ function detectTianMaRuMing(chart: ZiweiChart, patterns: Pattern[]) {
 }
 
 /** Hua Lu entering Wealth palace: major star in Wealth palace transforms to Lu */
+/** Hóa Lộc nhập Cung Tài Bạch: chính tinh tại Cung Tài Bạch hóa Lộc */
 function detectHuaLuRuCai(chart: ZiweiChart, patterns: Pattern[]) {
   const cai = chart.palaces.find(p => p.name === '财帛');
   if (!cai) return;
@@ -895,6 +967,7 @@ function detectHuaLuRuCai(chart: ZiweiChart, patterns: Pattern[]) {
 }
 
 /** Hua Quan entering Career palace: major star in Career palace transforms to Quan */
+/** Hóa Quyền nhập Cung Quan Lộc: chính tinh tại Cung Quan Lộc hóa Quyền */
 function detectHuaQuanRuGuan(chart: ZiweiChart, patterns: Pattern[]) {
   const guan = chart.palaces.find(p => p.name === '官禄');
   if (!guan) return;
@@ -911,6 +984,7 @@ function detectHuaQuanRuGuan(chart: ZiweiChart, patterns: Pattern[]) {
 }
 
 /** Hua Ke entering Life / Body palace: academic distinction bestowed */
+/** Hóa Khoa nhập Mệnh / Thân Cung: được ban danh tiếng học vấn */
 function detectHuaKeRuMingShen(chart: ZiweiChart, patterns: Pattern[]) {
   const ming = chart.palaces.find(p => p.branch === chart.mingGongBranch);
   const shen = chart.palaces.find(p => p.branch === chart.shenGongBranch);
@@ -928,15 +1002,19 @@ function detectHuaKeRuMingShen(chart: ZiweiChart, patterns: Pattern[]) {
       source: '《紫微斗数全书·四化论》',
     });
     return; // avoid duplicate detection when Life Palace = Body Palace
+            // tránh phát hiện trùng lặp khi Mệnh Cung = Thân Cung
   }
 }
 
 /** Ji Yue Tong Liang three-star meeting (reduced version): any 3 of Tian Ji/Tai Yin/Tian Tong/Tian Liang in San Fang Si Zheng */
+/** Cơ Nguyệt Đồng Lương hội ba sao (bản rút gọn): bất kỳ 3 trong 4 sao Thiên Cơ/Thái Âm/Thiên Đồng/Thiên Lương tại Tam Phương Tứ Chính */
 function detectJiYueTongLiangPartial(chart: ZiweiChart, ming: Palace, patterns: Pattern[]) {
   const sanFangSet = sanFangAllStars(chart);
   const has = ['天机', '太阴', '天同', '天梁'].filter(s => sanFangSet.has(s));
   if (has.length !== 3) return; // all 4 stars case is handled by detectJiYueTongLiang
+                                 // trường hợp đủ 4 sao đã được xử lý bởi detectJiYueTongLiang
   // avoid duplicating detectJiYueTongLiang above (4-star cases don't enter here)
+  // tránh trùng lặp với detectJiYueTongLiang ở trên (trường hợp đủ 4 sao không vào đây)
   const missing = ['天机', '太阴', '天同', '天梁'].filter(s => !sanFangSet.has(s));
   patterns.push({
     name: '机月同梁三星会',
@@ -950,6 +1028,7 @@ function detectJiYueTongLiangPartial(chart: ZiweiChart, ming: Palace, patterns: 
 }
 
 /** Chang Qu Tong Hui: Wen Chang + Wen Qu both in Life Palace's San Fang Si Zheng */
+/** Xương Khúc Đồng Hội: Văn Xương + Văn Khúc cùng tại Tam Phương Tứ Chính của Mệnh Cung */
 function detectChangQuTongHui(chart: ZiweiChart, patterns: Pattern[]) {
   const sanFangSet = sanFangAllStars(chart);
   if (!sanFangSet.has('文昌') || !sanFangSet.has('文曲')) return;
@@ -969,6 +1048,7 @@ function detectChangQuTongHui(chart: ZiweiChart, patterns: Pattern[]) {
 }
 
 /** Fu Bi Tong Hui: Zuo Fu + You Bi both in Life Palace's San Fang Si Zheng */
+/** Phù Bật Đồng Hội: Tả Phù + Hữu Bật cùng tại Tam Phương Tứ Chính của Mệnh Cung */
 function detectFuBiTongHui(chart: ZiweiChart, patterns: Pattern[]) {
   const sanFangSet = sanFangAllStars(chart);
   if (!sanFangSet.has('左辅') || !sanFangSet.has('右弼')) return;
@@ -983,6 +1063,7 @@ function detectFuBiTongHui(chart: ZiweiChart, patterns: Pattern[]) {
 }
 
 /** Kui Yue Tong Hui: Tian Kui + Tian Yue both in Life Palace's San Fang Si Zheng */
+/** Khôi Việt Đồng Hội: Thiên Khôi + Thiên Việt cùng tại Tam Phương Tứ Chính của Mệnh Cung */
 function detectKuiYueTongHui(chart: ZiweiChart, patterns: Pattern[]) {
   const sanFangSet = sanFangAllStars(chart);
   if (!sanFangSet.has('天魁') || !sanFangSet.has('天钺')) return;
@@ -997,6 +1078,7 @@ function detectKuiYueTongHui(chart: ZiweiChart, patterns: Pattern[]) {
 }
 
 /** Ke Quan Shuang Hui: Hua Ke + Hua Quan both converge in San Fang Si Zheng */
+/** Khoa Quyền Song Hội: Hóa Khoa + Hóa Quyền cùng hội tụ tại Tam Phương Tứ Chính */
 function detectKeQuanShuangHui(chart: ZiweiChart, patterns: Pattern[]) {
   const sfPalaces = getSanFangPalaces(chart);
   let hasKe = false, hasQuan = false;
@@ -1018,12 +1100,14 @@ function detectKeQuanShuangHui(chart: ZiweiChart, patterns: Pattern[]) {
 }
 
 // ────────────────── Main entry point ──────────────────
+// ────────────────── Điểm vào chính ──────────────────
 export function detectPatterns(chart: ZiweiChart): Pattern[] {
   const patterns: Pattern[] = [];
   const ming = chart.palaces.find(p => p.branch === chart.mingGongBranch);
   if (!ming) return patterns;
 
   // Superior patterns
+  // Cách cục thượng thừa
   detectJunChenQingHui(chart, ming, patterns);
   detectZiFu(chart, ming, patterns);
   detectFuXiangChaoYuan(chart, ming, patterns);
@@ -1034,6 +1118,7 @@ export function detectPatterns(chart: ZiweiChart): Pattern[] {
   detectJiYueTongLiang(chart, ming, patterns);
 
   // Standard patterns
+  // Cách cục tiêu chuẩn
   detectLianXiang(chart, patterns);
   detectWuQiSha(chart, patterns);
   detectTongLiang(chart, patterns);
@@ -1045,6 +1130,7 @@ export function detectPatterns(chart: ZiweiChart): Pattern[] {
   detectZiWeiInMing(chart, ming, patterns);
 
   // Support patterns
+  // Cách cục hỗ trợ
   detectFuBiJiaMing(chart, patterns);
   detectChangQuJiaMing(chart, patterns);
   detectKuiYueJiaMing(chart, patterns);
@@ -1053,6 +1139,7 @@ export function detectPatterns(chart: ZiweiChart): Pattern[] {
   detectHuaLuRuMing(chart, ming, patterns);
 
   // Negative patterns
+  // Cách cục xấu
   detectHuaJiRuMingQian(chart, patterns);
   detectYangTuoJiaJi(chart, patterns);
   detectHuoLingJiaMing(chart, patterns);
@@ -1063,6 +1150,7 @@ export function detectPatterns(chart: ZiweiChart): Pattern[] {
   detectMaTouDaiJian(chart, ming, patterns);
 
   // Basic patterns (improve detection coverage so average charts match 1-3 patterns)
+  // Cách cục cơ bản (tăng độ phủ để lá số trung bình khớp 1-3 cách cục)
   detectLuCunShouShen(chart, patterns);
   detectTianMaRuMing(chart, patterns);
   detectHuaLuRuCai(chart, patterns);
@@ -1078,6 +1166,7 @@ export function detectPatterns(chart: ZiweiChart): Pattern[] {
 }
 
 // ────────────────── Life Palace summary (backward compatibility) ──────────────────
+// ────────────────── Tóm tắt Mệnh Cung (tương thích ngược) ──────────────────
 export function getMingGongSummary(chart: ZiweiChart): {
   stars: string[];
   keywords: string[];

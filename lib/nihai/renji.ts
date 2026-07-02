@@ -1,18 +1,26 @@
 /**
  * Ren Ji — Ni Haixia classical Chinese medicine teaching database
+ * Ren Ji — cơ sở dữ liệu giảng dạy y học cổ truyền Trung Hoa của Ni Haixia
  *
  * "Know human affairs" — Ren Ji is the systematic teaching of classical Chinese medicine.
+ * "Thấu hiểu việc người" — Ren Ji là hệ thống giảng dạy y học cổ truyền Trung Hoa.
  * Completed 2004-2005, covering five major classical medicine courses.
+ * Hoàn thành năm 2004-2005, bao gồm năm khóa học y học cổ điển lớn.
  * Study sequence: Acupuncture → Huang Di Nei Jing → Shen Nong Ben Cao → Shang Han Lun → Jin Kui Yao Lue
+ * Trình tự học: Châm cứu → Hoàng Đế Nội Kinh → Thần Nông Bản Thảo → Thương Hàn Luận → Kim Quỹ Yếu Lược
  *
  * Core philosophy:
+ * Triết lý cốt lõi:
  *   TCM is physical medicine — it analyzes the human body from a physical perspective.
+ *   Y học cổ truyền Trung Hoa là y học vật lý — phân tích cơ thể con người từ góc độ vật lý.
  *   A fully trained practitioner can treat everything from the common cold to liver cancer.
+ *   Một thầy thuốc được đào tạo đầy đủ có thể chữa mọi bệnh, từ cảm cúm thông thường đến ung thư gan.
  */
 
 import type { NiModule, AcuExperience, TransNeedling, HantangFormula, ClassicFormula } from './types';
 
 // ─── Ren Ji modules ─────────────────────────────────────────
+// ─── Các module Ren Ji ─────────────────────────────────────────
 export const RENJI_MODULES: NiModule[] = [
   {
     id: 'rj-zhenjiu',
@@ -347,8 +355,10 @@ export const RENJI_MODULES: NiModule[] = [
 ];
 
 // ─── 215 acupuncture clinical experience points (Ni Haixia's clinical essentials) ─────
+// ─── 215 điểm kinh nghiệm lâm sàng châm cứu (tinh yếu lâm sàng của Ni Haixia) ─────
 export const ACU_EXPERIENCES: AcuExperience[] = [
   // 01 Heart & cardiovascular system
+  // 01 Tim mạch
   { id: 1, condition: '冠心病', acupoints: '关元、巨阙、少府、涌泉、公孙', category: '心血管' },
   { id: 2, condition: '心脏肥大', acupoints: '巨阙、少府、神门、劳宫、关元、公孙、内关、天突', category: '心血管' },
   { id: 3, condition: '心绞痛', acupoints: '厉兑、人中、十宣（放血）、涌泉、百会（放血）', category: '心血管' },
@@ -357,6 +367,7 @@ export const ACU_EXPERIENCES: AcuExperience[] = [
   { id: 6, condition: '心悸', acupoints: '神门、少府、关元', category: '心血管' },
   { id: 7, condition: '心脏痛', acupoints: '公孙、内关、巨阙、关元、天突、厉兑', category: '心血管' },
   // 02 Liver & gallbladder system
+  // 02 Gan mật
   { id: 8, condition: '肝病', acupoints: '肝关、行间', category: '肝胆' },
   { id: 9, condition: '肝炎', acupoints: '行间', category: '肝胆' },
   { id: 10, condition: '肝硬化', acupoints: '肝俞、行间', category: '肝胆' },
@@ -364,6 +375,7 @@ export const ACU_EXPERIENCES: AcuExperience[] = [
   { id: 12, condition: '黄疸', acupoints: '脊中、行间', category: '肝胆' },
   { id: 13, condition: '胆结石', acupoints: '肝俞、胆俞、阳陵泉正下约一寸处（胆石点）', category: '肝胆' },
   // 03 Spleen, stomach & digestive system
+  // 03 Tỳ vị (lá lách, dạ dày & tiêu hóa)
   { id: 14, condition: '胃病胃痛', acupoints: '中脘（梅花灸）、关元、天枢、公孙、内关', category: '脾胃' },
   { id: 15, condition: '胃癌', acupoints: '膺窗、鱼际、足三里、天溪、痞根、地五会', category: '脾胃' },
   { id: 16, condition: '腹痛', acupoints: '三阴交、公孙、关元、中极、肠关', category: '脾胃' },
@@ -382,6 +394,7 @@ export const ACU_EXPERIENCES: AcuExperience[] = [
   { id: 29, condition: '疝气', acupoints: '隐白、肝俞、大敦（对侧）、行间', category: '脾胃' },
   { id: 30, condition: '水肿', acupoints: '水分、三阴交、地机、阴陵泉、水道', category: '脾胃' },
   // 04 Lung & respiratory system
+  // 04 Phế hệ (phổi & hô hấp)
   { id: 31, condition: '肺癌', acupoints: '中府、云门、孔最、公孙、内关', category: '肺系' },
   { id: 32, condition: '气喘', acupoints: '膻中、中府、云门、孔最、公孙、内关', category: '肺系' },
   { id: 33, condition: '咳嗽', acupoints: '太渊、灵墟、俞府、彧中', category: '肺系' },
@@ -392,6 +405,7 @@ export const ACU_EXPERIENCES: AcuExperience[] = [
   { id: 38, condition: '肺结核', acupoints: '肺俞、胆俞、膈俞', category: '肺系' },
   { id: 39, condition: '肺积水', acupoints: '膈俞、膻中、鸠尾、阳谷、后溪、照海、水分、水道、大包', category: '肺系' },
   // 05 Kidney & urinary system
+  // 05 Thận hệ (thận & tiết niệu)
   { id: 40, condition: '肾虚', acupoints: '肾俞、京门、命门', category: '肾系' },
   { id: 41, condition: '遗精', acupoints: '三阴交（灸）、横骨', category: '肾系' },
   { id: 42, condition: '前列腺肥大', acupoints: '阴陵泉、关元、足三里', category: '肾系' },
@@ -406,6 +420,7 @@ export const ACU_EXPERIENCES: AcuExperience[] = [
   { id: 51, condition: '尿失禁', acupoints: '阴陵泉', category: '肾系' },
   { id: 52, condition: '肾结石', acupoints: '肾俞、京门、命门、交信和太溪之间（肾石点）', category: '肾系' },
   // 06 Gynecology & pediatrics
+  // 06 Phụ khoa & nhi khoa
   { id: 53, condition: '痛经', acupoints: '关元（灸）、中极（灸）、三阴交、血海', category: '妇科' },
   { id: 54, condition: '月经过少', acupoints: '血海（血海下一寸针）', category: '妇科' },
   { id: 55, condition: '月经过多', acupoints: '隐白、行间', category: '妇科' },
@@ -430,6 +445,7 @@ export const ACU_EXPERIENCES: AcuExperience[] = [
   { id: 74, condition: '乳房纤维瘤', acupoints: '天溪、地五会', category: '妇科' },
   { id: 75, condition: '乳腺癌', acupoints: '肩井、膺窗、鱼际、足三里、天溪、痞根、地五会', category: '妇科' },
   // 07 Mind & nervous system
+  // 07 Thần chí (tâm thần & thần kinh)
   { id: 76, condition: '脑血栓', acupoints: '百会', category: '神志', note: '无昏迷时用' },
   { id: 77, condition: '中风', acupoints: '百会、风府', category: '神志' },
   { id: 78, condition: '中风中经络', acupoints: '风市、阳陵泉、阴陵泉、悬钟、三阴交', category: '神志' },
@@ -444,6 +460,7 @@ export const ACU_EXPERIENCES: AcuExperience[] = [
   { id: 87, condition: '癫狂', acupoints: '筋缩', category: '神志' },
   { id: 88, condition: '脑瘤', acupoints: '百会、涌泉', category: '神志' },
   // 08 Injuries & surgery
+  // 08 Thương khoa (chấn thương & ngoại khoa)
   { id: 89, condition: '颈椎病', acupoints: '昆仑、后溪、申脉', category: '伤科' },
   { id: 90, condition: '头项强重', acupoints: '后溪、申脉、大杼、昆仑', category: '伤科' },
   { id: 91, condition: '落枕', acupoints: '手三里', category: '伤科' },
@@ -457,6 +474,7 @@ export const ACU_EXPERIENCES: AcuExperience[] = [
   { id: 99, condition: '膝痛', acupoints: '风市、阴市、膝阳关透曲泉', category: '伤科' },
   { id: 100, condition: '脚扭伤', acupoints: '商丘透丘墟', category: '伤科', note: '一针见效' },
   // 09 ENT & ophthalmology
+  // 09 Ngũ quan (tai mũi họng & nhãn khoa)
   { id: 101, condition: '头痛（前额）', acupoints: '合谷、阳白', category: '五官' },
   { id: 102, condition: '头痛（偏头）', acupoints: '太阳透率谷、丝竹空（放血）', category: '五官' },
   { id: 103, condition: '头痛（后脑）', acupoints: '后溪、申脉、昆仑', category: '五官' },
@@ -468,6 +486,7 @@ export const ACU_EXPERIENCES: AcuExperience[] = [
   { id: 109, condition: '耳鸣', acupoints: '耳门、听宫、听会、肾俞、翳风', category: '五官' },
   { id: 110, condition: '牙痛', acupoints: '合谷、颊车、下关', category: '五官' },
   // 10 Other
+  // 10 Khác
   { id: 111, condition: '戒烟', acupoints: '列缺透阳溪、筑宾、合谷、肺俞', category: '其他' },
   { id: 112, condition: '盗汗', acupoints: '神门透阴郄、内关', category: '其他' },
   { id: 113, condition: '狐臭', acupoints: '肩髃透极泉', category: '其他' },
@@ -481,6 +500,7 @@ export const ACU_EXPERIENCES: AcuExperience[] = [
 ];
 
 // ─── 31 through-needling techniques ─────────────────────────
+// ─── 31 kỹ thuật xuyên châm ─────────────────────────
 export const TRANS_NEEDLING: TransNeedling[] = [
   { id: 1, combo: '中府透云门', indication: '咳嗽、气喘、哮喘、肺癌', supporting: '孔最、公孙、内关', source: '倪海厦' },
   { id: 2, combo: '阳陵泉透阴陵泉', indication: '中风、中经络、雷诺氏病', supporting: '内关、水沟、三阴交、极泉', source: '孙培荣/周左宇/倪海厦' },
@@ -516,6 +536,7 @@ export const TRANS_NEEDLING: TransNeedling[] = [
 ];
 
 // ─── Han Tang 100 Formulas complete list ────────────────────
+// ─── Danh sách đầy đủ 100 bài thuốc Han Tang ────────────────────
 export const HANTANG_FORMULAS: HantangFormula[] = [
   { id: 1, name: '白带丸', indication: '女性赤白带过多', theory: '乳汁下行变化为月经，肝经主疏泄' },
   { id: 2, name: '退乳丸', indication: '退乳汁，预防乳癌', theory: '乳汁与月经同源' },
@@ -617,6 +638,7 @@ export const HANTANG_FORMULAS: HantangFormula[] = [
 ];
 
 // ─── Selected core classical formulas (Shang Han Lun + Jin Kui Yao Lue) ──────────────
+// ─── Các bài thuốc cổ điển cốt lõi được chọn lọc (Thương Hàn Luận + Kim Quỹ Yếu Lược) ──────────────
 export const CLASSIC_FORMULAS: ClassicFormula[] = [
   { id: 'cf-01', name: '桂枝汤', source: '伤寒论', composition: '桂枝10g、白芍10g、生姜二片、炙甘草10g、红枣十枚', indication: '太阳中风，调和营卫', niUsage: '太阳中风第一方，脉浮缓有汗恶风' },
   { id: 'cf-02', name: '麻黄汤', source: '伤寒论', composition: '麻黄9g、桂枝6g、杏仁9g、炙甘草3g', indication: '太阳伤寒，发汗解表', niUsage: '脉浮紧无汗恶寒身疼' },
@@ -646,6 +668,7 @@ export const CLASSIC_FORMULAS: ClassicFormula[] = [
 ];
 
 // ─── Statistics ──────────────────────────────────────────────
+// ─── Thống kê ──────────────────────────────────────────────
 export const RENJI_STATS = {
   totalModules: RENJI_MODULES.length,
   totalChapters: RENJI_MODULES.reduce((sum, m) => sum + m.chapters.length, 0),

@@ -21,6 +21,7 @@ const BRANCH_GRID_POS: Record<number, [number, number]> = {
 };
 
 // SVG center coordinates (percentage) for each earthly-branch palace
+// Tọa độ tâm SVG (phần trăm) cho mỗi cung địa chi
 const BRANCH_SVG_POS: Record<number, [number, number]> = {
   5: [12.5, 12.5], 6: [37.5, 12.5], 7: [62.5, 12.5], 8: [87.5, 12.5],
   4: [12.5, 37.5],                                      9: [87.5, 37.5],
@@ -29,6 +30,7 @@ const BRANCH_SVG_POS: Record<number, [number, number]> = {
 };
 
 // Clockwise order around the board (used for three-direction quadrilateral sorting)
+// Thứ tự theo chiều kim đồng hồ quanh bàn cờ (dùng để sắp xếp tứ giác tam phương)
 const CLOCKWISE_INDEX: Record<number, number> = {
   5: 0, 6: 1, 7: 2, 8: 3,
   9: 4, 10: 5,
@@ -41,12 +43,16 @@ function sortClockwise(branches: number[]): number[] {
 }
 
 /** Three Directions and Four Cardinals: self palace + opposite + two San He palaces */
+/** Tam Phương Tứ Chính: cung bản thân + cung đối diện + hai cung Tam Hợp */
 function getSanFangSiZheng(branch: number): [number, number, number, number] {
   return [
     branch,
     (branch + 6) % 12,   // opposite palace
+    // cung đối diện
     (branch + 4) % 12,   // San He palace 1
+    // cung Tam Hợp 1
     (branch + 8) % 12,   // San He palace 2
+    // cung Tam Hợp 2
   ];
 }
 
@@ -61,6 +67,7 @@ export default function ChartBoard({ chart, onStarSelect, onPalaceSelect, onSiHu
   chart.palaces.forEach(p => { palaceMap[p.branch] = p; });
 
   // Compute current overlay Si Hua data (Da Xian or Liu Nian)
+  // Tính toán dữ liệu Tứ Hóa lớp phủ hiện tại (Đại Hạn hoặc Lưu Niên)
   const currentDx = chart.daXians[chart.currentDaXianIndex];
   const overlayData: Record<string, string> = (() => {
     if (timeView === 'daxian' && currentDx) {
@@ -84,12 +91,14 @@ export default function ChartBoard({ chart, onStarSelect, onPalaceSelect, onSiHu
   };
 
   // Three-direction and four-cardinal palaces
+  // Các cung tam phương tứ chính
   const sanFangBranches = selectedBranch !== null ? getSanFangSiZheng(selectedBranch) : null;
   const sanFangSet = sanFangBranches ? new Set(sanFangBranches) : null;
 
   return (
     <div className="w-full select-none">
       {/* Time navigation bar */}
+      {/* Thanh điều hướng thời gian */}
       <TimeNav
         chart={chart}
         view={timeView}
@@ -99,6 +108,7 @@ export default function ChartBoard({ chart, onStarSelect, onPalaceSelect, onSiHu
       />
 
       {/* Chart title */}
+      {/* Tiêu đề lá số */}
       <motion.div
         initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
@@ -113,6 +123,7 @@ export default function ChartBoard({ chart, onStarSelect, onPalaceSelect, onSiHu
       </motion.div>
 
       {/* 4×4 chart grid (with SVG overlay) */}
+      {/* Lưới lá số 4×4 (có lớp phủ SVG) */}
       <div
         className="grid rounded-xl overflow-hidden relative"
         style={{
@@ -146,6 +157,7 @@ export default function ChartBoard({ chart, onStarSelect, onPalaceSelect, onSiHu
         })}
 
         {/* Center info area */}
+        {/* Khu vực thông tin trung tâm */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -185,6 +197,7 @@ export default function ChartBoard({ chart, onStarSelect, onPalaceSelect, onSiHu
         </motion.div>
 
         {/* ── Three-direction/four-cardinal SVG lines (absolutely positioned inside grid, clipped by overflow:hidden) ── */}
+        {/* ── Các đường SVG tam phương tứ chính (định vị tuyệt đối trong lưới, bị cắt bởi overflow:hidden) ── */}
         <AnimatePresence>
           {sanFangBranches !== null && (
             <motion.div
@@ -208,16 +221,22 @@ export default function ChartBoard({ chart, onStarSelect, onPalaceSelect, onSiHu
               >
                 {(() => {
                   // Triangle (San He) + one line (opposite palace)
+                  // Tam giác (Tam Hợp) + một đường (cung đối diện)
                   const p0 = BRANCH_SVG_POS[sanFangBranches[0]]; // self palace
+                  // cung bản thân
                   const p1 = BRANCH_SVG_POS[sanFangBranches[1]]; // opposite palace
+                  // cung đối diện
                   const p2 = BRANCH_SVG_POS[sanFangBranches[2]]; // San He 1
+                  // Tam Hợp 1
                   const p3 = BRANCH_SVG_POS[sanFangBranches[3]]; // San He 2
+                  // Tam Hợp 2
                   const dash = "6,5";
                   const stroke = "rgba(37,99,235,0.55)";
                   const sw = "1.5";
                   return (
                     <>
                       {/* Opposite palace line: self ↔ opposite (through center) */}
+                      {/* Đường cung đối diện: bản thân ↔ đối diện (qua tâm) */}
                       <line
                         x1={`${p0[0]}%`} y1={`${p0[1]}%`}
                         x2={`${p1[0]}%`} y2={`${p1[1]}%`}
@@ -225,6 +244,7 @@ export default function ChartBoard({ chart, onStarSelect, onPalaceSelect, onSiHu
                         strokeDasharray={dash} strokeLinecap="round"
                       />
                       {/* San He triangle: self → San He 1 → San He 2 → self */}
+                      {/* Tam giác Tam Hợp: bản thân → Tam Hợp 1 → Tam Hợp 2 → bản thân */}
                       <line
                         x1={`${p0[0]}%`} y1={`${p0[1]}%`}
                         x2={`${p2[0]}%`} y2={`${p2[1]}%`}
@@ -244,6 +264,7 @@ export default function ChartBoard({ chart, onStarSelect, onPalaceSelect, onSiHu
                         strokeDasharray={dash} strokeLinecap="round"
                       />
                       {/* Center dots for the four palaces */}
+                      {/* Các chấm trung tâm cho bốn cung */}
                       {[p0, p1, p2, p3].map((p, i) => (
                         <circle
                           key={i}
@@ -262,6 +283,7 @@ export default function ChartBoard({ chart, onStarSelect, onPalaceSelect, onSiHu
       </div>
 
       {/* Legend */}
+      {/* Chú giải */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}

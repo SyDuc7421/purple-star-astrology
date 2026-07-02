@@ -7,6 +7,7 @@ import type { BirthInfo, ZiweiChart } from '@/lib/ziwei/types';
 import { useTheme } from '@/components/ThemeProvider';
 
 // ─── AiContent renderer (same as InsightPanel) ─────────────
+// ─── Bộ hiển thị AiContent (giống InsightPanel) ─────────────
 function AiContent({ text, streaming }: { text: string; streaming?: boolean }) {
   const lines = text.split('\n');
   return (
@@ -52,13 +53,16 @@ export default function HemingPage() {
   const isDark = theme === 'dark';
 
   // ─── Both parties chart state ─────────────────────────────
+  // ─── Trạng thái lá số của cả hai bên ─────────────────────────────
   const [chartA, setChartA] = useState<ZiweiChart | null>(null);
   const [chartB, setChartB] = useState<ZiweiChart | null>(null);
   // Both form states are synced here via BirthForm onFormSave; a single button triggers chart generation
+  // Cả hai trạng thái form được đồng bộ tại đây qua BirthForm onFormSave; một nút duy nhất kích hoạt tạo lá số
   const [formA, setFormA] = useState<BirthFormState | null>(null);
   const [formB, setFormB] = useState<BirthFormState | null>(null);
 
   // ─── AI union chart analysis state ───────────────────────
+  // ─── Trạng thái phân tích lá số hợp bằng AI ───────────────────────
   const [analysis, setAnalysis] = useState('');
   const [analyzing, setAnalyzing] = useState(false);
   const [question, setQuestion] = useState('');
@@ -67,6 +71,7 @@ export default function HemingPage() {
   const analysisRef = useRef<HTMLDivElement>(null);
 
   // ─── Generate chart (single call, returns chart for unified flow) ──
+  // ─── Tạo lá số (gọi một lần, trả về lá số cho luồng thống nhất) ──
   const generateChart = useCallback(async (info: BirthInfo): Promise<ZiweiChart | null> => {
     try {
       const res = await fetch('/api/generate', {
@@ -82,10 +87,12 @@ export default function HemingPage() {
   }, []);
 
   // Whether both forms are complete
+  // Kiểm tra xem cả hai form đã hoàn chỉnh chưa
   const isFormReady = (f: BirthFormState | null): boolean =>
     !!(f && f.year && f.month && f.day && f.gender && (f.unknownTime || (f.clockHour !== '' && f.clockMinute !== '')));
 
   // ─── Unified entry: chart generation + union analysis ──────
+  // ─── Điểm vào thống nhất: tạo lá số + phân tích lá số hợp ──────
   const runAnalysis = useCallback(async (q?: string) => {
     setFormError(null);
     if (!isFormReady(formA) || !isFormReady(formB)) {
@@ -98,6 +105,7 @@ export default function HemingPage() {
 
     try {
       // Generate both charts in parallel (if not already generated)
+      // Tạo song song cả hai lá số (nếu chưa được tạo)
       let cA = chartA;
       let cB = chartB;
       const [newA, newB] = await Promise.all([
@@ -141,6 +149,7 @@ export default function HemingPage() {
         }
       }
       // scroll to analysis
+      // cuộn đến phần phân tích
       setTimeout(() => analysisRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
     } catch {
       setAnalysisError(true);
@@ -164,6 +173,7 @@ export default function HemingPage() {
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg-0)' }}>
       {/* Top bar */}
+      {/* Thanh trên cùng */}
       <header style={{
         position: 'sticky', top: 0, zIndex: 50,
         background: isDark ? 'rgba(2,8,16,0.88)' : 'rgba(250,245,235,0.92)',
@@ -188,9 +198,11 @@ export default function HemingPage() {
       </header>
 
       {/* Main content */}
+      {/* Nội dung chính */}
       <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '32px 24px 80px' }}>
 
         {/* Title */}
+        {/* Tiêu đề */}
         <div style={{ textAlign: 'center', marginBottom: '36px' }}>
           <div style={{ fontSize: '28px', color: 'var(--ac)', opacity: 0.15, marginBottom: '12px' }}>☯</div>
           <h1 style={{ fontSize: '22px', fontWeight: 600, letterSpacing: '0.15em', color: 'var(--tx-0)', marginBottom: '8px' }}>
@@ -202,9 +214,11 @@ export default function HemingPage() {
         </div>
 
         {/* Two-column form */}
+        {/* Biểu mẫu hai cột */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '24px' }}
           className="heming-grid">
           {/* Party A */}
+          {/* Bên A */}
           <div style={cardStyle}>
             <span style={labelStyle}>Party A</span>
             <BirthForm
@@ -215,6 +229,7 @@ export default function HemingPage() {
           </div>
 
           {/* Party B */}
+          {/* Bên B */}
           <div style={cardStyle}>
             <span style={labelStyle}>Party B</span>
             <BirthForm
@@ -226,6 +241,7 @@ export default function HemingPage() {
         </div>
 
         {/* ═══ Union chart analysis panel (visual center, always visible) ════ */}
+        {/* ═══ Bảng phân tích lá số hợp (trung tâm thị giác, luôn hiển thị) ════ */}
         <div ref={analysisRef} style={{
           ...cardStyle,
           minHeight: '320px',
@@ -235,12 +251,14 @@ export default function HemingPage() {
           justifyContent: (!analysis && !analyzing) ? 'center' : 'flex-start',
         }}>
           {/* Section title */}
+          {/* Tiêu đề mục */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: (analysis || analyzing) ? '20px' : '24px' }}>
             <span style={{ color: 'var(--ac)', opacity: 0.6 }}>◉</span>
             <span style={{ fontSize: '11px', letterSpacing: '0.3em', color: 'var(--tx-3)' }}>Union Chart Analysis · HEMING</span>
           </div>
 
           {/* State branches */}
+          {/* Các nhánh trạng thái */}
           {!analysis && !analyzing && (
             <div style={{ textAlign: 'center', padding: '32px 0' }}>
               <div style={{ fontSize: '13px', color: 'var(--tx-3)', marginBottom: '24px', lineHeight: 1.7 }}>
@@ -291,6 +309,7 @@ export default function HemingPage() {
         </div>
 
         {/* ═══ Follow-up chat for union chart (only shown after analysis completes) ═══ */}
+        {/* ═══ Trò chuyện tiếp theo cho lá số hợp (chỉ hiển thị sau khi phân tích hoàn tất) ═══ */}
         {analysis && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '16px' }}>
             <div style={{ fontSize: '11px', letterSpacing: '0.2em', color: 'var(--tx-3)', marginBottom: '4px' }}>
@@ -298,6 +317,7 @@ export default function HemingPage() {
             </div>
 
             {/* Quick questions */}
+            {/* Câu hỏi nhanh */}
             <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
               {[
                 'How is the love compatibility?',
@@ -328,6 +348,7 @@ export default function HemingPage() {
             </div>
 
             {/* Input + follow-up button */}
+            {/* Ô nhập liệu + nút hỏi thêm */}
             <div style={{ display: 'flex', gap: '8px' }}>
               <input
                 type="text"

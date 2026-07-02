@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 interface ScrollIntroProps {
   onComplete: () => void;
   /** Skip button label */
+  /** Nhãn nút Bỏ qua */
   skipLabel?: string;
 }
 
@@ -12,18 +13,27 @@ const BEIDOU = ['天枢', '天璇', '天玑', '天权', '玉衡', '开阳', '摇
 
 export default function ScrollIntro({ onComplete, skipLabel = 'Skip' }: ScrollIntroProps) {
   // visible: whether the entire intro overlay is showing
+  // visible: liệu toàn bộ lớp phủ giới thiệu có đang hiển thị hay không
   // unrolled: whether the scroll has unfurled (controls content reveal)
+  // unrolled: liệu cuộn giấy đã mở ra hay chưa (kiểm soát việc hiển thị nội dung)
   const [visible, setVisible] = useState(true);
   const [unrolled, setUnrolled] = useState(false);
 
   useEffect(() => {
     // Timeline:
+    // Dòng thời gian:
     // 0.0s        : scroll rod at center, paper rolled up (width: 0)
+    // 0.0s        : trục cuộn ở giữa, giấy cuộn lại (width: 0)
     // 0.3-2.0s   : scroll unrolls to both sides (1.7s)
+    // 0.3-2.0s   : cuộn giấy mở ra hai bên (1.7s)
     // 2.0s        : unrolled = true, content reveals
+    // 2.0s        : unrolled = true, nội dung hiển thị
     // 2.0-3.5s   : content holds for 1.5s
+    // 2.0-3.5s   : nội dung giữ nguyên trong 1.5s
     // 3.5s        : whole overlay begins to fade
+    // 3.5s        : toàn bộ lớp phủ bắt đầu mờ dần
     // 4.2s        : visible = false, triggers onComplete
+    // 4.2s        : visible = false, kích hoạt onComplete
     const t1 = setTimeout(() => setUnrolled(true), 1900);
     const t2 = setTimeout(() => setVisible(false), 3500);
     const t3 = setTimeout(onComplete, 4200);
@@ -36,6 +46,7 @@ export default function ScrollIntro({ onComplete, skipLabel = 'Skip' }: ScrollIn
   };
 
   // Scroll unroll easing: fast then slow (physical feel of pulling a scroll open)
+  // Đường cong dãn cuộn giấy: nhanh rồi chậm (cảm giác vật lý khi kéo mở một cuộn giấy)
   const easeUnroll = [0.32, 0.72, 0.36, 1.0] as const;
 
   return (
@@ -53,6 +64,7 @@ export default function ScrollIntro({ onComplete, skipLabel = 'Skip' }: ScrollIn
           }}
         >
           {/* Background star dots */}
+          {/* Các chấm sao nền */}
           <div style={{
             position: 'absolute', inset: 0,
             backgroundImage: `
@@ -66,12 +78,14 @@ export default function ScrollIntro({ onComplete, skipLabel = 'Skip' }: ScrollIn
           }} />
 
           {/* Scroll body (unfurls right to left — right rod fixed, paper expands left, left rod moves left) */}
+          {/* Thân cuộn giấy (mở từ phải sang trái — trục phải cố định, giấy mở rộng sang trái, trục trái di chuyển sang trái) */}
           <div style={{
             position: 'relative',
             width: 'min(90vw, 1080px)',
             height: 'min(60vh, 480px)',
           }}>
             {/* Rice paper (right anchor inside right rod, width expands from 0 → 100% minus rod widths) */}
+            {/* Giấy dó (neo bên phải trong trục phải, chiều rộng mở rộng từ 0 → 100% trừ đi chiều rộng các trục) */}
             <motion.div
               initial={{ width: 0, opacity: 0.92 }}
               animate={{ width: 'calc(100% - 32px)', opacity: 1 }}
@@ -94,6 +108,7 @@ export default function ScrollIntro({ onComplete, skipLabel = 'Skip' }: ScrollIn
               }}
             >
               {/* Top/bottom edge shadows (simulating classical scroll creases) */}
+              {/* Bóng mờ cạnh trên/dưới (mô phỏng các nếp gấp cuộn giấy cổ điển) */}
               <div style={{
                 position: 'absolute', top: 0, left: 0, right: 0, height: '8px',
                 background: 'linear-gradient(180deg, rgba(80,50,20,0.35), transparent)',
@@ -104,6 +119,7 @@ export default function ScrollIntro({ onComplete, skipLabel = 'Skip' }: ScrollIn
               }} />
 
               {/* Aged paper texture */}
+              {/* Kết cấu giấy cũ */}
               <div style={{
                 position: 'absolute', inset: 0,
                 background: `
@@ -115,6 +131,7 @@ export default function ScrollIntro({ onComplete, skipLabel = 'Skip' }: ScrollIn
               }} />
 
               {/* Scroll content (appears as it unfurls) */}
+              {/* Nội dung cuộn giấy (xuất hiện khi cuộn giấy mở ra) */}
               <motion.div
                 initial={{ opacity: 0, y: 12 }}
                 animate={unrolled ? { opacity: 1, y: 0 } : {}}
@@ -129,6 +146,7 @@ export default function ScrollIntro({ onComplete, skipLabel = 'Skip' }: ScrollIn
                 }}
               >
                 {/* Top decoration: Big Dipper star names */}
+                {/* Trang trí phía trên: tên các sao trong chòm Bắc Đẩu */}
                 <div style={{
                   fontSize: 'clamp(10px, 1.1vw, 12px)',
                   color: '#8b5d18',
@@ -142,6 +160,7 @@ export default function ScrollIntro({ onComplete, skipLabel = 'Skip' }: ScrollIn
                 </div>
 
                 {/* Gold-foil dividing line */}
+                {/* Đường phân cách dát vàng */}
                 <div style={{
                   width: '60px', height: '1px',
                   background: 'linear-gradient(90deg, transparent, #a87a30, transparent)',
@@ -149,6 +168,7 @@ export default function ScrollIntro({ onComplete, skipLabel = 'Skip' }: ScrollIn
                 }} />
 
                 {/* Large title */}
+                {/* Tiêu đề lớn */}
                 <h1 style={{
                   fontSize: 'clamp(48px, 8vw, 110px)',
                   fontWeight: 700,
@@ -163,6 +183,7 @@ export default function ScrollIntro({ onComplete, skipLabel = 'Skip' }: ScrollIn
                 </h1>
 
                 {/* Subtitle in regular script */}
+                {/* Phụ đề bằng chữ khải thư */}
                 <div style={{
                   fontSize: 'clamp(13px, 1.5vw, 18px)',
                   color: '#6b4818',
@@ -186,6 +207,7 @@ export default function ScrollIntro({ onComplete, skipLabel = 'Skip' }: ScrollIn
                 </div>
 
                 {/* Cinnabar seal */}
+                {/* Con dấu son */}
                 <motion.div
                   initial={{ opacity: 0, scale: 0.6, rotate: -15 }}
                   animate={unrolled ? { opacity: 1, scale: 1, rotate: -4 } : {}}
@@ -213,6 +235,7 @@ export default function ScrollIntro({ onComplete, skipLabel = 'Skip' }: ScrollIn
                 </motion.div>
 
                 {/* Bottom decoration: Eight Trigrams */}
+                {/* Trang trí phía dưới: Bát Quái */}
                 <div style={{
                   marginTop: 'clamp(20px, 3vh, 32px)',
                   fontSize: 'clamp(13px, 1.4vw, 16px)',
@@ -227,6 +250,7 @@ export default function ScrollIntro({ onComplete, skipLabel = 'Skip' }: ScrollIn
             </motion.div>
 
             {/* Right rod (fixed — the anchor rod) */}
+            {/* Trục phải (cố định — trục neo) */}
             <div
               style={{
                 position: 'absolute', top: 0, bottom: 0, right: 0,
@@ -238,6 +262,7 @@ export default function ScrollIntro({ onComplete, skipLabel = 'Skip' }: ScrollIn
               }}
             >
               {/* Top cap (bronze/jade) */}
+              {/* Nắp đầu (đồng/ngọc bích) */}
               <div style={{
                 position: 'absolute', top: '-14px', left: '-6px', right: '-6px',
                 height: '20px',
@@ -255,6 +280,7 @@ export default function ScrollIntro({ onComplete, skipLabel = 'Skip' }: ScrollIn
             </div>
 
             {/* Left rod (starts at right rod position, pulled left as scroll unfurls) */}
+            {/* Trục trái (bắt đầu ở vị trí trục phải, kéo sang trái khi cuộn giấy mở ra) */}
             <motion.div
               initial={{ right: '0px' }}
               animate={{ right: 'calc(100% - 32px)' }}
@@ -286,6 +312,7 @@ export default function ScrollIntro({ onComplete, skipLabel = 'Skip' }: ScrollIn
           </div>
 
           {/* Skip button */}
+          {/* Nút Bỏ qua */}
           <button
             onClick={handleSkip}
             style={{

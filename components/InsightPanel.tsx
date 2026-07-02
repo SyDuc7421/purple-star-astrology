@@ -8,6 +8,7 @@ interface Message {
   role: 'user' | 'assistant';
   content: string;
   hidden?: boolean; // don't show user bubble for auto/topic messages
+  // không hiển thị bong bóng người dùng cho tin nhắn tự động/theo chủ đề
 }
 
 interface SelectedSiHua {
@@ -145,6 +146,7 @@ const PALACE_ROLES: Record<string, string> = {
 };
 
 /** Render AI markdown: **【Title】** → gold header, **bold** → strong */
+/** Hiển thị markdown AI: **【Tiêu đề】** → tiêu đề màu vàng, **in đậm** → in đậm */
 function AiContent({ text, streaming }: { text: string; streaming?: boolean }) {
   const lines = text.split('\n');
   return (
@@ -188,6 +190,7 @@ export default function InsightPanel({ chart, selectedPalace, selectedSiHua }: I
   const [loading, setLoading] = useState(false);
   const [activeTopic, setActiveTopic] = useState<string>('overview');
   const messagesRef = useRef<Message[]>([]); // always-current copy for closures
+  // bản sao luôn cập nhật để dùng trong closure
   const loadingRef = useRef(false);
   const autoLoaded = useRef(false);
   const lastPalaceBranch = useRef<number | undefined>(undefined);
@@ -195,10 +198,12 @@ export default function InsightPanel({ chart, selectedPalace, selectedSiHua }: I
   const scrollRef = useRef<HTMLDivElement>(null);
 
   // Keep refs in sync
+  // Giữ các ref đồng bộ
   useEffect(() => { messagesRef.current = messages; }, [messages]);
   useEffect(() => { loadingRef.current = loading; }, [loading]);
 
   // Auto-scroll
+  // Tự động cuộn
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
@@ -206,6 +211,7 @@ export default function InsightPanel({ chart, selectedPalace, selectedSiHua }: I
   }, [messages]);
 
   // Auto-generate chart overview on mount
+  // Tự động tạo tổng quan lá số khi component được mount
   useEffect(() => {
     if (autoLoaded.current) return;
     autoLoaded.current = true;
@@ -213,6 +219,7 @@ export default function InsightPanel({ chart, selectedPalace, selectedSiHua }: I
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Inject palace analysis when palace selected
+  // Chèn phân tích cung khi một cung được chọn
   useEffect(() => {
     if (!selectedPalace || selectedPalace.branch === lastPalaceBranch.current) return;
     lastPalaceBranch.current = selectedPalace.branch;
@@ -241,6 +248,7 @@ Concrete advice based on this palace.`;
   }, [selectedPalace]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Inject Si Hua flying-star analysis on click
+  // Chèn phân tích sao bay Tứ Hóa khi được nhấp
   useEffect(() => {
     if (!selectedSiHua) return;
     const key = `${selectedSiHua.starName}-${selectedSiHua.siHua}-${selectedSiHua.view}`;
@@ -248,6 +256,7 @@ Concrete advice based on this palace.`;
     lastSiHuaKey.current = key;
 
     // Find which palace contains this star
+    // Tìm cung nào chứa sao này
     const palaceOfStar = chart.palaces.find(p =>
       p.stars.some(s => s.name === selectedSiHua.starName)
     );
@@ -307,6 +316,7 @@ Concrete actionable advice based on this Si Hua configuration.`;
               return updated;
             });
           } catch { /* skip */ }
+          // bỏ qua
         }
       }
     } catch {
@@ -324,6 +334,7 @@ Concrete actionable advice based on this Si Hua configuration.`;
 
     const userMsg: Message = { role: 'user', content: text, hidden };
     // Capture current messages synchronously via ref (avoids stale closure)
+    // Lấy tin nhắn hiện tại một cách đồng bộ qua ref (tránh closure lỗi thời)
     const apiMessages = [...messagesRef.current, userMsg].map(m => ({
       role: m.role,
       content: m.content,
@@ -348,6 +359,7 @@ Concrete actionable advice based on this Si Hua configuration.`;
     <div className="flex flex-col h-full rounded-xl overflow-hidden card-glass">
 
       {/* ── Topic buttons ── */}
+      {/* ── Các nút chủ đề ── */}
       <div className="flex-shrink-0 px-2 pt-2.5 pb-2" style={{ borderBottom: '1px solid var(--t-border)' }}>
         <div className="grid grid-cols-6 gap-1">
           {TOPICS.map(t => {
@@ -372,9 +384,11 @@ Concrete actionable advice based on this Si Hua configuration.`;
       </div>
 
       {/* ── Messages ── */}
+      {/* ── Tin nhắn ── */}
       <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-4 min-h-0">
 
         {/* Loading state before first message */}
+        {/* Trạng thái đang tải trước khi có tin nhắn đầu tiên */}
         {messages.length === 0 && (
           <div className="flex flex-col items-center justify-center h-full text-center">
             <div className="text-4xl mb-3" style={{ color: 'var(--t-gold)', opacity: 0.1 }}>✦</div>
@@ -409,6 +423,7 @@ Concrete actionable advice based on this Si Hua configuration.`;
             }
 
             // Assistant message
+            // Tin nhắn của trợ lý
             const isLastMsg = i === messages.length - 1;
             return (
               <motion.div
@@ -431,6 +446,7 @@ Concrete actionable advice based on this Si Hua configuration.`;
       </div>
 
       {/* ── Input ── */}
+      {/* ── Ô nhập liệu ── */}
       <div className="flex-shrink-0 px-3 pb-3 pt-2" style={{ borderTop: '1px solid var(--t-border)' }}>
         <div className="flex gap-2">
           <input

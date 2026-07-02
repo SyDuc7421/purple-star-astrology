@@ -1,20 +1,30 @@
 /**
  * Tian Ji — Ni Haixia celestial arts and numerology database
+ * Tian Ji — cơ sở dữ liệu thuật số và huyền học của Ni Haixia
  *
  * "Know celestial arts" — Tian Ji is the systematic result of Ni Haixia's esoteric research.
+ * "Biết thuật số trời" — Tian Ji là kết quả hệ thống hóa nghiên cứu huyền học của Ni Haixia.
  * Recorded in 1994, 24 episodes (2 hours each, 48 hours total).
+ * Ghi hình năm 1994, 24 tập (mỗi tập 2 giờ, tổng cộng 48 giờ).
  * Lecture notes span four volumes: Tian Ji Dao, Ren Jian Dao, Di Mai Dao, and the 64 Hexagram Yi Tu.
+ * Giáo trình bài giảng gồm bốn tập: Tian Ji Dao, Ren Jian Dao, Di Mai Dao, và 64 Hexagram Yi Tu.
  *
  * Core schools:
+ * Các trường phái cốt lõi:
  *   Zi Wei Dou Shu → San He school
+ *   Tử Vi Đẩu Số → phái Tam Hợp (San He)
  *   Feng shui   → Nine-Star school (Yang Jiu-Pin lineage)
+ *   Phong thủy   → phái Cửu Tinh (dòng Yang Jiu-Pin)
  *   I Ching     → Xiang Shu (symbol-number) school
+ *   Kinh Dịch     → phái Tượng Số (Xiang Shu)
  *   Fate calc.  → He Luo numerology school
+ *   Luận mệnh  → phái Số Học Hà Lạc (He Luo)
  */
 
 import type { NiModule, Hexagram, FengShuiEntry, TianjiEpisode } from './types';
 
 // ─── Tian Ji modules ────────────────────────────────────────
+// ─── Các module Tian Ji ────────────────────────────────────────
 export const TIANJI_MODULES: NiModule[] = [
   {
     id: 'tj-ziwei',
@@ -356,6 +366,7 @@ export const TIANJI_MODULES: NiModule[] = [
 ];
 
 // ─── I Ching 64 hexagrams database ──────────────────────────
+// ─── Cơ sở dữ liệu 64 quẻ Kinh Dịch ──────────────────────────
 export const HEXAGRAMS: Hexagram[] = [
   { number: 1, name: '乾', composition: '乾为天', upper: '乾', lower: '乾', meaning: '元亨利贞，天行健，君子以自强不息', niInterpretation: '纯阳之卦，刚健中正，至大至刚', divination: '大吉大利，但需注意亢龙有悔' },
   { number: 2, name: '坤', composition: '坤为地', upper: '坤', lower: '坤', meaning: '元亨，利牝马之贞，地势坤，君子以厚德载物', niInterpretation: '纯阴之卦，柔顺承载', divination: '宜顺从，不宜主动' },
@@ -424,6 +435,7 @@ export const HEXAGRAMS: Hexagram[] = [
 ];
 
 // ─── Feng shui / geomancy entries ───────────────────────────
+// ─── Các mục phong thủy / địa lý ───────────────────────────
 export const FENGSHUI_ENTRIES: FengShuiEntry[] = [
   {
     id: 'fs-bashayq',
@@ -470,6 +482,7 @@ export const FENGSHUI_ENTRIES: FengShuiEntry[] = [
 ];
 
 // ─── Tian Ji 24-episode structure (2h each: first half destiny / second half I Ching) ─
+// ─── Cấu trúc 24 tập Tian Ji (mỗi tập 2 giờ: nửa đầu luận mệnh / nửa sau Kinh Dịch) ─
 export const TIANJI_EPISODES: TianjiEpisode[] = [
   { dvd: 1, firstHalf: '天纪开篇·天纪与真理', secondHalf: '易经三义·先后天八卦', highlights: ['如何分辨君子与小人', '天地人三才论', '紫微斗数为何优于子平法', '文字只是船真理才是彼岸'] },
   { dvd: 2, firstHalf: '紫微斗数·十二宫位详解', secondHalf: '八卦地理配置·爻变与时机', highlights: ['命宫为本三方为用', '夫妻宫兼看福德宫', '面相五形论', '名位相等原则', '卜筮有时机不疑何卜'] },
@@ -498,6 +511,7 @@ export const TIANJI_EPISODES: TianjiEpisode[] = [
 ];
 
 // ─── Ni Haixia Tian Ji core quotes ──────────────────────────
+// ─── Các câu trích dẫn cốt lõi Tian Ji của Ni Haixia ──────────────────────────
 export const TIANJI_QUOTES = [
   { text: '文字只是协助诸位到达真理的彼岸，千万不要三个月以后，怎么还是扛着船在马路上跑', topic: '学习态度' },
   { text: '大道至简——飞星飞来飞去太复杂，不搞这个', topic: '紫微斗数' },
@@ -531,6 +545,7 @@ export const TIANJI_QUOTES = [
 ];
 
 // ─── Statistics ──────────────────────────────────────────────
+// ─── Thống kê ──────────────────────────────────────────────
 export const TIANJI_STATS = {
   totalModules: TIANJI_MODULES.length,
   activeModules: TIANJI_MODULES.filter(m => m.status === 'active').length,

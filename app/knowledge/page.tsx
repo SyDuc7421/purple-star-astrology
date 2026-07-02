@@ -1,6 +1,8 @@
 /**
  * /knowledge — knowledge base home page
+ * /knowledge — trang chủ cơ sở tri thức
  * Lists 14 major stars; each star links to readings for all 13 palaces
+ * Liệt kê 14 chính tinh; mỗi sao liên kết đến luận giải cho cả 13 cung
  */
 
 import Link from 'next/link';
@@ -19,6 +21,7 @@ export default function KnowledgeHomePage() {
   return (
     <div style={{ background: 'var(--bg-page)', minHeight: '100vh' }}>
       {/* Top bar */}
+      {/* Thanh trên cùng */}
       <div className="px-6 py-4 flex items-center justify-between"
         style={{ borderBottom: '1px solid rgba(184,146,42,0.15)', background: 'var(--bg-page)' }}>
         <Link href="/" style={{ fontSize: '12px', color: 'var(--ac)', letterSpacing: '0.3em', textDecoration: 'none' }}>
@@ -33,6 +36,7 @@ export default function KnowledgeHomePage() {
       </div>
 
       {/* Hero */}
+      {/* Phần giới thiệu nổi bật */}
       <div className="text-center px-6 py-14">
         <div className="flex items-center justify-center gap-3 mb-4">
           <div style={{ height: '1px', width: '48px', background: 'linear-gradient(to right, transparent, rgba(184,146,42,0.4))' }} />
@@ -49,6 +53,7 @@ export default function KnowledgeHomePage() {
       </div>
 
       {/* 14 major star cards */}
+      {/* Thẻ 14 chính tinh */}
       <div className="max-w-5xl mx-auto px-6 pb-20">
         <div style={{ fontSize: '11px', color: 'var(--tx-3)', letterSpacing: '0.3em', textAlign: 'center', marginBottom: '24px' }}>
           Fourteen Major Stars
@@ -78,6 +83,7 @@ export default function KnowledgeHomePage() {
         </div>
 
         {/* Detail list (each star + description + entry button) */}
+        {/* Danh sách chi tiết (mỗi sao + mô tả + nút truy cập) */}
         <div className="mt-14 space-y-4">
           {ALL_STARS.map(star => (
             <div key={star} style={{

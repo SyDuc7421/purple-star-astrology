@@ -3,14 +3,18 @@ import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 // Announcement version — change this to show the modal again to users who already dismissed it
+// Phiên bản thông báo — thay đổi giá trị này để hiển thị lại popup cho những người dùng đã đóng nó
 const ANNOUNCEMENT_VERSION = '2026-05-01';
 const STORAGE_KEY = `announcement_seen_${ANNOUNCEMENT_VERSION}`;
 
 export default function AnnouncementModal() {
   // Default closed; useEffect checks localStorage on the client and decides immediately.
+  // Mặc định đóng; useEffect kiểm tra localStorage trên client và quyết định ngay lập tức.
   // Not seen yet → show over the homepage; already seen → don't show again.
+  // Chưa xem → hiển thị đè lên trang chủ; đã xem → không hiển thị lại.
   const [open, setOpen] = useState(false);
   const [decided, setDecided] = useState(false); // true once hydration check is complete
+  // true khi kiểm tra hydration đã hoàn tất
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -18,10 +22,12 @@ export default function AnnouncementModal() {
       const seen = localStorage.getItem(STORAGE_KEY);
       if (!seen) setOpen(true);
     } catch { /* localStorage may be disabled, ignore */ }
+    // localStorage có thể bị vô hiệu hóa, bỏ qua
     setDecided(true);
   }, []);
 
   // Lock body scroll when the announcement is open, to prevent scrolling behind it
+  // Khóa cuộn của body khi thông báo đang mở, để ngăn cuộn phía sau nó
   useEffect(() => {
     if (typeof document === 'undefined') return;
     if (open) {
@@ -34,6 +40,7 @@ export default function AnnouncementModal() {
   const close = () => {
     setOpen(false);
     try { localStorage.setItem(STORAGE_KEY, '1'); } catch { /* skip */ }
+    // bỏ qua
   };
 
   if (!decided) return null;
@@ -47,6 +54,7 @@ export default function AnnouncementModal() {
           exit={{ opacity: 0 }}
           transition={{ duration: 0.25 }}
           // No click-outside-to-close — user must press the button to proceed
+          // Không đóng khi click ra ngoài — người dùng phải nhấn nút để tiếp tục
           style={{
             position: 'fixed', inset: 0, zIndex: 9999,
             background: 'rgba(20,12,2,0.88)',
@@ -77,6 +85,7 @@ export default function AnnouncementModal() {
             }}
           >
             {/* Top decoration + close button */}
+            {/* Trang trí phía trên + nút đóng */}
             <div style={{
               padding: '22px 28px 14px',
               borderBottom: '1px solid rgba(184,146,42,0.15)',
@@ -107,6 +116,7 @@ aria-label="Close"
             </div>
 
             {/* Limited-time free banner (most important info, pinned at top) */}
+            {/* Banner miễn phí có thời hạn (thông tin quan trọng nhất, ghim ở trên cùng) */}
             <div style={{
               margin: '14px 22px 0',
               padding: '12px 16px',
@@ -127,6 +137,7 @@ aria-label="Close"
             </div>
 
             {/* Body (scrollable) */}
+            {/* Nội dung (có thể cuộn) */}
             <div style={{
               padding: '18px 28px 24px',
               overflowY: 'auto',
@@ -173,6 +184,7 @@ aria-label="Close"
             </div>
 
             {/* Footer button */}
+            {/* Nút ở chân trang */}
             <div style={{
               padding: '14px 22px',
               borderTop: '1px solid rgba(184,146,42,0.15)',

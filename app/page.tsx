@@ -7,6 +7,7 @@ import { useTheme, type Theme } from '@/components/ThemeProvider';
 import AnnouncementModal from '@/components/AnnouncementModal';
 
 // ─── Scroll entrance wrapper ────────────────────────────────
+// Wrapper cuộn vào khung hình (hiệu ứng xuất hiện khi cuộn trang)
 function FadeIn({
   children, delay = 0, y = 28, className = '',
 }: {
@@ -28,7 +29,9 @@ function FadeIn({
 
 function WeakBoundary({ line }: { line: string }) {
   // Previous version had a 1px solid line + 12px gradient shadow — created a harsh visible border on theme switch.
+  // Phiên bản trước dùng đường viền solid 1px + bóng gradient 12px — tạo viền rõ khi đổi theme.
   // Switched to a softer 24px gradient + low opacity for smoother section transitions.
+  // Đã chuyển sang gradient 24px mềm hơn + độ mờ thấp để chuyển đoạn mượt hơn.
   return (
     <div className="absolute top-0 left-0 right-0 h-16 pointer-events-none"
       style={{ background: `linear-gradient(to bottom, ${line}, transparent)`, opacity: 0.45 }} />
@@ -36,6 +39,7 @@ function WeakBoundary({ line }: { line: string }) {
 }
 
 // ─── Theme toggle button ────────────────────────────────────
+// Nút chuyển đổi theme
 function ThemeToggle() {
   const { theme, toggle } = useTheme();
   const isDark = theme === 'dark';
@@ -80,6 +84,7 @@ function ThemeToggle() {
 }
 
 // ─── Major star data ────────────────────────────────────────
+// Dữ liệu chính tinh
 const STARS = [
   { name: '紫微' }, { name: '天机' }, { name: '太阳' }, { name: '武曲' },
   { name: '天同' }, { name: '廉贞' }, { name: '天府' }, { name: '太阴' },
@@ -88,6 +93,7 @@ const STARS = [
 ];
 
 // ─── Feature modules ────────────────────────────────────────
+// Các module tính năng
 const FEATURES = [
   {
     tag: 'Chart Engine',
@@ -135,6 +141,7 @@ const FEATURES = [
 ];
 
 // ─── 4 learning modules (timeline after hero) ──────────────
+// 4 module học tập (dòng thời gian sau phần hero)
 const SECTIONS = [
   {
     key: 'ziwei',
@@ -144,6 +151,7 @@ const SECTIONS = [
     status: 'ready' as const,
     when: 'May',
     icon: '◉',  // filled circle + inner dot, Zi Wei star visual
+    // hình tròn đặc + chấm bên trong, biểu tượng sao Tử Vi
     note: '',
   },
   {
@@ -154,6 +162,7 @@ const SECTIONS = [
     status: 'soon' as const,
     when: 'Jun',
     icon: '⊙',  // circle + inner dot (ancient "sun"), same width as ◉
+    // hình tròn + chấm bên trong ("mặt trời" cổ), cùng độ rộng với ◉
     note: '',
   },
   {
@@ -164,6 +173,7 @@ const SECTIONS = [
     status: 'soon' as const,
     when: 'Jun',
     icon: '⊞',  // square + grid (earth/field visual), same width as ⊙
+    // hình vuông + lưới (biểu tượng đất/ruộng), cùng độ rộng với ⊙
     note: 'Manuscript study',
   },
   {
@@ -174,11 +184,13 @@ const SECTIONS = [
     status: 'soon' as const,
     when: 'Jul',
     icon: '⊕',  // circle + cross (medicine / yin-yang), same width as ⊙/⊞
+    // hình tròn + dấu cộng (y học / âm dương), cùng độ rộng với ⊙/⊞
     note: '',
   },
 ];
 
 // ─── Ni Haixia core teachings ──────────────────────────────
+// Các giáo lý cốt lõi của Ni Haixia
 const NI_TEACHINGS = [
   {
     title: 'Ming Gong is the root, Three Directions the function',
@@ -199,11 +211,13 @@ const NI_TEACHINGS = [
 ];
 
 // ─── Theme color helper ─────────────────────────────────────
+// Hàm hỗ trợ màu theme
 function useColors(theme: Theme) {
   const d = theme === 'dark';
   return {
     bgBase:       d ? '#020810'                                : '#f5efe0',
     // nav uses the same opaque color as bgBase to avoid color banding from semi-transparent overlays
+    // nav dùng cùng màu đặc như bgBase để tránh hiện tượng dải màu (banding) từ lớp phủ bán trong suốt
     navBg:        d ? '#020810'                                : '#f5efe0',
     navBorder:    d ? 'rgba(255,255,255,0.05)'                : 'rgba(160,120,30,0.15)',
     goldGrad:     d ? 'linear-gradient(160deg,#c8993a 0%,#f0d070 40%,#c8993a 70%,#f0c755 100%)'
@@ -212,11 +226,13 @@ function useColors(theme: Theme) {
     goldLine:     d ? 'rgba(212,168,67,0.4)'                  : 'rgba(140,100,20,0.4)',
     tagText:      d ? 'rgba(212,168,67,0.6)'                  : 'rgba(120,80,10,0.65)',
     // Light-mode text uses cool-gray (Plan A): warm bg + cool text = no visual fatigue
+    // Chế độ sáng dùng chữ xám lạnh (Phương án A): nền ấm + chữ lạnh = không gây mỏi mắt
     textPrimary:  d ? '#e8eef6'                               : '#1a1d24',
     textSecond:   d ? '#b8c6df'                               : '#3a3f4a',
     textMuted:    d ? '#9db0d0'                               : '#5a6275',
     textFaint:    d ? 'rgba(240,246,255,0.56)'                : '#9da4b3',
     // Cool accent (Plan B): echoes the dark-mode quan blue; used for glow / links / highlights
+    // Màu nhấn lạnh (Phương án B): gợi lại màu xanh "quyền" của chế độ tối; dùng cho hiệu ứng sáng / liên kết / điểm nhấn
     accent:       d ? '#3a78d4'                               : '#3a5a82',
     accentSoft:   d ? 'rgba(58,120,212,0.18)'                 : 'rgba(58,90,130,0.10)',
     cardBg:       d ? 'rgba(255,255,255,0.05)'                : 'rgba(255,255,255,0.88)',
@@ -226,6 +242,7 @@ function useColors(theme: Theme) {
     featureBord:  d ? 'rgba(255,255,255,0.08)'                : 'rgba(200,160,60,0.2)',
     glowTint:     d ? 'rgba(212,168,67,0.07)'                 : 'rgba(180,140,40,0.06)',
     // Light-mode glow uses actual blue/purple — adds cool-tone accent to the overall atmosphere
+    // Hiệu ứng sáng ở chế độ sáng dùng xanh dương/tím thực — thêm điểm nhấn tông lạnh cho tổng thể không khí
     glowBlue:     d ? 'rgba(40,80,160,0.12)'                  : 'rgba(58,90,130,0.06)',
     glowPurple:   d ? 'rgba(120,50,180,0.08)'                 : 'rgba(96,80,140,0.04)',
     niBg:         d ? 'rgba(255,255,255,0.04)'                : 'rgba(255,255,255,0.8)',
@@ -249,6 +266,7 @@ function useColors(theme: Theme) {
 }
 
 // ─── Si Hua brief descriptions ─────────────────────────────
+// Mô tả ngắn gọn về Tứ Hóa
 const SIHUA_BRIEF: Record<string, { attr: string; brief: string }> = {
   '化禄': { attr: 'Auspicious·Augment', brief: 'Fortune star enters the palace, boosting wealth and blessings. Things run smoothly and abilities are enhanced — the most welcome transformation star.' },
   '化权': { attr: 'Auspicious·Authority', brief: 'Power star enters the palace, governing control and leadership. Its palace is assertive and decisive; thrives in Career and Life palaces, conferring real authority.' },
@@ -257,6 +275,7 @@ const SIHUA_BRIEF: Record<string, { attr: string; brief: string }> = {
 };
 
 // ─── Major star brief descriptions ─────────────────────────
+// Mô tả ngắn gọn về chính tinh
 const STAR_BRIEF: Record<string, { attr: string; brief: string }> = {
   '紫微': { attr: 'Earth·Emperor Star', brief: 'Imperial noble star, ruling over all others. Natives carry an air of aloofness and command authority — a natural leader suited to standing alone at the top.' },
   '天机': { attr: 'Wood·Wisdom Star', brief: 'Longevity-benefiting star, governing intellect and change. Clever and resourceful with a subtle mind — suited to planning, consulting, and technical work.' },
@@ -275,6 +294,7 @@ const STAR_BRIEF: Record<string, { attr: string; brief: string }> = {
 };
 
 // ─── Feature visual decorations ────────────────────────────
+// Trang trí hình ảnh cho tính năng
 function FeatureVisual({ index, colors: c }: { index: number; colors: ReturnType<typeof useColors> }) {
   if (index === 0) {
     return (
@@ -441,6 +461,7 @@ function FeatureVisual({ index, colors: c }: { index: number; colors: ReturnType
 }
 
 // ─── Home page ─────────────────────────────────────────────
+// Trang chủ
 export default function HomePage() {
   const router = useRouter();
   const { theme } = useTheme();
@@ -452,7 +473,9 @@ export default function HomePage() {
   const heroOpacity = useTransform(scrollYProgress, [0, 0.55], [1, 0]);
 
   // Sync body/html bg to home theme color to eliminate color bleed through semi-transparent nav
+  // Đồng bộ nền body/html theo màu theme trang chủ để loại bỏ hiện tượng lem màu qua nav bán trong suốt
   // useLayoutEffect ensures sync before browser paint, preventing desync with root div transition
+  // useLayoutEffect đảm bảo đồng bộ trước khi trình duyệt vẽ, tránh lệch pha với transition của div gốc
   useLayoutEffect(() => {
     document.documentElement.style.background = c.bgBase;
     document.body.style.background = c.bgBase;
@@ -465,11 +488,13 @@ export default function HomePage() {
   return (
     <div style={{ background: c.bgBase, transition: 'background 0.35s ease' }} className="overflow-x-hidden">
       {/* User announcement — full-screen on first visit, home loads after close */}
+      {/* Thông báo cho người dùng — hiển thị toàn màn hình lần truy cập đầu tiên, trang chủ tải sau khi đóng */}
       <AnnouncementModal />
 
       <StarField />
 
       {/* Global glow */}
+      {/* Hiệu ứng sáng toàn cục */}
       <div className="fixed inset-0 pointer-events-none z-0">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[500px] rounded-full"
           style={{ background: `radial-gradient(ellipse, ${c.glowTint} 0%, transparent 70%)` }} />
@@ -480,6 +505,7 @@ export default function HomePage() {
       </div>
 
       {/* ── Top nav ── same color as hero (c.bgBase), no blur or border, zero color banding */}
+      {/* ── Thanh điều hướng trên cùng ── cùng màu với hero (c.bgBase), không làm mờ hay viền, không dải màu */}
       <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 sm:px-8 py-3 sm:py-4 gap-2"
         style={{
           background: c.navBg,
@@ -508,9 +534,11 @@ export default function HomePage() {
       </nav>
 
       {/* ══ HERO ══════════════════════════════════════════ */}
+      {/* ══ PHẦN HERO ══════════════════════════════════════════ */}
       <section ref={heroRef} className="relative min-h-[82svh] lg:min-h-[92vh] flex flex-col items-center justify-center px-6 z-10 pb-24 pt-10">
         <motion.div style={{ y: heroY, opacity: heroOpacity, maxWidth: '960px' }} className="text-center w-full mx-auto mt-10">
           {/* Tag row */}
+          {/* Hàng nhãn thẻ */}
           <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
             className="flex items-center justify-center gap-3 mb-8">
@@ -522,6 +550,7 @@ export default function HomePage() {
           </motion.div>
 
           {/* Main title */}
+          {/* Tiêu đề chính */}
           <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
             style={{ position: 'relative', display: 'inline-block' }}>
@@ -555,6 +584,7 @@ export default function HomePage() {
           </motion.p>
 
           {/* CTA */}
+          {/* Nút kêu gọi hành động (CTA) */}
           <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.85 }}
             className="flex flex-col items-center gap-4">
@@ -568,6 +598,7 @@ export default function HomePage() {
           </motion.div>
 
           {/* 14 major stars */}
+          {/* 14 chính tinh */}
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
             transition={{ delay: 1.05, duration: 0.8 }}
             className="mt-12 grid grid-cols-7 gap-1.5 max-w-[540px] mx-auto">
@@ -584,6 +615,7 @@ export default function HomePage() {
         </motion.div>
 
         {/* Launch announcement sticky note — absolutely positioned right on desktop */}
+        {/* Ghi chú thông báo ra mắt — định vị tuyệt đối bên phải trên desktop */}
         <motion.div
           initial={{ opacity: 0, x: 30, rotate: 0 }}
           animate={{ opacity: 1, x: 0, rotate: -4 }}
@@ -616,6 +648,7 @@ export default function HomePage() {
         </motion.div>
 
         {/* Launch announcement sticky note — normal flow on mobile (centered below hero) */}
+        {/* Ghi chú thông báo ra mắt — luồng hiển thị thường trên mobile (căn giữa bên dưới hero) */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0, rotate: -2 }}
@@ -646,6 +679,7 @@ export default function HomePage() {
         </motion.div>
 
         {/* Scroll hint (absolutely positioned, does not affect hero opacity calc) */}
+        {/* Gợi ý cuộn trang (định vị tuyệt đối, không ảnh hưởng đến tính toán độ mờ của hero) */}
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
           transition={{ delay: 2, duration: 1 }}
           className="absolute bottom-6 left-0 right-0 flex flex-col items-center gap-2 pointer-events-none">
@@ -656,6 +690,7 @@ export default function HomePage() {
       </section>
 
       {/* ══ Philosophical quote ══════════════════════════════════ */}
+      {/* ══ Trích dẫn triết lý ══════════════════════════════════ */}
       <section className="relative z-10 overflow-hidden min-h-[82svh] lg:min-h-[92vh] flex items-center" style={{ padding: '72px 24px' }}>
         <WeakBoundary line={c.navBorder} />
         <div className="absolute inset-0"
@@ -699,6 +734,7 @@ export default function HomePage() {
       </section>
 
       {/* ══ 4 learning module timeline ══════════════════════════ */}
+      {/* ══ Dòng thời gian 4 module học tập ══════════════════════════ */}
       <section className="relative z-10 py-20 lg:py-24 px-6"
         style={{
           background: theme === 'dark'
@@ -721,6 +757,7 @@ export default function HomePage() {
 
         <div className="max-w-sm lg:max-w-5xl mx-auto relative">
           {/* Horizontal connector line (desktop only) */}
+          {/* Đường nối ngang (chỉ trên desktop) */}
           <div className="hidden lg:block absolute top-7 left-[12.5%] right-[12.5%] h-0.5"
             style={{
               background: `linear-gradient(90deg, ${c.goldSolid} 0%, ${c.goldSolid} 25%, ${c.goldLine} 25%)`,
@@ -728,6 +765,7 @@ export default function HomePage() {
             }} />
 
           {/* Vertical connector line (mobile only) — dots sit on the line, subway-map style */}
+          {/* Đường nối dọc (chỉ trên mobile) — các chấm nằm trên đường, kiểu bản đồ tàu điện ngầm */}
           <div className="lg:hidden absolute left-7 top-7 bottom-7 w-px -translate-x-1/2"
             style={{
               background: `linear-gradient(180deg, ${c.goldSolid} 0%, ${c.goldSolid} 22%, ${c.goldLine} 22%)`,
@@ -744,6 +782,7 @@ export default function HomePage() {
                   viewport={{ once: true }}
                   className="relative flex flex-row lg:flex-col items-center lg:items-center text-left lg:text-center gap-4 lg:gap-0">
                   {/* Node circle */}
+                  {/* Vòng tròn nút */}
                   <div className="relative w-14 h-14 shrink-0 rounded-full flex items-center justify-center lg:mb-3"
                     style={{
                       background: ready
@@ -762,8 +801,10 @@ export default function HomePage() {
                     )}
                   </div>
                   {/* Text group: single column on mobile; stacked centered on desktop */}
+                  {/* Nhóm văn bản: một cột trên mobile; xếp chồng căn giữa trên desktop */}
                   <div className="flex-1 lg:flex-none flex flex-col items-start lg:items-center min-w-0">
                     {/* Top row: time label + module name + note (inline on mobile; stacked on desktop) */}
+                    {/* Hàng trên: nhãn thời gian + tên module + ghi chú (cùng dòng trên mobile; xếp chồng trên desktop) */}
                     <div className="flex items-baseline gap-2 lg:flex-col lg:gap-0 lg:mb-1">
                       <div className="text-[10px] tracking-[0.25em] lg:mb-1.5"
                         style={{ color: ready ? '#10b981' : c.textMuted, fontWeight: 500 }}>
@@ -786,6 +827,7 @@ export default function HomePage() {
                       )}
                     </div>
                     {/* Desktop-only note (already shown inline on mobile top row) */}
+                    {/* Ghi chú chỉ hiển thị trên desktop (đã hiển thị cùng dòng trên mobile) */}
                     {s.note && (
                       <div className="hidden lg:block text-[9px] tracking-[0.15em] mb-1.5 px-2 py-0.5 rounded-full"
                         style={{
@@ -798,6 +840,7 @@ export default function HomePage() {
                       </div>
                     )}
                     {/* Description */}
+                    {/* Mô tả */}
                     <div className="text-[11px] lg:text-xs leading-relaxed lg:max-w-[200px] mt-0.5 lg:mt-0"
                       style={{ color: c.textSecond }}>
                       {s.desc}
@@ -811,6 +854,7 @@ export default function HomePage() {
       </section>
 
       {/* ══ Feature details ══════════════════════════════════════ */}
+      {/* ══ Chi tiết tính năng ══════════════════════════════════════ */}
       <section className="relative z-10">
         {FEATURES.map((feature, i) => (
           <div key={i}
@@ -819,6 +863,7 @@ export default function HomePage() {
             <div className="mx-auto w-full" style={{ maxWidth: '1280px' }}>
               <div className={`grid grid-cols-1 ${i % 2 === 0 ? 'lg:grid-cols-[0.45fr_0.55fr]' : 'lg:grid-cols-[0.55fr_0.45fr]'} gap-10 lg:gap-16 items-start ${i % 2 === 1 ? 'lg:grid-flow-dense' : ''}`}>
                 {/* Text area */}
+                {/* Khu vực văn bản */}
                 <div className={i % 2 === 1 ? 'lg:col-start-2' : ''}>
                   <FadeIn delay={0}>
                     <div className="flex items-center gap-3 mb-6">
@@ -850,6 +895,7 @@ export default function HomePage() {
                   </div>
                 </div>
                 {/* Visual decoration area */}
+                {/* Khu vực trang trí hình ảnh */}
                 <div className={i % 2 === 1 ? 'lg:col-start-1 lg:row-start-1' : ''}>
                   <FadeIn delay={0.15}>
                     <div className="relative rounded-2xl overflow-hidden p-8 md:p-12"
@@ -870,6 +916,7 @@ export default function HomePage() {
       </section>
 
       {/* ══ Heaven·Earth·Human three-part theory ═════════════════ */}
+      {/* ══ Học thuyết ba phần Thiên·Địa·Nhân ═════════════════ */}
       <section className="relative z-10 flex items-center px-6 md:px-10 lg:px-14 py-20"
         style={{ background: c.altSection, minHeight: '82svh' }}>
         <WeakBoundary line={c.navBorder} />
@@ -930,6 +977,7 @@ export default function HomePage() {
       </section>
 
       {/* ══ Ni Haixia biography ══════════════════════════════════ */}
+      {/* ══ Tiểu sử Ni Haixia ══════════════════════════════════ */}
       <section className="relative z-10 flex items-center px-6 md:px-10 lg:px-14 py-20" style={{ minHeight: '82svh' }}>
         <WeakBoundary line={c.navBorder} />
         <div className="mx-auto w-full" style={{ maxWidth: '1280px' }}>
@@ -1014,6 +1062,7 @@ export default function HomePage() {
       </section>
 
       {/* ══ Union chart entry ══════════════════════════════════════ */}
+      {/* ══ Lối vào lá số hợp đôi ══════════════════════════════════════ */}
       <section className="relative z-10 px-6 md:px-10 lg:px-14 py-20">
         <div className="mx-auto" style={{ maxWidth: '1280px' }}>
           <div className="rounded-2xl p-10 md:p-14 text-center"
@@ -1066,6 +1115,7 @@ export default function HomePage() {
       </section>
 
       {/* ══ Final CTA ══════════════════════════════════════════════ */}
+      {/* ══ Nút kêu gọi hành động cuối trang ══════════════════════════════════════════════ */}
       <section className="relative z-10 py-40 px-6 text-center" style={{ background: c.altSection }}>
         <FadeIn>
           <p className="text-[10px] tracking-[0.6em] uppercase mb-6" style={{ color: c.tagText }}>Begin your chart journey</p>
@@ -1114,10 +1164,12 @@ export default function HomePage() {
       </section>
 
       {/* Footer */}
+      {/* Chân trang */}
       <footer className="relative z-10 py-10 px-6"
         style={{ borderTop: `1px solid ${c.niCardBord}` }}>
 
         {/* 4 module nav slots (live + coming soon) */}
+        {/* 4 ô điều hướng module (đã hoạt động + sắp ra mắt) */}
         <div className="max-w-4xl mx-auto mb-8">
           <div className="text-[9px] tracking-[0.3em] text-center mb-4 uppercase"
             style={{ color: c.textMuted, opacity: 0.6 }}>

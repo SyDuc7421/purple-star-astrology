@@ -1,8 +1,14 @@
 /**
  * 《骨髓赋》— 紫微斗数核心口诀
+ * "Gu Sui Fu" — Core Mnemonic Verses of Zi Wei Dou Shu
+ * "Cốt Tủy Phú" — Khẩu quyết cốt lõi của Tử Vi Đẩu Số
  *
  * 公版（明代刊本）。是紫微斗数最权威、最浓缩的口诀，长约 1500 字。
+ * Public domain (Ming dynasty edition). The most authoritative and condensed mnemonic verses of Zi Wei Dou Shu, ~1,500 characters long.
+ * Công phạm (bản khắc thời Minh). Là khẩu quyết uy tín và cô đọng nhất của Tử Vi Đẩu Số, dài khoảng 1500 chữ.
  * 倪师在《天纪》中多次援引此赋。
+ * Master Ni cites this verse repeatedly in "Tian Ji".
+ * Sư Nghê nhiều lần trích dẫn bài phú này trong "Thiên Kỷ".
  */
 
 import type { Book } from '../types';

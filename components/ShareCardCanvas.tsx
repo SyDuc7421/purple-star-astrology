@@ -2,9 +2,12 @@
 
 /**
  * Chart share card — a true 12-palace thumbnail of the Zi Wei chart
+ * Thẻ chia sẻ lá số — bản thu nhỏ 12 cung thực sự của lá số Tử Vi
  *
  * Design: 12-palace thumbnail on the left, key info on the right
+ * Thiết kế: bản thu nhỏ 12 cung ở bên trái, thông tin chính ở bên phải
  * Uses native browser fonts, no SSR dependency
+ * Sử dụng font gốc của trình duyệt, không phụ thuộc SSR
  */
 
 import type { ZiweiChart } from '@/lib/ziwei/types';
@@ -12,23 +15,52 @@ import type { ZiweiChart } from '@/lib/ziwei/types';
 const BRANCH_NAMES = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'];
 
 // Zi Wei Dou Shu 12-palace earthly-branch layout (standard fixed arrangement)
+// Bố cục địa chi 12 cung của Tử Vi Đẩu Số (cách sắp xếp cố định tiêu chuẩn)
 // Yin/Mao/Chen/Si → top row
+// Dần/Mão/Thìn/Tỵ → hàng trên
 // Chou          Wu
+// Sửu           Ngọ
 // Zi            Wei
+// Tý            Mùi
 // Hai/Xu/You/Shen → bottom row
+// Hợi/Tuất/Dậu/Thân → hàng dưới
 const ZHIWEI_LAYOUT: Array<{ branch: number; row: number; col: number }> = [
   { branch: 2,  row: 0, col: 0 }, // 寅
+                                   // Yin
+                                   // Dần
   { branch: 3,  row: 0, col: 1 }, // 卯
+                                   // Mao
+                                   // Mão
   { branch: 4,  row: 0, col: 2 }, // 辰
+                                   // Chen
+                                   // Thìn
   { branch: 5,  row: 0, col: 3 }, // 巳
+                                   // Si
+                                   // Tỵ
   { branch: 1,  row: 1, col: 0 }, // 丑
+                                   // Chou
+                                   // Sửu
   { branch: 6,  row: 1, col: 3 }, // 午
+                                   // Wu
+                                   // Ngọ
   { branch: 0,  row: 2, col: 0 }, // 子
+                                   // Zi
+                                   // Tý
   { branch: 7,  row: 2, col: 3 }, // 未
+                                   // Wei
+                                   // Mùi
   { branch: 11, row: 3, col: 0 }, // 亥
+                                   // Hai
+                                   // Hợi
   { branch: 10, row: 3, col: 1 }, // 戌
+                                   // Xu
+                                   // Tuất
   { branch: 9,  row: 3, col: 2 }, // 酉
+                                   // You
+                                   // Dậu
   { branch: 8,  row: 3, col: 3 }, // 申
+                                   // Shen
+                                   // Thân
 ];
 
 interface ShareCardProps {
@@ -46,6 +78,7 @@ export default function ShareCardCanvas({ chart, birth, highlight }: ShareCardPr
   const dx = chart.daXians?.[chart.currentDaXianIndex];
 
   // Organize each palace into 12 cells, drawn per layout
+  // Sắp xếp mỗi cung vào 12 ô, vẽ theo bố cục
   const cells = ZHIWEI_LAYOUT.map(slot => {
     const palace = chart.palaces.find(p => p.branch === slot.branch);
     const majors = palace?.stars.filter(s => s.type === 'major') ?? [];
@@ -55,6 +88,7 @@ export default function ShareCardCanvas({ chart, birth, highlight }: ShareCardPr
   });
 
   // Card size: 680×420 (good for social sharing thumbnails)
+  // Kích thước thẻ: 680×420 (phù hợp cho ảnh thu nhỏ chia sẻ mạng xã hội)
   return (
     <div id="share-card" style={{
       width: '680px',
@@ -70,6 +104,7 @@ export default function ShareCardCanvas({ chart, birth, highlight }: ShareCardPr
       flexDirection: 'column',
     }}>
       {/* Decorative glow */}
+      {/* Hiệu ứng phát sáng trang trí */}
       <div style={{
         position: 'absolute', top: '-60px', left: '-60px',
         width: '180px', height: '180px', borderRadius: '50%',
@@ -82,6 +117,7 @@ export default function ShareCardCanvas({ chart, birth, highlight }: ShareCardPr
       }} />
 
       {/* Top bar */}
+      {/* Thanh trên cùng */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px', position: 'relative', zIndex: 1 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <div style={{
@@ -109,8 +145,12 @@ export default function ShareCardCanvas({ chart, birth, highlight }: ShareCardPr
       </div>
 
       {/* 主体：左 12 宫格子 + 右关键信息 */}
+      {/* Body: left 12-palace grid + right key info */}
+      {/* Phần thân: lưới 12 cung bên trái + thông tin chính bên phải */}
       <div style={{ display: 'flex', gap: '16px', flex: 1, position: 'relative', zIndex: 1, minHeight: 0 }}>
         {/* 左：12 宫缩略命盘 */}
+        {/* Left: 12-palace thumbnail chart */}
+        {/* Bên trái: lá số thu nhỏ 12 cung */}
         <div style={{
           width: '300px',
           height: '288px',
@@ -126,6 +166,7 @@ export default function ShareCardCanvas({ chart, birth, highlight }: ShareCardPr
         }}>
           {cells.map((cell, i) => {
             // Center 4 cells (row 1-2, col 1-2) merged into the center info area
+            // 4 ô trung tâm (hàng 1-2, cột 1-2) được gộp vào khu vực thông tin trung tâm
             if ((cell.row === 1 || cell.row === 2) && (cell.col === 1 || cell.col === 2)) return null;
             return (
               <div key={i} style={{
@@ -143,6 +184,7 @@ export default function ShareCardCanvas({ chart, birth, highlight }: ShareCardPr
                 overflow: 'hidden',
               }}>
                 {/* Palace name + branch */}
+                {/* Tên cung + địa chi */}
                 <div style={{
                   fontSize: '8px',
                   color: cell.isMing ? '#8b6a14' : '#a89b7c',
@@ -158,6 +200,7 @@ export default function ShareCardCanvas({ chart, birth, highlight }: ShareCardPr
                   <span style={{ fontSize: '7px', opacity: 0.7 }}>{BRANCH_NAMES[cell.branch]}</span>
                 </div>
                 {/* Major stars */}
+                {/* Chính tinh */}
                 <div style={{
                   marginTop: '2px',
                   display: 'flex',
@@ -185,6 +228,7 @@ export default function ShareCardCanvas({ chart, birth, highlight }: ShareCardPr
           })}
 
           {/* Center info area (spans 4 cells) */}
+          {/* Khu vực thông tin trung tâm (chiếm 4 ô) */}
           <div style={{
             gridRow: '2 / 4',
             gridColumn: '2 / 4',
@@ -205,8 +249,10 @@ export default function ShareCardCanvas({ chart, birth, highlight }: ShareCardPr
         </div>
 
         {/* Right: key info */}
+        {/* Bên phải: thông tin chính */}
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
           {/* Life Palace major stars */}
+          {/* Chính tinh của Mệnh Cung */}
           <div>
             <div style={{ fontSize: '10px', color: '#a89b7c', letterSpacing: '0.25em', marginBottom: '2px' }}>Ming Gong · {mingBranchName}</div>
             <div style={{
@@ -219,6 +265,7 @@ export default function ShareCardCanvas({ chart, birth, highlight }: ShareCardPr
             }}>{mingStarStr}</div>
 
             {/* Highlight */}
+            {/* Điểm nhấn */}
             {highlight && (
               <div style={{
                 fontSize: '12px',
@@ -235,6 +282,7 @@ export default function ShareCardCanvas({ chart, birth, highlight }: ShareCardPr
           </div>
 
           {/* Current Da Xian + slogan */}
+          {/* Đại Hạn hiện tại + khẩu hiệu */}
           <div>
             {dx && (
               <div style={{
@@ -271,6 +319,7 @@ export default function ShareCardCanvas({ chart, birth, highlight }: ShareCardPr
 }
 
 /** Screenshot utility: converts the above div to a PNG dataURL */
+/** Tiện ích chụp màn hình: chuyển đổi div ở trên thành PNG dataURL */
 export async function captureShareCard(): Promise<string | null> {
   try {
     const html2canvas = (await import('html2canvas')).default;

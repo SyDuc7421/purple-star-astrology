@@ -21,15 +21,20 @@ export const metadata: Metadata = {
     type: 'website',
   },
   // Webmaster verification (paste the code into the relevant field, redeploy to activate)
+  // Xác minh webmaster (dán mã vào trường tương ứng, triển khai lại để kích hoạt)
   verification: {
     // Google Search Console: add the site at https://search.google.com/search-console to get this
+    // Google Search Console: thêm trang web tại https://search.google.com/search-console để lấy mã này
     google: process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION || undefined,
     // Bing Webmaster Tools: add the site at https://www.bing.com/webmasters to get this
+    // Bing Webmaster Tools: thêm trang web tại https://www.bing.com/webmasters để lấy mã này
     other: {
       'msvalidate.01': process.env.NEXT_PUBLIC_BING_VERIFICATION || '808FFC6023A2C359B375DD860FEDA856',
       // Baidu Webmaster (after business license is approved)
+      // Baidu Webmaster (sau khi giấy phép kinh doanh được phê duyệt)
       'baidu-site-verification': process.env.NEXT_PUBLIC_BAIDU_VERIFICATION || '',
       // 360 Webmaster (after business license is approved)
+      // 360 Webmaster (sau khi giấy phép kinh doanh được phê duyệt)
       '360-site-verification': process.env.NEXT_PUBLIC_360_VERIFICATION || '',
     },
   },
