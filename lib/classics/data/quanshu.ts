@@ -1,8 +1,14 @@
 /**
  * 《紫微斗数全书》— 核心精选
+ * "Zi Wei Dou Shu Quan Shu" — Core Selected Chapters
+ * "Tử Vi Đẩu Số Toàn Thư" — Các chương chọn lọc cốt lõi
  *
  * 公版（明代罗洪先编）
+ * Public domain (Ming dynasty edition, compiled by Luo Hongxian)
+ * Công phạm (biên soạn bởi La Hồng Tiên thời Minh)
  * 是紫微斗数最系统的古籍，强调宫位关系与四化，全本约 10 万字。
+ * The most systematic classical Zi Wei Dou Shu text, emphasizing palace relationships and the Four Transformations, ~100,000 characters in full.
+ * Là cổ thư có hệ thống nhất của Tử Vi Đẩu Số, nhấn mạnh mối quan hệ giữa các cung và Tứ Hóa, toàn bộ khoảng 100.000 chữ.
  */
 
 import type { Book } from '../types';

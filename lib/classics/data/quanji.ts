@@ -1,9 +1,17 @@
 /**
  * 《紫微斗数全集》— 核心精选章节
+ * "Zi Wei Dou Shu Quan Ji" — Core Selected Chapters
+ * "Tử Vi Đẩu Số Toàn Tập" — Các chương chọn lọc cốt lõi
  *
  * 公版（明代刊本，相传由陈抟祖师传）
+ * Public domain (Ming dynasty edition, traditionally attributed to Patriarch Chen Tuan)
+ * Công phạm (bản khắc thời Minh, tương truyền do Tổ sư Trần Đoàn truyền lại)
  * 是紫微斗数最权威的古籍之一，全本约 8 万字。
+ * One of the most authoritative classical Zi Wei Dou Shu texts, ~80,000 characters in full.
+ * Là một trong những cổ thư uy tín nhất của Tử Vi Đẩu Số, toàn bộ khoảng 80.000 chữ.
  * 此处精选核心论述，未来可补全。
+ * Core passages selected here; may be completed in full later.
+ * Các đoạn cốt lõi được chọn lọc ở đây; có thể bổ sung đầy đủ sau này.
  */
 
 import type { Book } from '../types';
