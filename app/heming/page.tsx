@@ -214,6 +214,7 @@ export default function HemingPage() {
         </div>
 
         {/* Two-column form */}
+        {/* Biểu mẫu hai cột */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '24px' }}
           className="heming-grid">
           {/* Party A */}
