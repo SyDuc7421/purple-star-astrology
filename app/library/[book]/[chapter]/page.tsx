@@ -1,5 +1,6 @@
 /**
  * /library/[book]/[chapter] — single chapter reading page
+ * /library/[book]/[chapter] — trang đọc một chương
  */
 
 import Link from 'next/link';
@@ -48,6 +49,7 @@ export default async function ChapterPage({ params }: { params: Promise<{ book: 
 
       <article className="max-w-3xl mx-auto px-6 py-12">
         {/* Title */}
+        {/* Tiêu đề */}
         <div className="text-center mb-10">
           <div style={{ fontSize: '11px', color: 'var(--tx-3)', letterSpacing: '0.25em', marginBottom: '8px' }}>
             《{book.title}》· {book.dynasty}
@@ -63,6 +65,7 @@ export default async function ChapterPage({ params }: { params: Promise<{ book: 
         </div>
 
         {/* Paragraphs */}
+        {/* Các đoạn văn */}
         <div style={{ background: 'var(--bg-card)', borderRadius: '14px', border: '1px solid rgba(184,146,42,0.2)', padding: '32px 28px' }}>
           {chapter.paragraphs.map((p, i) => (
             <div
@@ -135,6 +138,7 @@ export default async function ChapterPage({ params }: { params: Promise<{ book: 
         </div>
 
         {/* Chapter navigation */}
+        {/* Điều hướng chương */}
         <div style={{ marginTop: '24px', display: 'flex', justifyContent: 'space-between', gap: '12px' }}>
           {prevIdx >= 0 ? (
             <Link

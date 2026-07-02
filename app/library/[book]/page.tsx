@@ -1,5 +1,6 @@
 /**
  * /library/[book] — single classical text table of contents
+ * /library/[book] — mục lục của một cổ thư
  */
 
 import Link from 'next/link';
@@ -42,6 +43,7 @@ export default async function BookPage({ params }: { params: Promise<{ book: str
 
       <div className="max-w-3xl mx-auto px-6 py-12">
         {/* Book info */}
+        {/* Thông tin sách */}
         <div className="text-center mb-12">
           <div style={{ fontSize: '11px', color: 'var(--tx-3)', letterSpacing: '0.3em', marginBottom: '8px' }}>
             {book.dynasty} · {book.author}
@@ -55,6 +57,7 @@ export default async function BookPage({ params }: { params: Promise<{ book: str
         </div>
 
         {/* Chapter index */}
+        {/* Mục lục chương */}
         <div style={{ background: 'var(--bg-card)', borderRadius: '14px', border: '1px solid rgba(184,146,42,0.2)', overflow: 'hidden' }}>
           <div style={{ padding: '14px 20px', borderBottom: '1px solid rgba(184,146,42,0.15)', fontSize: '11px', color: 'var(--tx-3)', letterSpacing: '0.3em' }}>
             CHAPTERS

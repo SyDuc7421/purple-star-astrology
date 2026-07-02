@@ -1,5 +1,6 @@
 /**
  * /library/search?q=xxx — search results page
+ * /library/search?q=xxx — trang kết quả tìm kiếm
  */
 
 import Link from 'next/link';

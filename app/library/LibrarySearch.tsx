@@ -2,8 +2,10 @@
 
 /**
  * Classical text library search box — client component
+ * Ô tìm kiếm thư viện cổ thư — client component
  *
  * Input → real-time search → navigate to /library/search?q=xxx
+ * Nhập → tìm kiếm theo thời gian thực → chuyển hướng đến /library/search?q=xxx
  */
 
 import { useState, useTransition } from 'react';

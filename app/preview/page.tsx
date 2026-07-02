@@ -7,15 +7,18 @@ import ScrollIntro from '@/components/ScrollIntro';
 export default function PreviewPage() {
   const router = useRouter();
   // replayKey forces a reset of ScrollIntro (when user clicks "play again")
+  // replayKey buộc ScrollIntro phải đặt lại (khi người dùng nhấn "phát lại")
   const [replayKey, setReplayKey] = useState(0);
   const [done, setDone] = useState(false);
 
   return (
     <>
       {/* Scroll animation */}
+      {/* Hoạt ảnh cuộn tranh */}
       <ScrollIntro key={replayKey} onComplete={() => setDone(true)} />
 
       {/* Panel shown after animation: description + buttons */}
+      {/* Bảng hiển thị sau hoạt ảnh: mô tả + các nút */}
       {done && (
         <main style={{
           minHeight: '100vh',
@@ -97,6 +100,7 @@ export default function PreviewPage() {
           </div>
 
           {/* Timeline description */}
+          {/* Mô tả dòng thời gian */}
           <div style={{
             marginTop: '64px',
             padding: '24px 32px',
