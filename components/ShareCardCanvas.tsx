@@ -252,7 +252,7 @@ export default function ShareCardCanvas({ chart, birth, highlight }: ShareCardPr
         {/* Bên phải: thông tin chính */}
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
           {/* Life Palace major stars */}
-          {/* Chính tinh của Mệnh cung */}
+          {/* Chính tinh của Mệnh Cung */}
           <div>
             <div style={{ fontSize: '10px', color: '#a89b7c', letterSpacing: '0.25em', marginBottom: '2px' }}>Ming Gong · {mingBranchName}</div>
             <div style={{

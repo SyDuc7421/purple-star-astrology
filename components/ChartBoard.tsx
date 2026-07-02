@@ -43,7 +43,7 @@ function sortClockwise(branches: number[]): number[] {
 }
 
 /** Three Directions and Four Cardinals: self palace + opposite + two San He palaces */
-/** Tam phương tứ chính: cung bản thân + cung đối diện + hai cung Tam Hợp */
+/** Tam Phương Tứ Chính: cung bản thân + cung đối diện + hai cung Tam Hợp */
 function getSanFangSiZheng(branch: number): [number, number, number, number] {
   return [
     branch,
