@@ -9,13 +9,19 @@ import type { BirthInfo, ZiweiChart, Palace } from "@/lib/ziwei/types";
 
 /**
  * Chart page — open-source "chart engine demo"
+ * Trang lá số — "bản demo engine lá số" mã nguồn mở
  *
  * This is a minimal runnable example: uses the repo's generateChart() engine with basic UI
  * components to render a full Zi Wei chart + basic reading, with natal / Da Xian / Liu Nian switching.
+ * Đây là một ví dụ chạy được tối giản: sử dụng engine generateChart() của repo cùng các thành phần UI
+ * cơ bản để hiển thị lá số Tử Vi Đẩu Số đầy đủ + luận giải cơ bản, với chuyển đổi giữa bản mệnh / Đại Hạn / Lưu Niên.
  *
  * Note: the full commercial interactive UI (redesigned interface, AI streaming, union chart, share
  * cards, etc.) is not open-sourced; but the chart engine — star placement, Si Hua, pattern detection,
  * classical texts — is fully open (see lib/ziwei/*), free for you to build your own UI on top of.
+ * Lưu ý: giao diện tương tác thương mại đầy đủ (giao diện được thiết kế lại, AI streaming, lá số hợp,
+ * thẻ chia sẻ, v.v.) không được mã nguồn mở; nhưng engine lá số — an sao, Tứ Hóa, dò cách cục,
+ * cổ văn kinh điển — hoàn toàn mở (xem lib/ziwei/*), tự do để bạn xây dựng UI riêng trên nền đó.
  */
 export default function ChartPage() {
   const [chart, setChart] = useState<ZiweiChart | null>(null);
@@ -26,6 +32,7 @@ export default function ChartPage() {
   );
 
   // ── No chart yet: show birth info form ──
+  // ── Chưa có lá số: hiển thị form thông tin sinh ──
   if (!chart) {
     return (
       <main style={{ maxWidth: 720, margin: "0 auto", padding: "48px 20px" }}>
@@ -52,6 +59,7 @@ export default function ChartPage() {
   }
 
   // ── Chart ready: chart + reading ──
+  // ── Lá số đã sẵn sàng: lá số + luận giải ──
   return (
     <main style={{ maxWidth: 1280, margin: "0 auto", padding: "24px 16px" }}>
       <button
