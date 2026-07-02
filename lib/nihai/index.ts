@@ -1,13 +1,20 @@
 /**
  * Ni Haixia Tian Ji / Di Ji / Ren Ji — unified exports
+ * Ni Haixia Tian Ji / Di Ji / Ren Ji — các export thống nhất
  *
  * Ni Haixia (1954-2012), founder of the Han Tang Classical Chinese Medicine School,
+ * Ni Haixia (1954-2012), người sáng lập Han Tang Classical Chinese Medicine School,
  * a rare modern master of all five classical arts: destiny, physiognomy, divination, geomancy, and medicine.
+ * một bậc thầy hiện đại hiếm có tinh thông cả năm thuật cổ điển: mệnh lý, tướng thuật, bốc phệ, phong thủy và y học.
  *
  * The Three-Ji System:
+ * Hệ thống Tam Kỷ:
  *   Tian Ji — celestial arts (Zi Wei Dou Shu, I Ching, Feng Shui, fate calculation, physiognomy, word divination)
+ *   Tian Ji — thuật thiên văn (Tử Vi Đẩu Số, Kinh Dịch, phong thủy, tính số mệnh, tướng thuật, chiết tự)
  *   Di Ji — terrestrial arts (national geography, feng shui and national destiny)
+ *   Di Ji — thuật địa lý (địa lý quốc gia, phong thủy và vận mệnh quốc gia)
  *   Ren Ji — human arts (acupuncture, Huang Di Nei Jing, Shen Nong Ben Cao Jing, Shang Han Lun, Jin Kui Yao Lue)
+ *   Ren Ji — thuật nhân sự (châm cứu, Huang Di Nei Jing, Shen Nong Ben Cao Jing, Shang Han Lun, Jin Kui Yao Lue)
  */
 
 export * from './types';
@@ -16,6 +23,7 @@ export { RENJI_MODULES, ACU_EXPERIENCES, TRANS_NEEDLING, HANTANG_FORMULAS, CLASS
 export { DIJI_MODULES, DIJI_STATS } from './diji';
 
 /** Complete Ni Haixia biography */
+/** Tiểu sử đầy đủ của Ni Haixia */
 export const NI_HAIXIA_BIO = {
   name: '倪海厦',
   nameVariant: '倪海夏',
@@ -38,12 +46,14 @@ export const NI_HAIXIA_BIO = {
     '海外优秀华人奖获得者',
   ],
   /** Lineage and teachers */
+  /** Truyền thừa và các thầy dạy */
   teachers: [
     { name: '周左宇', background: '北京四代家传名医，1949年后移居台湾', subject: '针灸', period: '1977-1981' },
     { name: '徐济民', background: '江苏籍上海名医', subject: '针灸', period: '1970s' },
     { name: '姜佐景传承', background: '师承曹颖甫的经方家', subject: '经方', period: '基隆中药行学徒期间' },
   ],
   /** Core philosophy */
+  /** Triết lý cốt lõi */
   corePhilosophy: [
     '大道至简——飞星飞来飞去太复杂，不搞这个',
     '命宫为本，三方为用',
@@ -56,6 +66,7 @@ export const NI_HAIXIA_BIO = {
     '文字只是船，真理才是彼岸',
   ],
   /** Life milestones */
+  /** Các dấu mốc cuộc đời */
   timeline: [
     { year: '1954', event: '出生于台北市，祖籍浙江瑞安' },
     { year: '1970s', event: '高中时以《医宗金鉴》治愈二姐月经痛，立志习医' },
@@ -77,6 +88,7 @@ export const NI_HAIXIA_BIO = {
     { year: '2012', event: '1月31日因心肺衰竭在台北辞世，享年59岁' },
   ],
   /** Works and publications */
+  /** Tác phẩm và ấn phẩm */
   publications: {
     originalBooks8: ['黄帝内经素问', '黄帝内经', '神农本草经', '针灸', '伤寒论', '金匮', '人间道', '天机道·地脉道'],
     totalBooks: '26-44册（含注解版教材、医案全集、穴位精解等）',
@@ -86,6 +98,7 @@ export const NI_HAIXIA_BIO = {
     totalVideoHours: '200+小时',
   },
   /** The Three-Ji System */
+  /** Hệ thống Tam Kỷ */
   sanJi: {
     tianji: {
       name: '天纪',
@@ -122,6 +135,7 @@ export const NI_HAIXIA_BIO = {
     },
   },
   /** Personality traits */
+  /** Đặc điểm tính cách */
   personality: {
     算命风格: '铁口直断不留余地',
     音乐爱好: '最喜老鹰乐队《加州旅馆》',
@@ -131,6 +145,7 @@ export const NI_HAIXIA_BIO = {
     患者评价: '常被美国病患称为"最后的希望（The last hope）"',
   },
   /** Criteria for selecting successors */
+  /** Tiêu chí lựa chọn người kế thừa */
   discipleStandards: [
     '心性好',
     '个性强',
@@ -141,6 +156,7 @@ export const NI_HAIXIA_BIO = {
 };
 
 /** Three-Ji navigation */
+/** Điều hướng Tam Kỷ */
 export const SANJI_CATEGORIES = [
   { key: 'tianji' as const, name: '天纪', nameEn: 'Tian Ji', icon: '⊙', meaning: '上知天文', color: '#d4a843', href: '/tianji' },
   { key: 'diji' as const, name: '地纪', nameEn: 'Di Ji', icon: '⊞', meaning: '下知地理', color: '#6b8a5e', href: '/diji' },
