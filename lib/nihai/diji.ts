@@ -1,17 +1,24 @@
 /**
  * Di Ji — Ni Haixia geography and feng shui database
+ * Di Ji — Cơ sở dữ liệu địa lý và phong thủy của Ni Haixia
  *
  * "Know the land" — Di Ji is the systematic study of geography.
+ * "Biết đất" — Di Ji là môn nghiên cứu có hệ thống về địa lý.
  * Ni Haixia originally planned to write this after age 60, drawing on his knowledge of astronomy,
+ * Ni Haixia ban đầu dự định viết phần này sau tuổi 60, dựa trên kiến thức thiên văn,
  * geography, and medicine to rewrite national geographies and study the link between feng shui and national character.
+ * địa lý và y học của ông để viết lại địa chí các quốc gia và nghiên cứu mối liên hệ giữa phong thủy và tính cách dân tộc.
  *
  * Ni Haixia passed away in 2012; Di Ji remains unfinished — his uncompleted legacy.
+ * Ni Haixia qua đời năm 2012; Di Ji vẫn còn dang dở — di sản chưa hoàn thành của ông.
  * Existing content derives from the feng shui sections of Tian Ji and manuscripts compiled by his students.
+ * Nội dung hiện có được lấy từ các phần phong thủy trong Tian Ji và các bản thảo do học trò của ông biên soạn.
  */
 
 import type { NiModule } from './types';
 
 // ─── Di Ji modules ──────────────────────────────────────────
+// ─── Các mô-đun Di Ji ──────────────────────────────────────────
 export const DIJI_MODULES: NiModule[] = [
   {
     id: 'dj-guojiadili',
@@ -175,6 +182,7 @@ export const DIJI_MODULES: NiModule[] = [
 ];
 
 // ─── Statistics ──────────────────────────────────────────────
+// ─── Thống kê ──────────────────────────────────────────────
 export const DIJI_STATS = {
   totalModules: DIJI_MODULES.length,
   totalChapters: DIJI_MODULES.reduce((sum, m) => sum + m.chapters.length, 0),
