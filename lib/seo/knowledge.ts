@@ -1,8 +1,11 @@
 /**
  * SEO knowledge pages — data helper
+ * Trợ giúp dữ liệu cho các trang kiến thức SEO
  *
  * 14 major stars × 13 topics = 182 independent SEO URLs
+ * 14 chính tinh × 13 chủ đề = 182 URL SEO độc lập
  * Each page renders 4 marker sections from STAR_DB (one-line summary / core judgment / chart basis / classical source)
+ * Mỗi trang hiển thị 4 phần đánh dấu từ STAR_DB (tóm tắt một câu / luận điểm cốt lõi / căn cứ lá số / nguồn gốc cổ thư)
  */
 
 import { STAR_DB } from '@/lib/ziwei/db-analysis';
@@ -15,6 +18,7 @@ export const ALL_STARS = [
 ];
 
 // Star name ↔ pinyin slug mapping (URLs use slug to avoid Chinese URL edge cases on Vercel/CDN)
+// Ánh xạ tên sao ↔ slug pinyin (URL dùng slug để tránh các trường hợp URL tiếng Trung gây lỗi trên Vercel/CDN)
 export const STAR_TO_SLUG: Record<string, string> = {
   '紫微': 'ziwei',
   '天机': 'tianji',
@@ -132,6 +136,7 @@ export function getKnowledge(star: string, topic: TopicKey): KnowledgeData {
 }
 
 /** Generate all 14×13 combinations (for generateStaticParams) */
+/** Tạo tất cả 14×13 tổ hợp (dùng cho generateStaticParams) */
 export function getAllKnowledgeRoutes() {
   const routes: { star: string; slug: string; topic: TopicKey }[] = [];
   for (const star of ALL_STARS) {
@@ -144,6 +149,7 @@ export function getAllKnowledgeRoutes() {
 }
 
 /** Major star attribute summary (for the "About [star]" section on SEO pages) */
+/** Tóm tắt thuộc tính chính tinh (dùng cho phần "Giới thiệu về [sao]" trên các trang SEO) */
 export const STAR_BRIEF_SEO: Record<string, string> = {
   '紫微': '紫微为帝星，主尊贵，化气为尊。落命主有领导气场、宜大平台高位。',
   '天机': '天机为智慧星，主善变机灵，化气为善。落命主聪明机变、宜辅佐策划。',
